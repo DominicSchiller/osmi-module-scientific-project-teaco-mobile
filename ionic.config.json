@@ -1,0 +1,7 @@
+{
+  "name": "TeaCoMobile",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
