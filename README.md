@@ -43,21 +43,21 @@ is installed to be able to build the TeaCoMobile app for iOS
 
 Before installing the Ionic CLI it is required to install the Cordova CLI first, since Ionic addresses that CLI when building the app project for Android and iOS.
 To do so, the following command must be executed in the system's shell:
-<br />
+
 ```console
 foo@bar:~$ npm install -g cordova
 ```
-<br />
+
  This command will download and install the Cordova CLI globally on the operating system using the `npm`-package manager that has been shipped and installed along with NodeJS.
  <br />
  If Cordova has been installed successfully, Ionic can be installed next by running the following command:
- <br />
- ```console
- foo@bar:~$ npm install -g ionic
- ```
- <br />
+
+```console
+foo@bar:~$ npm install -g ionic
+```
+
  Similar to the installation of the Cordova CLI, this command will install the Ionic CLI on the system globally.
- <br />
+
  > <span class="black">**Note:** <br />
  > In some cases both commands listed above might fail. If so, these commands should be executed with the `sudo` keyword in front if running MacOS or the shell-application launched as administrator if running 
  > Windows to finally execute these commands with administrator permissions.
@@ -70,19 +70,19 @@ foo@bar:~$ npm install -g cordova
 
 Once the project has been cloned or downloaded to the local system it has to be initialized though.
 <br />
-To install all production and development dependencies using the Node.js package manager `npm` which are defined in the `package.json` file, the following
-shell command needs to be executed within the projects root directory:
-<br />
+To install all production and development dependencies using the Node.js package manager `npm` which are defined in the `package.json` file, the following shell command needs to be executed within the projects root directory:<br />
+
 ```console
- foo@bar:~$ npm install
- ```
- <br />
+foo@bar:~$ npm install 
+```
+
+<br />
  This command will install all required dependencies locally to the `node_modules` directory.
  <br />
  <br />
  The last step before getting ready is to install all plugins required by Cordova and Ionic.<br />
  To do so, the following shell command needs to be executed within the projects root directory:
- <br />
+
  ```console
 foo@bar:~$ ionic cordova prepare
  ```
@@ -102,28 +102,28 @@ the project can be built.
 Building the project for the web browser is the first step the Ionic CLI will always take -  even if a build for iOS or Android has been actually requested as it will be described in the upcoming sections.
 <br />
 To build the project for the web browser, the following shell command needs to be executed within the projects root directory:
-<br />
+
  ```console
  foo@bar:~$ ionic build
  ```
- <br />
+
  This command will take all source files from the project's `src` directory, builds, minifies and hence copies the final build result to the
  project's `www` directory.
  <br />
  <br />
  The finally run and preview the build result in the systems' set default web browser, the following command needs to be executed: 
- <br />
-  ```console
- foo@bar:~$ ionic serve
- ```
- <br />
+
+```console
+foo@bar:~$ ionic serve
+```
+
   > <span class="black">**Note:** <br />
  > `ionic serve` can be used as short hand command to build and preview the app all at once.<br />
  > But the most useful fact with this command is that, whenever some changes to any of the source files from the  
  > `src` directory will be made, the browser will be updated instantly. This said, this command offers a live preview feature while coding.
  > 
  > 
- <br />
+
   > <span class="black">**Note:** <br />
  > It's recommended using [Chrome](https://www.google.de/intl/de_ALL/chrome/) as default web browser for development purpose, since it provides handy [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/) like the [Device Toolbar](https://developers.google.com/web/tools/chrome-devtools/device-mode/), which makes it possible to test the app's visual responsiveness along different device classes and viewport sizes.
  > 
