@@ -25,6 +25,7 @@ npm-debug.log*
 .vscode/
 .idea/
 !.idea/scopes/**/*
+!.idea/runConfigurations/**/*
 .ionic/
 .sourcemaps/
 .sass-cache/
