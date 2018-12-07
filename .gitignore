@@ -47,28 +47,5 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 
-# Platforms related stuff #
-####### iOS ########
-
-platforms/ios/cordova/**/*
-platforms/ios/CordovaLib/**/*
-platforms/ios/www/**/*
-platforms/ios/platform_www/**/*
-platforms/ios/TeaCoMobile/**/*
-platforms/ios/TeaCoMobile.xcodeproj/xcuserdata/**/*
-platforms/ios/TeaCoMobile.xcworkspace/xcuserdata/**/*
-
-####### Android ########
-platforms/android/cordova/**/*
-platforms/android/CordovaLib/**/*
-platforms/android/gradle/**/*
-platforms/android/platform_www/**/*
-platforms/android/build/**/*
-platforms/android/.gradle/**/*
-platforms/android/app/build/**/*
-platforms/android/app/src/main/assets/www/**/*
-platforms/android/app/src/main/res/**/*
-platforms/android/app/src/main/java/com/**/*
-platforms/android/app/src/main/java/io/**/*
-platforms/android/app/src/main/java/org/**/*
-platforms/android/local.properties
+# Platforms related stuff
+platforms/**/*
