@@ -4,11 +4,13 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
+import { HttpClientModule } from "@angular/common/http";
 import { Deeplinks } from "@ionic-native/deeplinks";
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { RegisterUserPage } from "../pages/register-user/register-user";
+import { TeaCoApiProvider } from '../providers/teaco-api-provider/teaco-api-provider';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,7 @@ import { RegisterUserPage } from "../pages/register-user/register-user";
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -30,7 +33,8 @@ import { RegisterUserPage } from "../pages/register-user/register-user";
     StatusBar,
     SplashScreen,
     Deeplinks,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    TeaCoApiProvider
   ]
 })
 export class AppModule {}

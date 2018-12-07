@@ -7,8 +7,10 @@
 </ion-header>
 
 <ion-content padding>
-  bla bla bla
-  <p>
-    Hier sollte das tab-menu hin :-)
+  <p *ngIf="user != undefined">
+    Hallo, {{user.name}}<br />
+    <br />
+    Deine E-mail: {{user.email}}<br />
+    Deine Konto wurde erstellt am: {{user.created_at.toLocaleDateString()}}<br />
   </p>
 </ion-content>
