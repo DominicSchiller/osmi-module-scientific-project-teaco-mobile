@@ -1,10 +1,11 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+
 
 import {Observable} from "rxjs";
 import 'rxjs/add/operator/map';
 
-import { User } from "../../models/User";
+import {User} from "../../models/User";
 
 /**
  * API provider for communicating with the TeaCo server endpoint.
@@ -33,7 +34,9 @@ export class TeaCoApiProvider {
    * @param userKey The user's unique key
    */
   getUser(userKey: string): Observable<User> {
-    return this.http.get<User>(this.baseUrl + this.usersAPIEndpoint + userKey, TeaCoApiProvider.getRequestOptions())
+    const requestOptions = TeaCoApiProvider.getRequestOptions();
+    const url = this.baseUrl + this.usersAPIEndpoint+ userKey;
+    return this.http.get<User>(url, requestOptions)
         .map(response => {
           return new User(response);
         })
@@ -43,10 +46,11 @@ export class TeaCoApiProvider {
    * Get required HTTP request options
    * @return Object which contains all required HTTP options such as HTTP headers etc.
    */
-  private static getRequestOptions(): Object {
-    return {
+  private static getRequestOptions() {
+    const requestOptions = {
       headers: TeaCoApiProvider.createHttpHeaders()
     };
+    return requestOptions
   }
 
   /**
@@ -54,13 +58,11 @@ export class TeaCoApiProvider {
    * @return HttpHeaders instance
    */
   private static createHttpHeaders(): HttpHeaders {
-    let headers = new HttpHeaders();
-    headers.append('Access-Control-Allow-Origin' , '*');
-    headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
-    headers.append('Accept','application/json');
-    headers.append('content-type','application/json');
-
-    return headers
+    return new HttpHeaders()
+        .set('Access-Control-Allow-Origin', '*')
+        .set('Access-Control-Allow-Methods', 'POST, GET, DELETE, PATCH, OPTIONS, PUT, HEAD')
+        .set('Accept', 'application/json')
+        .set('content-type', 'application/json')
   }
 
 }
