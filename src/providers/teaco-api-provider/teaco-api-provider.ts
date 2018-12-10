@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import 'rxjs/add/operator/map';
 
 import { User } from "../../models/User";
+import {Meeting} from "../../models/Meeting";
 
 /**
  * API provider for communicating with the TeaCo server endpoint.
@@ -22,6 +23,12 @@ export class TeaCoApiProvider {
   private usersAPIEndpoint = "users/";
 
   /**
+   * The API endpoint for Meeting CRUD operations
+   */
+  private meetingssAPIEndpoint = "meetings/";
+
+
+  /**
    * Constructor
    * @param http The Ionic HTTP client instance
    */
@@ -37,6 +44,17 @@ export class TeaCoApiProvider {
         .map(response => {
           return new User(response);
         })
+  }
+
+  /**
+   * Get all meetings for a specific user from TeaCo.
+   * @param userHash The user's hash
+   */
+  getMeetingsforUser(userHash: string): Observable<Meeting> {
+      return this.http.get<Meeting>(this.baseUrl+ this.usersAPIEndpoint + userHash + this.meetingssAPIEndpoint, TeaCoApiProvider.getRequestOptions())
+          .map(response => {
+            return new Meeting(response);
+          })
   }
 
   /**
