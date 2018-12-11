@@ -6,12 +6,13 @@ import { Deeplinks } from "@ionic-native/deeplinks";
 
 import { HomePage } from '../pages/home/home';
 import { RegisterUserPage } from "../pages/register-user/register-user";
+import { TabsPage } from '../pages/tabs/tabs';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = HomePage;
+  rootPage:any = TabsPage;
   @ViewChild(Nav) nav:Nav;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private deepLinks: Deeplinks) {

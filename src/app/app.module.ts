@@ -11,12 +11,18 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { RegisterUserPage } from "../pages/register-user/register-user";
 import { TeaCoApiProvider } from '../providers/teaco-api-provider/teaco-api-provider';
+import { TabsPage } from '../pages/tabs/tabs';
+import { LockedMettingsPage } from '../pages/locked-mettings/locked-mettings';
+import { AddNewMeetingPage } from '../pages/add-new-meeting/add-new-meeting';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    RegisterUserPage
+    RegisterUserPage,
+    TabsPage,
+    LockedMettingsPage,
+    AddNewMeetingPage
   ],
   imports: [
     BrowserModule,
@@ -27,7 +33,10 @@ import { TeaCoApiProvider } from '../providers/teaco-api-provider/teaco-api-prov
   entryComponents: [
     MyApp,
     HomePage,
-    RegisterUserPage
+    RegisterUserPage,
+    TabsPage,
+    LockedMettingsPage,
+    AddNewMeetingPage
   ],
   providers: [
     StatusBar,
