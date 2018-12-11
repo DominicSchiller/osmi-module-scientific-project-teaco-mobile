@@ -16,7 +16,7 @@ export class TeaCoApiProvider {
   /**
    * The base URL to the TeaCo server
    */
-  private baseUrl = 'http://192.168.2.177:3000/api/';
+  private baseUrl = 'http://localhost:3000/api/';
   /**
    * The API endpoint for User CRUD operations
    */
