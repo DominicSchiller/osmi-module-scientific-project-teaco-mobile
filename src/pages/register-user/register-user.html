@@ -7,5 +7,16 @@
 </ion-header>
 
 <ion-content padding>
-    Loading information for user with key {{userKey}}
+    <p *ngIf="user == undefined">
+        Registriere User mit Key:
+        <br />{{userKey}} ...
+    </p>
+    <p *ngIf="user !== undefined">
+        Hallo {{user.name}},<br />
+        Du bist nun in der App registriert.
+        <br />
+        <br />
+        Deine E-mail: {{user.email}}<br />
+        Deine Konto wurde erstellt am: {{user.created_at.toLocaleDateString()}}<br />
+    </p>
 </ion-content>

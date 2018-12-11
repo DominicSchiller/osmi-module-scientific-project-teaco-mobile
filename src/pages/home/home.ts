@@ -9,13 +9,7 @@ import {User} from "../../models/User";
 })
 export class HomePage {
 
-  private user: User;
-
-  constructor(private navCtrl: NavController, apiService: TeaCoApiProvider) {
-    apiService.getUser("1")
-        .subscribe(user => {
-          this.user = user;
-        });
+  constructor(private navCtrl: NavController) {
   }
 
 }

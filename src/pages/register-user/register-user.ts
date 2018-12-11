@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import {TeaCoApiProvider} from "../../providers/teaco-api-provider/teaco-api-provider";
+import {User} from "../../models/User";
 
 @Component({
     selector: 'page-register-user',
@@ -16,12 +18,19 @@ export class RegisterUserPage {
      */
     private userKey: string;
 
+    private user: User;
+
     /**
      * Constructor
      * @param navCtrl The app's navigation controller
      * @param navParams The handed navigation params which should contain the user's key
      */
-    constructor(private navCtrl: NavController, private navParams: NavParams) {
+    constructor(private navCtrl: NavController, private navParams: NavParams, private zone: NgZone, private apiService: TeaCoApiProvider) {
         this.userKey = this.navParams.get('userKey');
+        this.apiService.getUser(this.userKey).subscribe(user => {
+            this.zone.run(() => {
+                this.user = user;
+            })
+        })
     }
 }
