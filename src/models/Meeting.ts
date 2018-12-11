@@ -1,6 +1,8 @@
 /**
- * Class representing a meeting.
+ * Model class representing a meeting.
  */
+import {User} from "./User";
+
 export class Meeting {
 
     /**
@@ -29,12 +31,25 @@ export class Meeting {
      */
     updated_at: Date;
 
-
     /**
      * Whether the meeting is restricted.
      */
     restricted: boolean;
 
+    /**
+     * The meeting's initiator
+     */
+    initiator: User;
+
+    /**
+     * List of participants associated with this meeting
+     */
+    participants: User[];
+
+    /**
+     * Constructor
+     * @param data JSON data to parse all meeting's information from
+     */
     constructor(data: any) {
         this.id = data.id;
         this.initiator_id = data.initiator_id;
@@ -42,6 +57,12 @@ export class Meeting {
         this.created_at = data.created_at;
         this.updated_at = data.updated_at;
         this.restricted = data.restricted;
+        this.initiator = new User(data.initiator);
+
+        this.participants = [];
+        data.participants.forEach(participantData => {
+            this.participants.push(new User(participantData))
+        })
     }
 
 }

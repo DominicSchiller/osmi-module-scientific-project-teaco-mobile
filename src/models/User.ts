@@ -1,5 +1,5 @@
 /**
- * Represents a User
+ * Model class representing a user.
  */
 export class User {
     /**
@@ -21,7 +21,7 @@ export class User {
 
     /**
      * Constructor
-     * @param data JSOn data to parse all information from
+     * @param data JSON data to parse all information from
      */
     constructor(data: any) {
         this.id = data.id;

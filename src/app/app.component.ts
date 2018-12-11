@@ -12,7 +12,7 @@ import { RegisterUserPage } from "../pages/register-user/register-user";
 })
 export class MyApp {
   rootPage:any = HomePage;
-  @ViewChild(Nav) navChild:Nav;
+  @ViewChild(Nav) nav:Nav;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private deepLinks: Deeplinks) {
     platform.ready().then(() => {
@@ -22,8 +22,10 @@ export class MyApp {
       splashScreen.hide();
 
       // Handle deep links
-      this.deepLinks.routeWithNavController(this.navChild, {
+      this.deepLinks.routeWithNavController(this.nav, {
         '/:userKey': RegisterUserPage
+      }, {
+        root: true
       }).subscribe( (match) => {
         //alert("Match: " + JSON.stringify(match));
       }, (noMatch) => {

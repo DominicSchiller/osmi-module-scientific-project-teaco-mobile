@@ -9,7 +9,11 @@ import {User} from "../../models/User";
 })
 export class HomePage {
 
-  constructor(private navCtrl: NavController) {
+  constructor(private navCtrl: NavController, private apiService: TeaCoApiProvider) {
+    // //TODO: just for testing purpose --> should be removed later on
+    // this.apiService.getAllMeetings('1').subscribe(meetings => {
+    //   console.log(meetings);
+    // })
   }
 
 }

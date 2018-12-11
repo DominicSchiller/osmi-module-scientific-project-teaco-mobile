@@ -1,10 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
 import {Observable} from "rxjs";
 import 'rxjs/add/operator/map';
 
-import { User } from "../../models/User";
+import {User} from "../../models/User";
 import {Meeting} from "../../models/Meeting";
 
 /**
@@ -16,7 +16,7 @@ export class TeaCoApiProvider {
   /**
    * The base URL to the TeaCo server
    */
-  private baseUrl = 'http://localhost:3000/api/';
+  private baseUrl = 'http://192.168.2.177:3000/api/';
   /**
    * The API endpoint for User CRUD operations
    */
@@ -25,7 +25,7 @@ export class TeaCoApiProvider {
   /**
    * The API endpoint for Meeting CRUD operations
    */
-  private meetingssAPIEndpoint = "meetings/";
+  private meetingssAPIEndpoint = "/meetings/";
 
 
   /**
@@ -41,22 +41,28 @@ export class TeaCoApiProvider {
    */
   getUser(userKey: string): Observable<User> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
-    const url = this.baseUrl + this.usersAPIEndpoint+ userKey;
+    const url = this.baseUrl + this.usersAPIEndpoint + userKey;
     return this.http.get<User>(url, requestOptions)
         .map(response => {
           return new User(response);
-        })
+        });
   }
 
   /**
    * Get all meetings for a specific user from TeaCo.
-   * @param userHash The user's hash
+   * @param userKey  The user's unique key
    */
-  getMeetingsforUser(userHash: string): Observable<Meeting> {
-      return this.http.get<Meeting>(this.baseUrl+ this.usersAPIEndpoint + userHash + this.meetingssAPIEndpoint, TeaCoApiProvider.getRequestOptions())
-          .map(response => {
-            return new Meeting(response);
-          })
+  getAllMeetings(userKey: string): Observable<Meeting[]> {
+    const requestOptions = TeaCoApiProvider.getRequestOptions();
+    const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingssAPIEndpoint;
+    return this.http.get<Meeting[]>(url, requestOptions)
+        .map(response => {
+          let meetings: Meeting[] = [];
+          response.forEach(data => {
+            meetings.push(new Meeting(data));
+          });
+          return meetings;
+        });
   }
 
   /**
@@ -64,10 +70,9 @@ export class TeaCoApiProvider {
    * @return Object which contains all required HTTP options such as HTTP headers etc.
    */
   private static getRequestOptions() {
-    const requestOptions = {
+    return {
       headers: TeaCoApiProvider.createHttpHeaders()
-    };
-    return requestOptions
+    }
   }
 
   /**
