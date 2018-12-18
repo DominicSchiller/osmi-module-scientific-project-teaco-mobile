@@ -2,6 +2,8 @@
  * Model class representing a meeting.
  */
 import {User} from "./User";
+import {Suggestion} from "./Suggestion";
+
 
 export class Meeting {
 
@@ -47,6 +49,11 @@ export class Meeting {
     participants: User[];
 
     /**
+     * List of suggestions proposed for this meeting
+     */
+    suggestions: Suggestion[];
+
+    /**
      * Constructor
      * @param data JSON data to parse all meeting's information from
      */
@@ -62,7 +69,14 @@ export class Meeting {
         this.participants = [];
         data.participants.forEach(participantData => {
             this.participants.push(new User(participantData))
-        })
+        });
+
+
+        this.suggestions = [];
+        // enable the following once server side is up to date
+  //      data.suggestions.forEach(suggestionData => {
+  //          this.suggestions.push(new Suggestion(suggestionData))
+  //      })
     }
 
 }
