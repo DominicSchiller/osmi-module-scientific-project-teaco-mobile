@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run in Chrome" type="js.build_tools.npm">
+  <configuration default="false" name="Lab - Staging" type="js.build_tools.npm">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
-      <script value="start" />
+      <script value="lab-staging" />
     </scripts>
     <arguments value="--browser &quot;google chrome&quot;" />
     <node-interpreter value="project" />

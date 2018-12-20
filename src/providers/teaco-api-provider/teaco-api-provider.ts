@@ -4,6 +4,8 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import 'rxjs/add/operator/map';
 
+import { ENV } from "@app/env";
+
 import {User} from "../../models/User";
 import {Meeting} from "../../models/Meeting";
 
@@ -16,16 +18,16 @@ export class TeaCoApiProvider {
   /**
    * The base URL to the TeaCo server
    */
-  private baseUrl = 'http://localhost:3000/api/';
+  private readonly baseUrl: string;
   /**
    * The API endpoint for User CRUD operations
    */
-  private usersAPIEndpoint = "users/";
+  private readonly usersAPIEndpoint = "users/";
 
   /**
    * The API endpoint for Meeting CRUD operations
    */
-  private meetingssAPIEndpoint = "/meetings/";
+  private readonly meetingsAPIEndpoint = "/meetings/";
 
 
   /**
@@ -33,6 +35,7 @@ export class TeaCoApiProvider {
    * @param http The Ionic HTTP client instance
    */
   constructor(private http: HttpClient) {
+    this.baseUrl = ENV.api.baseURL;
   }
 
   /**
@@ -54,7 +57,7 @@ export class TeaCoApiProvider {
    */
   getAllMeetings(userKey: string): Observable<Meeting[]> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
-    const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingssAPIEndpoint;
+    const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint;
     return this.http.get<Meeting[]>(url, requestOptions)
         .map(response => {
           let meetings: Meeting[] = [];

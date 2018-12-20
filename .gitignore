@@ -49,3 +49,6 @@ UserInterfaceState.xcuserstate
 
 # Platforms related stuff
 platforms/**/*
+
+# Configs
+/src/env/env.ts
