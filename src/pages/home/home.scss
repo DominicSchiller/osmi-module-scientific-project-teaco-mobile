@@ -1,10 +1,65 @@
 page-home {
-    .icon{
-        margin-top: 50px;
-        margin-left: 10px;
-        font-size: 34px;
+    ion-card-header{
+        padding-left: 3px !important;
+        padding-bottom: 3px !important;
+        padding-top: 0px !important;
     }
 
+    ion-card-content{
+        padding:  3px 3px !important;
+    }
+
+    ion-grid{
+        padding: 0 !important;
+    }
+
+    .icons-bottom{
+        font-size: 18px;
+    }
+
+    .status{
+        border-right: 1px solid color($colors, primary);
+        background-color: #a87d6852; 
+        
+    }
+    .icon-status{ 
+    margin-top: 40px;
+    width: 100%;
+     //background-color: aqua;
+    //margin-left: 10px;
+    text-align: center;    
+    font-size: 34px;
+    }
+
+    .createdDate{
+        font-size: 12px;
+        color: #969696;
+        float: right;
+    }
+    
+    .title{
+        color: color($colors, primary);
+        padding-left: 0px !important;
+    }    
+    
+    .main-text{
+        padding-bottom: 6px
+    }
+
+    /* Status Bar has to be modified */
+    .container-bar{
+        width: 100%;
+        background-color: #ddd;
+        margin-top: 6px;
+    }
+    
+    .votes-bar{
+        width: 70%; background-color: color($colors, primary);
+        color: color($colors, primary);
+        text-align: right;
+        font-size: 7px;
+        padding-right: 10px;
+    }
 
 
 }
