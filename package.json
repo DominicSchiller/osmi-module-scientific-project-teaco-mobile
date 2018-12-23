@@ -22,6 +22,8 @@
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
+    "lab-dev": "ENV=dev ionic lab",
+    "lab-staging": "ENV=staging ionic lab",
     "ionic:build:before": "node ./config/env-prepare.js",
     "ionic:serve:before": "node ./config/env-prepare.js",
     "ionic:watch:before": "node ./config/env-prepare.js"
