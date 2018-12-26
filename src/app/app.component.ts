@@ -10,7 +10,7 @@ import { ENV } from "@app/env";
 
 import { NoUserFoundPage } from '../pages/user/no-user-found/no-user-found';
 import { RegisterUserPage } from "../pages/user/register-user/register-user";
-import {TabsPage} from "../pages/tabs/tabs";
+import {MeetingsOverviewPage} from "../pages/meetings/meetings-overview/meetings-overview";
 
 @Component({
   templateUrl: 'app.html'
@@ -24,13 +24,13 @@ export class MyApp {
       statusBar: StatusBar,
       splashScreen: SplashScreen,
       private deepLinks: Deeplinks,
-      private userSession: UserSessionProvider) {
+      private readonly userSession: UserSessionProvider) {
 
     platform.ready().then(() => {
       console.warn("Running in " + ENV.mode);
 
       userSession.ready().then(activeUser => {
-        this.rootPage = activeUser ? TabsPage : NoUserFoundPage;
+        this.rootPage = activeUser ? MeetingsOverviewPage : NoUserFoundPage;
       });
 
       // Okay, so the platform is ready and our plugins are available.

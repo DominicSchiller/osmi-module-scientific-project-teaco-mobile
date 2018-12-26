@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicModule } from 'ionic-angular';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator';
 import {MyApp} from "../app/app.component";
 @NgModule({

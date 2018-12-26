@@ -1,8 +1,8 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams} from 'ionic-angular';
 import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
 import { LoadingIndicatorComponent } from "../../../components/loading-indicator/loading-indicator";
-import { TabsPage } from "../../tabs/tabs";
+import { MeetingsOverviewPage } from "../../meetings/meetings-overview/meetings-overview";
 import { UserSessionProvider } from "../../../providers/user-session/user-session";
 
 /**
@@ -55,7 +55,7 @@ export class RegisterUserPage {
         this.userKey = this.navParams.get('userKey');
         if(this.userKey != undefined) {
             this.isCalledByDeepLink = true;
-            this.registerUserViaDeeplink();
+            this.registerUserViaDeepLink();
         }
     }
 
@@ -90,7 +90,7 @@ export class RegisterUserPage {
      * Note: This function must be called with delay and asynchronously to ensure
      * it can be triggered directly from the constructor while the UI template has not be rendered.
      */
-    private registerUserViaDeeplink() {
+    private registerUserViaDeepLink() {
         setTimeout(() => {
             this.loadingIndicator.show();
         }, 100);
@@ -100,9 +100,9 @@ export class RegisterUserPage {
      * Finish the registration process and navigate to the
      * meetings overview page.
      */
-    private finishRegistration() {
+    private finishRegistration(): void {
         this.navCtrl.pop().then(() => {
-            this.navCtrl.setRoot(TabsPage).then();
+            this.navCtrl.setRoot(MeetingsOverviewPage).then();
         });
     }
 
