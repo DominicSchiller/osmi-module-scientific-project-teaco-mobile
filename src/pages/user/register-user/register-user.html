@@ -28,7 +28,7 @@
             <button ion-button round (click)="registerUser()">Anmelden</button>
         </ion-list>
     </div>
-    <div id="direct-registration-info-container" *ngIf="isCalledByDeepLink">
+    <div id="direct-registration-info-container" *ngIf="isCalledByDeepLink && !isRegistrationSuccess">
         <p  ion-text color="text-dark">
             Ihr Konto wird registriert ...
         </p>

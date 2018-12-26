@@ -92,7 +92,7 @@ export class RegisterUserPage {
      */
     private registerUserViaDeepLink() {
         setTimeout(() => {
-            this.loadingIndicator.show();
+            this.registerUser();
         }, 100);
     }
 
@@ -101,9 +101,13 @@ export class RegisterUserPage {
      * meetings overview page.
      */
     private finishRegistration(): void {
-        this.navCtrl.pop().then(() => {
-            this.navCtrl.setRoot(MeetingsOverviewPage).then();
-        });
+        if(this.isCalledByDeepLink) {
+            this.navCtrl.push(MeetingsOverviewPage).then();
+        } else {
+            this.navCtrl.pop().then(() => {
+                this.navCtrl.setRoot(MeetingsOverviewPage).then();
+            });
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Nav } from 'ionic-angular';
+import {Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -16,7 +16,8 @@ import {MeetingsOverviewPage} from "../pages/meetings/meetings-overview/meetings
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any;
+  rootPage: any;
+  isAppOpenedByDeepLink = false;
   @ViewChild(Nav) nav:Nav;
 
   constructor(
@@ -29,10 +30,6 @@ export class MyApp {
     platform.ready().then(() => {
       console.warn("Running in " + ENV.mode);
 
-      userSession.ready().then(activeUser => {
-        this.rootPage = activeUser ? MeetingsOverviewPage : NoUserFoundPage;
-      });
-
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
@@ -44,10 +41,18 @@ export class MyApp {
       }, {
         root: true
       }).subscribe( (match) => {
-        //alert("Match: " + JSON.stringify(match));
+        console.log("match", JSON.stringify(match));
+        this.isAppOpenedByDeepLink = true;
+        this.rootPage = undefined;
       }, (noMatch) => {
-        //alert("No Match: " + JSON.stringify(noMatch));
+       console.log("no match", JSON.stringify(noMatch));
       });
+
+      setTimeout( () => {
+        userSession.ready().then(activeUser => {
+          this.rootPage = activeUser ? MeetingsOverviewPage : (!this.isAppOpenedByDeepLink ? NoUserFoundPage : undefined);
+        });
+      }, 50);
     });
   }
 }
