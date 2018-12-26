@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { HomePage } from '../home/home';
+import { NoUserFoundPage } from '../user/no-user-found/no-user-found';
 import { LockedMettingsPage } from '../locked-mettings/locked-mettings';
 
 
@@ -19,7 +19,7 @@ import { LockedMettingsPage } from '../locked-mettings/locked-mettings';
 export class TabsPage {
 
   tab1Root = LockedMettingsPage;
-  tab2Root = HomePage;
+  tab2Root = NoUserFoundPage;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }

@@ -1,0 +1,18 @@
+h1, h2, h3, h4, h5, h6,
+p, div, span {
+  &.thin{
+    font-weight: 300;
+  }
+  &.light {
+    font-weight: 400;
+  }
+  &.medium {
+    font-weight: 500;
+  }
+  &.bold {
+    font-weight: 600;
+  }
+  &.heavy {
+    font-weight: 900;
+  }
+}

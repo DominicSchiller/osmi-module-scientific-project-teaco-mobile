@@ -34,20 +34,30 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #ff5100,
-  secondary:  #32db64,
-  danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #000
+        // default ionic colors
+        primary:    #cc0a2f,
+        secondary:  #00bae5,
+        danger:     #cc0a2f,
+        light:      #ffffff,
+        dark:       #222222,
+        // background and border colors
+        gray-light:   #f8f8f8,
+        gray-medium:  #e4e5e5,
+        gray-dark:    #b8b8b8,
+        // text colors
+        text-dark:  #222222,
+        text-light: #ffffff,
+        text-disabled: #b8b8b8,
+        // progress colors
+        ok:         #83bb20,
+        pending:    #f18400,
 );
 
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
 $toolbar-ios-background: color($colors, primary);
-$background-content: color($colors, light);
-ion-content{ background-color: $background-content !important;
-}
+
 
 // App Material Design Variables
 // --------------------------------------------------
@@ -69,6 +79,9 @@ ion-content{ background-color: $background-content !important;
 // then be future customized. This import comes last
 // so that the above variables are used and Ionic's
 // default are overridden.
+$toolbar-background: color($colors, primary);
+$toolbar-title: color($colors, light);
+$background-content: color($colors, light);
 
 @import "ionic.theme.default";
 
