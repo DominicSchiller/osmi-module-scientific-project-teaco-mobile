@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { TeaCoApiProvider } from "../../providers/teaco-api-provider/teaco-api-provider";
-import {User} from "../../models/User";
+import {IonicPage, NavController} from 'ionic-angular';
+import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
 import { AddNewMeetingPage } from '../add-new-meeting/add-new-meeting';
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-open-meetings-overview',
+  templateUrl: 'open-meetings-overview.html'
 })
-export class HomePage {
+export class OpenMeetingsOverviewPage {
 
   constructor(private navCtrl: NavController, private apiService: TeaCoApiProvider) {
     // //TODO: just for testing purpose --> should be removed later on

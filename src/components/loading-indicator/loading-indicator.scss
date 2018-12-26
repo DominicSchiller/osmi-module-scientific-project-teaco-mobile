@@ -1,0 +1,41 @@
+@import '../../theme/mixins';
+
+loading-indicator {
+  & #loading-indicator {
+    @include box(50px, 50px);
+    @include horizontal-center();
+    position: absolute;
+    top: -75px;
+    z-index: 10;
+    background: #ffffff;
+    border-radius: 50%;
+    @include drop-shadow();
+    transition: 0.5s ease;
+
+    &.loading {
+      top: 30px;
+    }
+
+    ion-spinner {
+      left: 11px;
+      @include vertical-center();
+    }
+  }
+
+  .overlay {
+    @include box(100%, 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #333333;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 9;
+    transition: 0.5s ease;
+
+    &.showing {
+      visibility: visible;
+      opacity: 0.2;
+    }
+  }
+}

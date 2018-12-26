@@ -1,0 +1,33 @@
+@import '../../../theme/mixins';
+@import '../../../theme/default';
+
+
+page-no-user-found {
+
+    ion-content {
+        padding: 0 25px;
+
+        #no-user-info-container {
+            @include box(75%, 50%);
+            @include align(50%, 5%);
+
+            h6, p {
+                text-align: center !important;
+            }
+
+            button {
+                @include box(75%);
+                @include horizontal-center();
+                margin: 30px 0 0 0;
+                box-shadow: none;
+                text-transform: none;
+            }
+
+            #no-user-icon {
+                @include box(auto, 50%);
+                @include horizontal-center;
+                margin: 30px 0 15px 0;
+            }
+        }
+    }
+}

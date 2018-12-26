@@ -1,0 +1,65 @@
+page-register-user {
+
+  ion-content {
+    height: 100%;
+    width: 100%;
+
+    p {
+      padding: 0 25px !important;
+    }
+
+    button {
+      @include box(80%);
+      @include horizontal-center();
+      margin-top: 50px !important;
+      text-transform: none !important;
+    }
+
+    #form {
+      padding: 0 25px;
+
+      ion-list {
+        padding: 0 25px !important;
+        @include horizontal-center();
+
+        ion-item {
+          padding: 0 !important;
+          left: 0;
+        }
+
+        .error-section {
+          margin-top: 5px;
+          color: color($colors, primary)
+        }
+      }
+    }
+
+    #direct-registration-info-container {
+      margin-top: 65px;
+      p {
+        text-align: center;
+      }
+    }
+
+    #success-info-container {
+      width: 100%;
+      padding: 0 25px;
+
+      img {
+        @include box(50%, auto);
+        @include horizontal-center;
+        margin: 30px 0 15px 0;
+      }
+
+      p {
+        text-align: center;
+
+        span {
+          line-height: 30px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+}

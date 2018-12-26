@@ -47,6 +47,9 @@ export class TeaCoApiProvider {
     const url = this.baseUrl + this.usersAPIEndpoint + userKey;
     return this.http.get<User>(url, requestOptions)
         .map(response => {
+          if(response === null) {
+            throw new Error("No user found for this key");
+          }
           return new User(response);
         });
   }
