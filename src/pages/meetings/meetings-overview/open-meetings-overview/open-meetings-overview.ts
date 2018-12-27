@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController} from 'ionic-angular';
-import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
-import { AddNewMeetingPage } from '../add-new-meeting/add-new-meeting';
+import { TeaCoApiProvider } from "../../../../providers/teaco-api/teaco-api-provider";
+import { AddNewMeetingPage } from '../../add-new-meeting/add-new-meeting';
 
 @Component({
   selector: 'page-open-meetings-overview',
