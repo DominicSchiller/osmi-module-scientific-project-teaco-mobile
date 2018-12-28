@@ -2,10 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams} from 'ionic-angular';
 
 /**
- * Generated class for the ClosedMeetingsOverviewPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * Page Controller for listing all closed meetings.
  */
 @Component({
   selector: 'page-closed-meetings-overview',
@@ -14,10 +11,6 @@ import { NavController, NavParams} from 'ionic-angular';
 export class ClosedMeetingsOverviewPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ClosedMeetingsOverviewPage');
   }
 
 }

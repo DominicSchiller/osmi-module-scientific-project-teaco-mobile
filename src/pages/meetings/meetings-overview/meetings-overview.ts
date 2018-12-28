@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { ClosedMeetingsOverviewPage } from './closed-meetings-overview/closed-meetings-overview';
-import {OpenMeetingsOverviewPage} from "./open-meetings-overview/open-meetings-overview";
-
+import { OpenMeetingsOverviewPage } from "./open-meetings-overview/open-meetings-overview";
 
 /**
- * Generated class for the MeetingsOverviewPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * Page Controller for the meetings tab menu.
  */
 @Component({
   selector: 'page-meetings-overview',
@@ -16,14 +12,15 @@ import {OpenMeetingsOverviewPage} from "./open-meetings-overview/open-meetings-o
 })
 export class MeetingsOverviewPage {
 
+  /**
+   * The first tab's page controller
+   */
   tab1Root = ClosedMeetingsOverviewPage;
+  /**
+   * The seconds tab's page controller
+   */
   tab2Root = OpenMeetingsOverviewPage;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MeetingsOverviewPage');
-  }
-
 }

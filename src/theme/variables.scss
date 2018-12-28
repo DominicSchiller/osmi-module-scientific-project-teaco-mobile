@@ -35,22 +35,23 @@ $app-direction: ltr;
 
 $colors: (
         // default ionic colors
-        primary:    #cc0a2f,
-        secondary:  #00bae5,
-        danger:     #cc0a2f,
-        light:      #ffffff,
-        dark:       #222222,
+        primary:          #cc0a2f,
+        secondary:        #00bae5,
+        danger:           #cc0a2f,
+        light:            #ffffff,
+        dark:             #222222,
         // background and border colors
-        gray-light:   #f8f8f8,
-        gray-medium:  #e4e5e5,
-        gray-dark:    #b8b8b8,
+        gray-light:       #f8f8f8,
+        gray-medium:      #dedfdf,
+        gray-dark:        #b8b8b8,
+        gray-extra-dark:  #808080,
         // text colors
-        text-dark:  #222222,
-        text-light: #ffffff,
-        text-disabled: #b8b8b8,
+        text-dark:        #222222,
+        text-light:       #ffffff,
+        text-disabled:    #b8b8b8,
         // progress colors
-        ok:         #83bb20,
-        pending:    #f18400,
+        ok:               #83bb20,
+        pending:          #fca800,
 );
 
 // App iOS Variables

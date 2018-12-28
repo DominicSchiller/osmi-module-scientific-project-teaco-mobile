@@ -37,6 +37,7 @@
 @mixin center() {
   @include vertical-center();
   @include horizontal-center();
+  transform: translate(-50%, -50%) !important;
 }
 
 @mixin drop-shadow() {

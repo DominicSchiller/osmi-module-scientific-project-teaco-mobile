@@ -1,5 +1,4 @@
-import {Vote} from "./Vote";
-
+import {Vote} from "./vote";
 
 /**
  * Model class representing a suggestion.
@@ -7,14 +6,14 @@ import {Vote} from "./Vote";
 export class Suggestion {
 
     /**
-     * Id representing the suggestion.
+     * The suggestion's unique id
      */
     id: number;
 
     /**
-     * Initator_id representing the creator of the suggestion.
+     * The initiator's id representing the creator of the suggestion.
      */
-    initiator_id: number; // seems to matter for deletion
+    initiator_id: number;
 
     /**
      * Title of the suggestion.
@@ -22,7 +21,7 @@ export class Suggestion {
     title: string;
 
     /**
-     * The votes cast.
+     * List of associated votes
      */
     votes: Vote[];
 
@@ -35,9 +34,13 @@ export class Suggestion {
         this.initiator_id = data.initiator_id;
         this.title = data.title;
 
+        // parse votes
         this.votes = [];
-        data.participants.forEach(voteData => {
-            this.votes.push(new Vote(voteData))
-        });
+        if(data.votes != undefined) {
+            data.votes.forEach(voteData => {
+                this.votes.push(new Vote(voteData))
+            });
+        }
+
     }
 }

@@ -74,6 +74,7 @@ export class RegisterUserPage {
         this.loadingIndicator.show();
         this.apiService.getUser(this.userKey).subscribe(user => {
             this.zone.run(() => {
+                user.key = this.userKey;
                 this.userSession.activeUser = user;
                 this.hideLoadingIndicator();
                 this.showSuccessInformation();

@@ -1,5 +1,7 @@
-h1, h2, h3, h4, h5, h6,
-p, div, span {
+@import 'variables';
+@import 'mixins';
+
+* {
   &.thin {
     font-weight: 300;
   }
@@ -15,6 +17,21 @@ p, div, span {
   &.heavy {
     font-weight: 900;
   }
+}
+
+/**
+Line declarations
+ */
+.horizontal-line {
+  @include box(100%, 1px);
+  margin: 10px 0;
+  background: color($colors, gray-medium);
+}
+
+.vertical-line {
+  @include box(1px, 100%);
+  margin: 0 10px;
+  background: color($colors, gray-medium);
 }
 
 /**
@@ -37,6 +54,22 @@ ion-icon {
 
   &[class*="teaco-closed-meetings"] {
     mask-image: url("../assets/svg/meetings/closed-meetings.svg");
+  }
+
+  &[class*="teaco-meeting-state-pending"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-pending.svg");
+  }
+
+  &[class*="teaco-meeting-state-voting"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-voting.svg");
+  }
+
+  &[class*="teaco-suggestion"] {
+    mask-image: url("../assets/svg/meetings/suggestions.svg");
+  }
+
+  &[class*="teaco-participants"] {
+    mask-image: url("../assets/svg/meetings/participants.svg");
   }
 
 }

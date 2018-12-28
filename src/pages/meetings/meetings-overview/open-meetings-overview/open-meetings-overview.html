@@ -1,83 +1,17 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Meetings Übersicht
+      Meeting-Übersicht
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <p *ngIf="user != undefined">
-    Hallo, {{user.name}}<br />
-    <br /> Deine E-mail: {{user.email}}<br /> Deine Konto wurde erstellt am: {{user.created_at.toLocaleDateString()}}<br
-    />
-  </p>
+  <open-meeting-card *ngFor="let meeting of meetings" [meeting]="meeting">
 
-  <ion-card>
-    <ion-grid>
-      <ion-row>
-        <!-- Status Icon-->
-        <ion-col col-2>
-          <ion-icon name="contact" class="icon"></ion-icon>
-
-        </ion-col>
-        <!-- Meeting Description with Title -->
-        <ion-col col-10>
-          <ion-card-header>
-            Header 
-          </ion-card-header>
-          <ion-card-content>
-            The British use the term "header", but the American term "head-shot" the English simply refuse to adopt.
-          </ion-card-content>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card>
-
-  <ion-card>
-    <ion-grid>
-      <ion-row>
-        <!-- Status Icon-->
-        <ion-col col-2>
-          <ion-icon name="contact" class="icon"></ion-icon>
-
-        </ion-col>
-        <!-- Meeting Description with Title -->
-        <ion-col col-10>
-          <ion-card-header>
-            Header
-          </ion-card-header>
-          <ion-card-content>
-            The British use the term "header", but the American term "head-shot" the English simply refuse to adopt.
-          </ion-card-content>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card>
-
-  <ion-card>
-    <ion-grid>
-      <ion-row>
-        <!-- Status Icon-->
-        <ion-col col-2>
-          <ion-icon name="contact" class="icon"></ion-icon>
-
-        </ion-col>
-        <!-- Meeting Description with Title -->
-        <ion-col col-10>
-          <ion-card-header>
-            Header
-          </ion-card-header>
-          <ion-card-content>
-            The British use the term "header", but the American term "head-shot" the English simply refuse to adopt.
-          </ion-card-content>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card>
-
+  </open-meeting-card>
   <ion-fab bottom right>
-      <button ion-fab color="primary" (click)="addNewMeetingPage()">+</button>
-    </ion-fab>    
+      <button ion-fab color="primary" (click)="goToNewMeetingPage()">+</button>
+  </ion-fab>
     
 </ion-content>
