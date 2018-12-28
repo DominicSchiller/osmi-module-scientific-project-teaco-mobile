@@ -1,8 +1,9 @@
 /**
  * Model class representing a meeting.
  */
-import {User} from "./User";
-import {Suggestion} from "./Suggestion";
+import {User} from "./user";
+import {Suggestion} from "./suggestion";
+import {MeetingProgress} from "./meeting-progress";
 
 
 export class Meeting {
@@ -13,7 +14,7 @@ export class Meeting {
     id: number;
 
     /**
-     * Initator_id representing the creator of the meeting.
+     * The ID from the creator of this meeting.
      */
     initiator_id: number;
 
@@ -27,7 +28,6 @@ export class Meeting {
      */
     created_at: Date;
 
-
     /**
      * Date the meeting was last updated.
      */
@@ -36,20 +36,31 @@ export class Meeting {
     /**
      * Whether the meeting is restricted.
      */
-    restricted: boolean;
+    isRestricted: boolean;
 
     /**
-     * The meeting's initiator
+     * Status whether this meeting is closed or not
      */
-    initiator: User;
+    isClosed: boolean;
 
     /**
-     * List of participants associated with this meeting
+     * The number of participants associated with this meeting
+     */
+    numberOfParticipants: number;
+    /**
+     * The number of suggestions associated with this meeting
+     */
+    numberOfSuggestions: number;
+    /**
+     * The overall meeting progress
+     */
+    progress: MeetingProgress;
+    /**
+     * List of associated participants
      */
     participants: User[];
-
     /**
-     * List of suggestions proposed for this meeting
+     * List of associated suggestions
      */
     suggestions: Suggestion[];
 
@@ -61,22 +72,28 @@ export class Meeting {
         this.id = data.id;
         this.initiator_id = data.initiator_id;
         this.title = data.title;
-        this.created_at = data.created_at;
-        this.updated_at = data.updated_at;
-        this.restricted = data.restricted;
-        this.initiator = new User(data.initiator);
+        this.created_at = new Date(data.created_at);
+        this.updated_at = new Date(data.updated_at);
+        this.isRestricted = data.restricted;
+        this.isClosed = data.isClosed;
+        this.numberOfParticipants = data.numberOfParticipants;
+        this.numberOfSuggestions = data.numberOfSuggestions;
+        this.progress = new MeetingProgress(data.progress);
 
+        // parse participants
         this.participants = [];
-        data.participants.forEach(participantData => {
-            this.participants.push(new User(participantData))
-        });
-
-
+        if(data.participants != undefined) {
+            data.participants.forEach( participantData => {
+               this.participants.push(new User(participantData));
+            });
+        }
+        // parse suggestions
         this.suggestions = [];
-        // enable the following once server side is up to date
-  //      data.suggestions.forEach(suggestionData => {
-  //          this.suggestions.push(new Suggestion(suggestionData))
-  //      })
+        if(data.suggestions != undefined) {
+            data.suggestions.forEach( suggestionData => {
+               this.suggestions.push(new Suggestion(suggestionData));
+            });
+        }
     }
 
 }
