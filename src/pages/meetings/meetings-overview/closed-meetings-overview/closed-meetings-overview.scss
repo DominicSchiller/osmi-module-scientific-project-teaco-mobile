@@ -1,8 +1,9 @@
 page-closed-meetings-overview {
-    .icon{
-        margin-top: 50px;
-        margin-left: 10px;
-        font-size: 34px;
-        color: color($colors,secondary);
+  ion-content {
+    background-color: color($colors, gray-light) !important;
+
+    .scroll-content {
+      padding: 0 0px !important;
     }
+  }
 }

@@ -31,7 +31,7 @@ export class Suggestion {
      */
     constructor(data: any) {
         this.id = data.id;
-        this.initiator_id = data.initiator_id;
+        this.initiator_id = data.initiatorId;
         this.title = data.title;
 
         // parse votes

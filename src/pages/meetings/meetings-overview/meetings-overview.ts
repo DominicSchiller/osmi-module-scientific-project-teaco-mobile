@@ -21,6 +21,6 @@ export class MeetingsOverviewPage {
    */
   tab2Root = OpenMeetingsOverviewPage;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor() {
   }
 }

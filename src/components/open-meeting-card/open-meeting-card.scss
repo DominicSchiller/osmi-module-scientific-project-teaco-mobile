@@ -2,10 +2,12 @@
 
 open-meeting-card {
   ion-card {
-    padding: 0 10px !important;
-    //margin: 18px 10px !important;
-    margin: 0 !important;
+    padding: 0 !important;
+    margin: 0 0 15px 0 !important;
     width: 100% !important;
+    border-top: 1px solid color($colors, gray-medium);
+    -webkit-box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
 
     .date-section {
       height: 15px;

@@ -33,21 +33,21 @@ export class OpenMeetingsOverviewPage {
    * @param apiService The app's TeaCo API service
    */
   constructor(
-      private navCtrl: NavController,
-      private userSession: UserSessionProvider,
-      private apiService: TeaCoApiProvider) {
+      protected navCtrl: NavController,
+      protected userSession: UserSessionProvider,
+      protected apiService: TeaCoApiProvider) {
     this.meetings = [];
   }
 
   ngOnInit() {
-    this.loadMeetings();
+    this.loadMeetings(MeetingType.open);
   }
 
   /**
    * Load all meetings from the TeaCo server
    */
-  private loadMeetings() {
-    this.apiService.getAllMeetings(this.userSession.activeUser.key, MeetingType.open).subscribe(meetings => {
+  protected loadMeetings(meetingType: MeetingType) {
+    this.apiService.getAllMeetings(this.userSession.activeUser.key, meetingType).subscribe(meetings => {
       this.meetings = meetings;
       if(meetings.length > 0) {
         this.startMeetingCardsUpdateInterval();
@@ -58,7 +58,7 @@ export class OpenMeetingsOverviewPage {
   /**
    * Start repeating interval for updating each card's date label
    */
-  private startMeetingCardsUpdateInterval() {
+  protected startMeetingCardsUpdateInterval() {
     setInterval(() => {
       this.openMeetingsCards.forEach( (card) => {
         card.updatePassedTimeDescription();

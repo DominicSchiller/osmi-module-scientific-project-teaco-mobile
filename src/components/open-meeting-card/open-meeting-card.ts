@@ -14,12 +14,12 @@ export class OpenMeetingCardComponent {
   /**
    * The associated meeting model
    */
-  @Input('meeting') private meeting: Meeting;
+  @Input('meeting') protected meeting: Meeting;
 
   /**
    * The parsed passed time description
    */
-  private passedTimeDescription: string;
+  protected passedTimeDescription: string;
 
   /**
    * Default constructor
@@ -34,7 +34,7 @@ export class OpenMeetingCardComponent {
    * Update the meeting card's passed time description
    */
   public updatePassedTimeDescription() {
-    this.passedTimeDescription = DateTimeHelper.getPassedTimeDescription(this.meeting.created_at);
+    this.passedTimeDescription = DateTimeHelper.getPassedTimeDescription(this.meeting.createdAt);
   }
 
 }

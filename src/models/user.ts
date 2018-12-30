@@ -32,7 +32,7 @@ export class User {
         this.id = data.id;
         this.name = data.name;
         this.email = data.email;
-        this.created_at = new Date(data.created_at);
+        this.created_at = new Date(data.createdAt);
         this.key = data.key !== undefined ? data.key : "";
     }
 }

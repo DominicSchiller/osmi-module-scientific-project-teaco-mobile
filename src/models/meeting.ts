@@ -16,7 +16,7 @@ export class Meeting {
     /**
      * The ID from the creator of this meeting.
      */
-    initiator_id: number;
+    initiatorId: number;
 
     /**
      * Title of the meeting.
@@ -26,12 +26,12 @@ export class Meeting {
     /**
      * Date the meeting was created.
      */
-    created_at: Date;
+    createdAt: Date;
 
     /**
      * Date the meeting was last updated.
      */
-    updated_at: Date;
+    updatedAt: Date;
 
     /**
      * Whether the meeting is restricted.
@@ -42,6 +42,11 @@ export class Meeting {
      * Status whether this meeting is closed or not
      */
     isClosed: boolean;
+
+    /**
+     * Status whether this meeting has been cancelled while closing
+     */
+    isCancelled: boolean;
 
     /**
      * The number of participants associated with this meeting
@@ -55,6 +60,10 @@ export class Meeting {
      * The overall meeting progress
      */
     progress: MeetingProgress;
+    /**
+     * The meeting's final location
+     */
+    location: string;
     /**
      * List of associated participants
      */
@@ -70,12 +79,14 @@ export class Meeting {
      */
     constructor(data: any) {
         this.id = data.id;
-        this.initiator_id = data.initiator_id;
+        this.initiatorId = data.initiatorId;
         this.title = data.title;
-        this.created_at = new Date(data.created_at);
-        this.updated_at = new Date(data.updated_at);
+        this.createdAt = new Date(data.created_at);
+        this.updatedAt = new Date(data.updated_at);
         this.isRestricted = data.restricted;
-        this.isClosed = data.isClosed;
+        this.isClosed = data.is_closed;
+        this.isCancelled = data.is_cancelled != undefined ? data.is_cancelled : false;
+        this.location = data.location != undefined ? data.location : "-";
         this.numberOfParticipants = data.numberOfParticipants;
         this.numberOfSuggestions = data.numberOfSuggestions;
         this.progress = new MeetingProgress(data.progress);

@@ -9,16 +9,19 @@
                 color="{{meeting.progress.pending === 1 ? 'gray-dark' : 'pending'}}">
         </ion-icon>
       </ion-col>
-      <!-- Meeting Description with Title -->
+      <!-- Meeting  Title and basic statistics -->
       <ion-col col-11>
         <div class="vertical-line"></div>
+        <!-- date information -->
         <div class="date-section">
           <span>{{passedTimeDescription}}</span>
           <ion-icon name="ios-arrow-forward"></ion-icon>
         </div>
+        <!-- meeting title -->
         <ion-card-header class="medium">
           {{meeting.title}}
         </ion-card-header>
+        <!-- basic statistics -->
         <ion-card-content>
           <div class="horizontal-line"></div>
           <ion-row>

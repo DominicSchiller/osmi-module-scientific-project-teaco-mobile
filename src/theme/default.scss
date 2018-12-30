@@ -1,7 +1,19 @@
 @import 'variables';
 @import 'mixins';
 
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+}
+
 * {
+  &.hidden {
+    display: none;
+  }
+
+  /**
+  Font weight declarations
+   */
   &.thin {
     font-weight: 300;
   }
@@ -64,6 +76,14 @@ ion-icon {
     mask-image: url("../assets/svg/meetings/meeting-state-voting.svg");
   }
 
+  &[class*="teaco-meeting-state-cancelled"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-cancelled.svg");
+  }
+
+  &[class*="teaco-meeting-state-completed"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-completed.svg");
+  }
+
   &[class*="teaco-suggestion"] {
     mask-image: url("../assets/svg/meetings/suggestions.svg");
   }
@@ -72,4 +92,12 @@ ion-icon {
     mask-image: url("../assets/svg/meetings/participants.svg");
   }
 
+  /**
+  background images
+   */
+  div {
+    &.final-date-image {
+
+    }
+  }
 }
