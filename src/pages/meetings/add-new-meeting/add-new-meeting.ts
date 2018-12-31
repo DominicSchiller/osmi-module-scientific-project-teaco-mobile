@@ -16,9 +16,4 @@ export class AddNewMeetingPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddNewMeetingPage');
-  }
-
 }

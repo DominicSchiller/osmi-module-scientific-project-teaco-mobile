@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 /**
- * Custom UI component inidcating a loading process.
+ * Custom UI component indicating a loading process.
  */
 @Component({
   selector: 'loading-indicator',

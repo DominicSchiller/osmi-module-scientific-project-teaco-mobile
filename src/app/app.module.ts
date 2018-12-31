@@ -14,10 +14,10 @@ import { NoUserFoundPage } from '../pages/user/no-user-found/no-user-found';
 import {RegisterUserPage} from "../pages/user/register-user/register-user";
 import { TeaCoApiProvider } from '../providers/teaco-api/teaco-api-provider';
 import { MeetingsOverviewPage } from '../pages/meetings/meetings-overview/meetings-overview';
-import { ClosedMeetingsOverviewPage } from '../pages/meetings/closed-meetings-overview/closed-meetings-overview';
+import { ClosedMeetingsOverviewPage } from '../pages/meetings/meetings-overview/closed-meetings-overview/closed-meetings-overview';
 import { AddNewMeetingPage } from '../pages/meetings/add-new-meeting/add-new-meeting';
 import { UserSessionProvider } from '../providers/user-session/user-session';
-import { OpenMeetingsOverviewPage } from "../pages/meetings/open-meetings-overview/open-meetings-overview";
+import { OpenMeetingsOverviewPage } from "../pages/meetings/meetings-overview/open-meetings-overview/open-meetings-overview";
 
 @NgModule({
   declarations: [

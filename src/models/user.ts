@@ -7,6 +7,11 @@ export class User {
      */
     id: number;
     /**
+     * The personal TeaCo key
+     * Note: This Key will be only set for the app's registered user
+     */
+    key: string;
+    /**
      * The user's full name
      */
     name: string;
@@ -27,6 +32,7 @@ export class User {
         this.id = data.id;
         this.name = data.name;
         this.email = data.email;
-        this.created_at = new Date(data.created_at);
+        this.created_at = new Date(data.createdAt);
+        this.key = data.key !== undefined ? data.key : "";
     }
 }

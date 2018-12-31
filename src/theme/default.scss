@@ -1,6 +1,20 @@
-h1, h2, h3, h4, h5, h6,
-p, div, span {
-  &.thin{
+@import 'variables';
+@import 'mixins';
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+}
+
+* {
+  &.hidden {
+    display: none;
+  }
+
+  /**
+  Font weight declarations
+   */
+  &.thin {
     font-weight: 300;
   }
   &.light {
@@ -14,5 +28,84 @@ p, div, span {
   }
   &.heavy {
     font-weight: 900;
+  }
+}
+
+/**
+Line declarations
+ */
+.horizontal-line {
+  @include box(100%, 1px);
+  margin: 10px 0;
+  background: color($colors, gray-medium);
+}
+
+.vertical-line {
+  @include box(1px, 100%);
+  margin: 0 10px;
+  background: color($colors, gray-medium);
+}
+
+/**
+Icon declarations
+ */
+
+ion-icon {
+  &[class*="teaco-"] {
+    mask-size: contain;
+    mask-position: 50% 50%;
+    mask-repeat: no-repeat;
+    background: currentColor;
+    width: 1em;
+    height: 1em;
+  }
+
+  &[class*="teaco-open-meetings"] {
+    mask-image: url("../assets/svg/meetings/open-meetings.svg");
+  }
+
+  &[class*="teaco-closed-meetings"] {
+    mask-image: url("../assets/svg/meetings/closed-meetings.svg");
+  }
+
+  &[class*="teaco-meeting-state-pending"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-pending.svg");
+  }
+
+  &[class*="teaco-meeting-state-voting"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-voting.svg");
+  }
+
+  &[class*="teaco-meeting-state-cancelled"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-cancelled.svg");
+  }
+
+  &[class*="teaco-meeting-state-completed"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-completed.svg");
+  }
+
+  &[class*="teaco-suggestion"] {
+    mask-image: url("../assets/svg/meetings/suggestions.svg");
+  }
+
+  &[class*="teaco-participants"] {
+     mask-image: url("../assets/svg/meetings/participants.svg");
+  }
+
+  &[class*="teaco-add-participant"] {
+    mask-image: url("../assets/svg/meetings/add-participant.svg");
+  }
+
+  &[class*="teaco-add-suggestion"] {
+    mask-image: url("../assets/svg/meetings/add-suggestion.svg");
+  }
+
+  /**
+  background images
+   */
+  div {
+    &.final-date-image {
+
+    }
   }
 }

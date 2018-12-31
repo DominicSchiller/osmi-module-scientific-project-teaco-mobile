@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { User } from "../../models/User";
+import { User } from "../../models/user";
 
 /**
  * Provider responsible for getting and setting the active user and managing
@@ -69,7 +69,8 @@ export class UserSessionProvider {
      return new Promise(resolve => {
       this.storage.get(this.USER_STORAGE_KEY).then((userData) => {
         if(userData !== null) {
-          resolve(new User(JSON.parse(userData)));
+          this._activeUser = new User(JSON.parse(userData));
+          resolve(this._activeUser);
         } else {
           resolve(null);
         }

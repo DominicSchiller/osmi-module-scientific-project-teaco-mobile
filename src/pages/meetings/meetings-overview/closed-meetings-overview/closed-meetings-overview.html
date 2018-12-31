@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Abgeschlossene Meetings</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-list no-lines>
+    <ion-item-sliding *ngFor="let meeting of meetings">
+      <ion-item>
+        <closed-meeting-card [meeting]="meeting">
+        </closed-meeting-card>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="secondary">
+          <ion-icon name="md-folder"></ion-icon>
+        </button>
+        <button ion-button color="primary">
+          <ion-icon name="md-trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

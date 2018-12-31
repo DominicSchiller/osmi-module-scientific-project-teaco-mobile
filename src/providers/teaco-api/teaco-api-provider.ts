@@ -6,8 +6,9 @@ import 'rxjs/add/operator/map';
 
 import { ENV } from "@app/env";
 
-import {User} from "../../models/User";
-import {Meeting} from "../../models/Meeting";
+import {User} from "../../models/user";
+import {Meeting} from "../../models/meeting";
+import {MeetingType} from "../../models/MeetingType";
 
 /**
  * API provider for communicating with the TeaCo server endpoint.
@@ -57,10 +58,11 @@ export class TeaCoApiProvider {
   /**
    * Get all meetings for a specific user from TeaCo.
    * @param userKey  The user's unique key
+   * @param meetingType The requested meeting type
    */
-  getAllMeetings(userKey: string): Observable<Meeting[]> {
+  getAllMeetings(userKey: string, meetingType: MeetingType): Observable<Meeting[]> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
-    const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint;
+    const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + "?type=" + meetingType.toString();
     return this.http.get<Meeting[]>(url, requestOptions)
         .map(response => {
           let meetings: Meeting[] = [];
