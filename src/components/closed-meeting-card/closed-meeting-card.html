@@ -26,11 +26,13 @@
           <div class="horizontal-line"></div>
           <ion-scroll scrollX="true" [ngClass]="meeting.isCancelled ? 'hidden' : ''">
             <ion-row nowrap class="final-dates-list">
-              <div class="date-item" *ngFor="let date of dates">
-                <div class="month medium">DEZ '18</div>
-                <div class="day heavy">{{date}}</div>
-                <div class="day-name">Samstag</div>
-                <div class="time">10:00 - 17:00</div>
+              <div class="date-item" *ngFor="let suggestion of meeting.suggestions">
+                <div class="month medium">{{getMonth(suggestion)}} '{{getYear(suggestion)}}</div>
+                <div class="day heavy">{{getDay(suggestion)}}</div>
+                <div class="day-name">{{getWeekday(suggestion)}}</div>
+                <div class="time">
+                  {{getTime(suggestion)}}
+                </div>
               </div>
             </ion-row>
           </ion-scroll>
