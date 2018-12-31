@@ -89,7 +89,15 @@ ion-icon {
   }
 
   &[class*="teaco-participants"] {
-    mask-image: url("../assets/svg/meetings/participants.svg");
+     mask-image: url("../assets/svg/meetings/participants.svg");
+  }
+
+  &[class*="teaco-add-participant"] {
+    mask-image: url("../assets/svg/meetings/add-participant.svg");
+  }
+
+  &[class*="teaco-add-suggestion"] {
+    mask-image: url("../assets/svg/meetings/add-suggestion.svg");
   }
 
   /**

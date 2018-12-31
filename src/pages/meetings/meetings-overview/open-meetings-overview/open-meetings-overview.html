@@ -5,9 +5,26 @@
 </ion-header>
 
 <ion-content>
-  <open-meeting-card *ngFor="let meeting of meetings" [meeting]="meeting">
+  <ion-list no-lines>
+    <ion-item-sliding *ngFor="let meeting of meetings">
+      <ion-item>
+        <open-meeting-card [meeting]="meeting">
+        </open-meeting-card>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="tertiary" text-wrap>
+          <ion-icon name="teaco-add-participant"></ion-icon>
+        </button>
+        <button ion-button color="secondary" text-wrap>
+          <ion-icon name="teaco-add-suggestion"></ion-icon>
+        </button>
+        <button ion-button color="primary">
+          <ion-icon name="md-trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 
-  </open-meeting-card>
   <ion-fab bottom right>
       <button ion-fab color="primary" (click)="goToNewMeetingPage()">+</button>
   </ion-fab>
