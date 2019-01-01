@@ -6,6 +6,7 @@ import {Meeting} from "../../../../models/meeting";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
 import {OpenMeetingCardComponent} from "../../../../components/open-meeting-card/open-meeting-card";
 import {MeetingType} from "../../../../models/MeetingType";
+import {MeetingDetailPage} from "../../meeting-detail/meeting-detail";
 
 /**
  * Page Controller for listing all open meetings.
@@ -53,6 +54,14 @@ export class OpenMeetingsOverviewPage {
         this.startMeetingCardsUpdateInterval();
       }
     });
+  }
+
+  private showMeetingDetail(meeting: Meeting) {
+    this.navCtrl.push(
+        MeetingDetailPage,
+        meeting,
+        {animate:true,animation:'transition',duration:500,direction:'forward'}
+        ).then();
   }
 
   /**

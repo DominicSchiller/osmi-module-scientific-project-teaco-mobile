@@ -11,6 +11,12 @@
     display: none;
   }
 
+  &.no-bg-image {
+    &:after {
+      background-image: none;
+    }
+  }
+
   /**
   Font weight declarations
    */
@@ -58,6 +64,10 @@ ion-icon {
     background: currentColor;
     width: 1em;
     height: 1em;
+  }
+
+  &[class*="teaco-meeting"] {
+    mask-image: url("../assets/svg/meetings/meeting.svg");
   }
 
   &[class*="teaco-open-meetings"] {

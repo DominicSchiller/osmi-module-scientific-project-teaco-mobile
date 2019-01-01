@@ -1,0 +1,56 @@
+<!--<ion-header>-->
+
+<!--</ion-header>-->
+<ion-header id="meeting-details-page-header">
+  <ion-navbar>
+  </ion-navbar>
+
+  <section id="meeting-details-header">
+    <ion-row class="title-row">
+      <ion-col>
+        <ion-icon name="teaco-meeting"></ion-icon>
+      </ion-col>
+      <ion-col class="divider">
+        <div class="vertical-line"></div>
+      </ion-col>
+      <ion-col>
+        <div class="meeting-title medium">{{meeting.title}}</div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="divider-row">
+      <div class="horizontal-line"></div>
+    </ion-row>
+    <ion-row class="statistics-row">
+      <ion-col>
+        <ion-icon name="teaco-meeting-state-voting"></ion-icon>
+        <div class="stats-value light">
+          <!--<span class="bold">Status</span><br />-->
+          in Planung
+        </div>
+      </ion-col>
+      <ion-col>
+        <ion-icon name="teaco-participants"></ion-icon>
+        <div class="stats-value light">
+          <!--<span class="bold">Teilnehmer</span><br />-->
+          {{meeting.numberOfParticipants}}
+        </div>
+      </ion-col>
+      <ion-col>
+        <ion-icon name="teaco-suggestion"></ion-icon>
+        <div class="stats-value light">
+          <!--<span class="bold">Termine</span><br />-->
+          {{meeting.numberOfParticipants}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </section>
+</ion-header>
+<ion-content class="no-scroll" id="meeting-details-content">
+  <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
+    <ion-list>
+      <ion-item *ngFor="let item of [1, 2,3 ,4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]">
+        Suggestion {{item}}
+      </ion-item>
+    </ion-list>
+  </ion-scroll>
+</ion-content>
