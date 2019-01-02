@@ -27,6 +27,10 @@ suggestion-card {
       margin-top: 3px;
     }
 
+    .quick-vote-col {
+      padding: 0;
+    }
+
     .progress-bar {
       @include box(100%, 8px);
       @include vertical-center();

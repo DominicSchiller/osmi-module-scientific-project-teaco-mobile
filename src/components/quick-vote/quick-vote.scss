@@ -1,0 +1,58 @@
+@import "../../theme/default.scss";
+
+quick-vote {
+  .quick-vote-section {
+    height: 50px !important;
+    width: 80% !important;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    @include horizontal-center();
+
+    .fab {
+      width: 50px !important;
+      height: 50px !important;
+      position: relative;
+      float: left;
+      margin: 0 5px;
+      box-shadow: none;
+      border-width: 2px;
+      border-style: solid;
+      background-color: transparent;
+
+      &.yes-voted {
+        border-color: color($colors, ok);
+        ion-icon {
+          color: color($colors, ok);
+        }
+        &.selected {
+          background: color($colors, ok);
+        }
+      }
+      &.maybe-voted {
+        border-color: color($colors, pending);
+        ion-icon {
+          color: color($colors, pending);
+        }
+        &.selected {
+          background: color($colors, pending);
+        }
+      }
+      &.no-voted {
+        border-color: color($colors, danger);
+        ion-icon {
+          color: color($colors, danger);
+        }
+        &.selected {
+          background: color($colors, danger);
+        }
+      }
+
+      &.selected {
+        ion-icon {
+          color: #fff;
+        }
+      }
+    }
+  }
+}

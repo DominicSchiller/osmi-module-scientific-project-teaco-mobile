@@ -110,6 +110,18 @@ ion-icon {
     mask-image: url("../assets/svg/meetings/add-suggestion.svg");
   }
 
+  &[class*="teaco-voted-yes"] {
+    mask-image: url("../assets/svg/suggestions/quick-vote/voted-yes.svg");
+  }
+
+  &[class*="teaco-voted-no"] {
+    mask-image: url("../assets/svg/suggestions/quick-vote/voted-no.svg");
+  }
+
+  &[class*="teaco-voted-maybe"] {
+    mask-image: url("../assets/svg/suggestions/quick-vote/voted-maybe.svg");
+  }
+
   /**
   background images
    */

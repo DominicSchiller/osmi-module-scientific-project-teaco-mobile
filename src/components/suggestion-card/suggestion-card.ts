@@ -3,6 +3,8 @@ import {Suggestion} from "../../models/suggestion";
 import {VoteDecision} from "../../models/vote-decision";
 import {SuggestionProgress} from "../../models/suggestion-progress";
 import {DateTimeHelper} from "../../utils/date-time-helper";
+import {UserSessionProvider} from "../../providers/user-session/user-session";
+import {Vote} from "../../models/vote";
 
 /**
  * Generated class for the SuggestionCardComponent component.
@@ -22,16 +24,18 @@ export class SuggestionCardComponent {
   @Input('suggestion') protected suggestion: Suggestion;
 
   private progress: SuggestionProgress;
+  private userVote: Vote;
 
   /**
    * Default Constructor
    */
-  constructor() {
+  constructor(private userSession: UserSessionProvider) {
     this.progress = new SuggestionProgress();
   }
 
   ngOnInit() {
     this.determineProgress();
+    this.userVote = this.determineUserVote();
   }
 
   private getDate() {
@@ -41,6 +45,18 @@ export class SuggestionCardComponent {
   private getTime() {
     return DateTimeHelper.getTimeString(this.suggestion.startTime) + " - " +
         DateTimeHelper.getTimeString(this.suggestion.endTime);
+  }
+
+  private determineUserVote() {
+    let userVote = undefined;
+    let user = this.userSession.activeUser;
+    this.suggestion.votes.forEach(vote => {
+      if(vote.voterId === user.id) {
+        userVote = vote;
+        return;
+      }
+    });
+    return userVote;
   }
 
   private determineProgress() {
