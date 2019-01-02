@@ -1,6 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
 import { NavController, NavParams, Navbar } from 'ionic-angular';
 import {Meeting} from "../../../models/meeting";
+import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
+import {UserSessionProvider} from "../../../providers/user-session/user-session";
 
 /**
  * Page Controller for meeting details.
@@ -24,11 +26,17 @@ export class MeetingDetailPage {
    */
   protected meeting: Meeting;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams) {
+  constructor(private navCtrl: NavController, private navParams: NavParams, private apiService: TeaCoApiProvider, userSession: UserSessionProvider) {
     this.meeting = this.navParams.data;
 
     // hide tab bar
     this.tabBarElement = document.querySelector('.tabbar');
+
+    // load participants and suggestions
+    this.apiService.getMeeting(userSession.activeUser.key, this.meeting.id).subscribe(meeting => {
+      this.meeting.participants = meeting.participants;
+      this.meeting.suggestions = meeting.suggestions;
+    })
   }
 
   ionViewDidLoad() {

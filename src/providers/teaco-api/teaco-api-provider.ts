@@ -42,6 +42,7 @@ export class TeaCoApiProvider {
   /**
    * Get a specific user from TeaCo.
    * @param userKey The user's unique key
+   * @return The retrieved user
    */
   getUser(userKey: string): Observable<User> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
@@ -59,6 +60,7 @@ export class TeaCoApiProvider {
    * Get all meetings for a specific user from TeaCo.
    * @param userKey  The user's unique key
    * @param meetingType The requested meeting type
+   * @return The retrieved list of meetings
    */
   getAllMeetings(userKey: string, meetingType: MeetingType): Observable<Meeting[]> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
@@ -71,6 +73,21 @@ export class TeaCoApiProvider {
           });
           return meetings;
         });
+  }
+
+    /**
+     * Get a specific meeting from TeaCo.
+     * @param userKey The user's unique key
+     * @param meetingID The meeting's id which to load
+     * @return The retrieved meeting
+     */
+  getMeeting(userKey: string, meetingID: number): Observable<Meeting> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID
+      return this.http.get<Meeting>(url, requestOptions)
+          .map(data => {
+              return new Meeting(data);
+          });
   }
 
   /**

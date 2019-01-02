@@ -39,7 +39,7 @@
         <ion-icon name="teaco-suggestion"></ion-icon>
         <div class="stats-value light">
           <!--<span class="bold">Termine</span><br />-->
-          {{meeting.numberOfParticipants}}
+          {{meeting.numberOfSuggestions}}
         </div>
       </ion-col>
     </ion-row>
@@ -48,8 +48,8 @@
 <ion-content class="no-scroll" id="meeting-details-content">
   <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
     <ion-list>
-      <ion-item *ngFor="let item of [1, 2,3 ,4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]">
-        Suggestion {{item}}
+      <ion-item *ngFor="let suggestion of meeting.suggestions">
+        Suggestion {{suggestion.id}}
       </ion-item>
     </ion-list>
   </ion-scroll>
