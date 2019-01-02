@@ -49,7 +49,7 @@
   <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
     <ion-list>
       <ion-item *ngFor="let suggestion of meeting.suggestions">
-        Suggestion {{suggestion.id}}
+        <suggestion-card [suggestion]="suggestion"></suggestion-card>
       </ion-item>
     </ion-list>
   </ion-scroll>

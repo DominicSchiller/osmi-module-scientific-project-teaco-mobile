@@ -5,16 +5,19 @@ import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator
 import {MyApp} from "../app/app.component";
 import { OpenMeetingCardComponent } from './open-meeting-card/open-meeting-card';
 import { ClosedMeetingCardComponent } from './closed-meeting-card/closed-meeting-card';
+import { SuggestionCardComponent } from './suggestion-card/suggestion-card';
 @NgModule({
 	declarations: [LoadingIndicatorComponent,
     OpenMeetingCardComponent,
-    ClosedMeetingCardComponent],
+    ClosedMeetingCardComponent,
+    SuggestionCardComponent],
 	imports: [
 		BrowserModule,
 		IonicModule.forRoot(MyApp)
 	],
 	exports: [LoadingIndicatorComponent,
     OpenMeetingCardComponent,
-    ClosedMeetingCardComponent]
+    ClosedMeetingCardComponent,
+    SuggestionCardComponent]
 })
 export class ComponentsModule {}

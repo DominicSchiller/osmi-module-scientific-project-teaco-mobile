@@ -69,9 +69,22 @@ page-meeting-detail {
   }
 
   ion-content {
+    background-color: color($colors, gray-light) !important;
+
     #suggestions-list {
       width: 100% !important;
       height: 100% !important;
+
+      ion-item {
+        background-color: color($colors, gray-light);
+
+        &, ion-label, .item-inner {
+          padding: 0 !important;
+          margin: 0 !important;
+          background-color: color($colors, gray-light);
+        }
+      }
+
     }
   }
 }

@@ -1,0 +1,56 @@
+@import "../../theme/default";
+
+suggestion-card {
+  ion-card {
+    padding: 0 !important;
+    margin: 0 0 15px 0 !important;
+    width: 100% !important;
+    //border-top: 1px solid color($colors, gray-medium);
+    -webkit-box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+
+    .vertical-line {
+      left: 0;
+      top: 0;
+      margin: 0 10px 0 5px;
+      height: 90% !important;
+      @include vertical-center();
+      position: absolute !important;
+    }
+
+    .date-label {
+      width: 100%;
+      //text-align: center;
+    }
+
+    .time-label {
+      margin-top: 3px;
+    }
+
+    .progress-bar {
+      @include box(100%, 8px);
+      @include vertical-center();
+
+      * {
+        float: left;
+      }
+
+      .dont-know-voted {
+        height: 100% !important;
+        background-color: color($colors, gray-medium);
+      }
+      .maybe-voted {
+        height: 100% !important;
+        background-color: color($colors, pending);
+      }
+      .no-voted {
+        height: 100% !important;
+        background-color: color($colors, danger);
+      }
+      .yes-voted {
+        height: 100% !important;
+        background-color: color($colors, ok);
+      }
+    }
+  }
+}

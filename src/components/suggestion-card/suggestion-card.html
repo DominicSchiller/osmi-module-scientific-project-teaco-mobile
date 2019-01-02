@@ -1,0 +1,36 @@
+<ion-card>
+  <ion-grid>
+    <ion-row>
+      <!-- Date and Time -->
+      <ion-col col-auto>
+        <div class="date-label medium">{{getDate()}}</div>
+        <div class="time-label">{{getTime()}} Uhr</div>
+      </ion-col>
+      <ion-col col-auto>
+        <div class="vertical-line"></div>
+      </ion-col>
+      <!-- Quick-Vote -->
+      <ion-col>
+        Quick-Vote Section
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <div class="horizontal-line"></div>
+     <ion-col>
+       <div class="progress-bar">
+         <div class="yes-voted" [ngStyle]="{'width': 'calc(' + progress.yes + '*100%)'}">
+         </div>
+         <div class="maybe-voted" [ngStyle]="{'width': 'calc(' + progress.maybe + '*100%)'}">
+         </div>
+         <div class="no-voted" [ngStyle]="{'width': 'calc(' + progress.no + '*100%)'}">
+         </div>
+         <div class="dont-know-voted" [ngStyle]="{'width': 'calc(' + progress.dontKnow + '*100%)'}">
+         </div>
+       </div>
+     </ion-col>
+      <ion-col col-auto>
+        {{suggestion.votes.length - suggestion.votes.length*progress.dontKnow}}/{{suggestion.votes.length}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>
