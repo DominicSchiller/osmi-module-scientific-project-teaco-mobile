@@ -2,6 +2,9 @@ import {Component, Input, ViewChild} from '@angular/core';
 import {Vote} from "../../models/vote";
 import {FabButton} from "ionic-angular";
 import {VoteDecision} from "../../models/vote-decision";
+import {UserSessionProvider} from "../../providers/user-session/user-session";
+import {TeaCoApiProvider} from "../../providers/teaco-api/teaco-api-provider";
+import {SuggestionCardComponent} from "../suggestion-card/suggestion-card";
 
 /**
  * Custom UI component for handling quick vote options.
@@ -16,6 +19,10 @@ export class QuickVoteComponent {
    * The associated vote item.
    */
   @Input('user-vote') vote: Vote;
+  /**
+   * The associated vote item.
+   */
+  @Input('root') suggestionCard: SuggestionCardComponent;
   /**
    * The 'yes' vote UI button
    */
@@ -32,10 +39,9 @@ export class QuickVoteComponent {
   /**
    * Default Constructor
    */
-  constructor() {}
+  constructor(private userSession: UserSessionProvider, private apiService: TeaCoApiProvider) {}
 
   ngOnInit() {
-    console.log(this.vote);
     switch(this.vote.decision) {
       case VoteDecision.yes:
         this.voteYes();
@@ -56,6 +62,7 @@ export class QuickVoteComponent {
     QuickVoteComponent.activateVoteButton(this.yesVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.maybeVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.noVoteButton);
+    this.updateDecision(VoteDecision.yes);
   }
 
   /**
@@ -65,6 +72,7 @@ export class QuickVoteComponent {
     QuickVoteComponent.activateVoteButton(this.maybeVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.yesVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.noVoteButton);
+    this.updateDecision(VoteDecision.maybe);
   }
 
   /**
@@ -74,6 +82,7 @@ export class QuickVoteComponent {
     QuickVoteComponent.activateVoteButton(this.noVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.yesVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.maybeVoteButton);
+    this.updateDecision(VoteDecision.no);
   }
 
   /**
@@ -92,6 +101,29 @@ export class QuickVoteComponent {
   private static deactivateVoteButton(voteButton: FabButton) {
     let nativeElement: HTMLElement = voteButton.getElementRef().nativeElement;
     nativeElement.classList.remove('selected');
+  }
+
+  /**
+   * Send update request to TeaCo server.
+   */
+  private updateDecision(newDecision: VoteDecision) {
+    if(this.vote.decision !== newDecision) {
+      let oldDecision = this.vote.decision;
+      this.vote.decision = newDecision;
+      this.suggestionCard.updateProgress();
+      this.apiService.updateVote(
+          this.userSession.activeUser.key,
+          this.vote
+      ).subscribe(() => {
+        console.log('successfully updated vote on TeaCo');
+      }, error => {
+        console.error(error.toString());
+        this.vote.decision = oldDecision;
+        this.ngOnInit();
+        this.suggestionCard.updateProgress();
+      });
+    }
+
   }
 
 }

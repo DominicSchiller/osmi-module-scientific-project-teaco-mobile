@@ -81,6 +81,8 @@ open-meeting-card {
       .progress-bar {
         @include box(100%, 8px);
         @include vertical-center();
+        border-radius: 15px;
+        overflow: hidden;
 
         * {
           float: left;

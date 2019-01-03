@@ -34,32 +34,11 @@ export class SuggestionCardComponent {
   }
 
   ngOnInit() {
-    this.determineProgress();
+    this.updateProgress();
     this.userVote = this.determineUserVote();
   }
 
-  private getDate() {
-    return DateTimeHelper.getDateString(this.suggestion.date);
-  }
-
-  private getTime() {
-    return DateTimeHelper.getTimeString(this.suggestion.startTime) + " - " +
-        DateTimeHelper.getTimeString(this.suggestion.endTime);
-  }
-
-  private determineUserVote() {
-    let userVote = undefined;
-    let user = this.userSession.activeUser;
-    this.suggestion.votes.forEach(vote => {
-      if(vote.voterId === user.id) {
-        userVote = vote;
-        return;
-      }
-    });
-    return userVote;
-  }
-
-  private determineProgress() {
+  public updateProgress() {
     let yesVotes = 0;
     let noVotes = 0;
     let maybeVotes = 0;
@@ -87,6 +66,27 @@ export class SuggestionCardComponent {
     this.progress.no = noVotes/votesSum;
     this.progress.maybe = maybeVotes/votesSum;
     this.progress.dontKnow = dontKnowVotes/votesSum;
+  }
+
+  private getDate() {
+    return DateTimeHelper.getDateString(this.suggestion.date);
+  }
+
+  private getTime() {
+    return DateTimeHelper.getTimeString(this.suggestion.startTime) + " - " +
+        DateTimeHelper.getTimeString(this.suggestion.endTime);
+  }
+
+  private determineUserVote() {
+    let userVote = undefined;
+    let user = this.userSession.activeUser;
+    this.suggestion.votes.forEach(vote => {
+      if(vote.voterId === user.id) {
+        userVote = vote;
+        return;
+      }
+    });
+    return userVote;
   }
 
 }

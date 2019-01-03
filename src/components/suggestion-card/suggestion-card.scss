@@ -34,13 +34,16 @@ suggestion-card {
     .progress-bar {
       @include box(100%, 8px);
       @include vertical-center();
+      border-radius: 15px;
+      overflow: hidden;
 
       * {
         float: left;
+        @include vertical-center();
       }
 
       .dont-know-voted {
-        height: 100% !important;
+        height: 70% !important;
         background-color: color($colors, gray-medium);
       }
       .maybe-voted {

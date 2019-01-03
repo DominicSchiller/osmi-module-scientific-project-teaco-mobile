@@ -9,6 +9,7 @@ import { ENV } from "@app/env";
 import {User} from "../../models/user";
 import {Meeting} from "../../models/meeting";
 import {MeetingType} from "../../models/MeetingType";
+import {Vote} from "../../models/vote";
 
 /**
  * API provider for communicating with the TeaCo server endpoint.
@@ -24,12 +25,14 @@ export class TeaCoApiProvider {
    * The API endpoint for User CRUD operations
    */
   private readonly usersAPIEndpoint = "users/";
-
   /**
    * The API endpoint for Meeting CRUD operations
    */
   private readonly meetingsAPIEndpoint = "/meetings/";
-
+  /**
+   * The API endpoint for Meeting CRUD operations
+   */
+  private readonly votesAPIEndpoint = "/votes/";
 
   /**
    * Constructor
@@ -83,11 +86,24 @@ export class TeaCoApiProvider {
      */
   getMeeting(userKey: string, meetingID: number): Observable<Meeting> {
       const requestOptions = TeaCoApiProvider.getRequestOptions();
-      const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID
+      const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID;
       return this.http.get<Meeting>(url, requestOptions)
           .map(data => {
               return new Meeting(data);
           });
+  }
+
+    /**
+     * Update a given Vote record on TeaCo.
+     * @param userKey The user's unique key
+     * @param vote The vote record which to update
+     * @return operation status (success or error).
+     */
+  updateVote(userKey: string, vote: Vote): Observable<void> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.votesAPIEndpoint;
+      const updateData = JSON.stringify(vote);
+      return this.http.put<void>(url, updateData, requestOptions);
   }
 
   /**

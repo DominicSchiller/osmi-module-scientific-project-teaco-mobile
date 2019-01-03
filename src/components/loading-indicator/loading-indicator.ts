@@ -18,7 +18,6 @@ export class LoadingIndicatorComponent {
    * Constructor.
    */
   constructor() {
-    console.log('Hello LoadingIndicatorComponent Component');
     this.isActive = false;
   }
 
