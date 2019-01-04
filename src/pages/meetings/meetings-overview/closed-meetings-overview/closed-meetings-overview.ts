@@ -4,7 +4,6 @@ import {OpenMeetingsOverviewPage} from "../open-meetings-overview/open-meetings-
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
 import {MeetingType} from "../../../../models/MeetingType";
-import {DateTimeHelper} from "../../../../utils/date-time-helper";
 
 /**
  * Page Controller for listing all closed meetings.

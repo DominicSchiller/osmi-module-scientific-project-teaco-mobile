@@ -11,6 +11,12 @@
     display: none;
   }
 
+  &.no-bg-image {
+    &:after {
+      background-image: none;
+    }
+  }
+
   /**
   Font weight declarations
    */
@@ -60,6 +66,10 @@ ion-icon {
     height: 1em;
   }
 
+  &[class*="teaco-meeting"] {
+    mask-image: url("../assets/svg/meetings/meeting.svg");
+  }
+
   &[class*="teaco-open-meetings"] {
     mask-image: url("../assets/svg/meetings/open-meetings.svg");
   }
@@ -98,6 +108,18 @@ ion-icon {
 
   &[class*="teaco-add-suggestion"] {
     mask-image: url("../assets/svg/meetings/add-suggestion.svg");
+  }
+
+  &[class*="teaco-voted-yes"] {
+    mask-image: url("../assets/svg/suggestions/quick-vote/voted-yes.svg");
+  }
+
+  &[class*="teaco-voted-no"] {
+    mask-image: url("../assets/svg/suggestions/quick-vote/voted-no.svg");
+  }
+
+  &[class*="teaco-voted-maybe"] {
+    mask-image: url("../assets/svg/suggestions/quick-vote/voted-maybe.svg");
   }
 
   /**

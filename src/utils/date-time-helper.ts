@@ -52,12 +52,35 @@ export class DateTimeHelper {
     }
 
     /**
+     * Generates date as normalized string representation from given date.
+     * @param date The date to generate the time string from.
+     * @return the normalized date string
+     */
+    public static getDateString(date: Date): string {
+        let stringParts:string[] = date.toLocaleDateString().split('.');
+        stringParts[0] = DateTimeHelper.addLeadingZeroIfRequired(Number(stringParts[0])) + stringParts[0];
+        stringParts[1] = DateTimeHelper.addLeadingZeroIfRequired(Number(stringParts[1])) + stringParts[1];
+        return stringParts[0] + '.' + stringParts[1] + '.' + stringParts[2];
+    }
+
+    /**
      * Generates time as string representation from given date.
      * @param date The date to generate the time string from.
      * @return the time string
      */
     public static getTimeString(date: Date): string {
-        return date.getHours() + ':' + date.getMinutes() + DateTimeHelper.addEndingZeroIfRequired(date.getMinutes());
+        return DateTimeHelper.addLeadingZeroIfRequired(date.getHours()) + date.getHours() + DateTimeHelper.addEndingZeroIfRequired(date.getHours())
+            +  ':' +
+            DateTimeHelper.addLeadingZeroIfRequired(date.getMinutes()) + date.getMinutes() + DateTimeHelper.addEndingZeroIfRequired(date.getMinutes());
+    }
+
+    /**
+     * Determines whether to add ending zeros to a time string or not.
+     * @param time The time to potentially add an ending zero to
+     * @return a zero or empty string
+     */
+    private static addLeadingZeroIfRequired(time: number): string {
+        return time.toString().length == 1 && time !== 0 ? '0' : '';
     }
 
     /**
@@ -111,7 +134,6 @@ export class DateTimeHelper {
                         } else {
                             // check for years
                             time = Math.floor(time /12);
-                            console.log(time);
                             dateString = 'vor ' + (time <= 1 ? 'einem Jahr' : time + ' Jahren');
                         }
                     }
