@@ -1,12 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
-import { HttpClientModule } from "@angular/common/http";
-import { Deeplinks } from "@ionic-native/deeplinks";
+import {HttpClientModule} from "@angular/common/http";
+import {Deeplinks } from "@ionic-native/deeplinks";
+
+import {FirebaseModule} from "../providers/firebase/firebase.module";
 
 import { MyApp } from './app.component';
 import { ComponentsModule } from "../components/components.module";
@@ -19,6 +21,7 @@ import { AddNewMeetingPage } from '../pages/meetings/add-new-meeting/add-new-mee
 import { UserSessionProvider } from '../providers/user-session/user-session';
 import { OpenMeetingsOverviewPage } from "../pages/meetings/meetings-overview/open-meetings-overview/open-meetings-overview";
 import {MeetingDetailPage} from "../pages/meetings/meeting-detail/meeting-detail";
+import { FirebaseProvider } from '../providers/firebase/firebase';
 
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ import {MeetingDetailPage} from "../pages/meetings/meeting-detail/meeting-detail
     BrowserModule,
     HttpClientModule,
     ComponentsModule,
+    FirebaseModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
   ],
@@ -55,7 +59,8 @@ import {MeetingDetailPage} from "../pages/meetings/meeting-detail/meeting-detail
     Deeplinks,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     TeaCoApiProvider,
-    UserSessionProvider
+    UserSessionProvider,
+    FirebaseProvider
   ]
 })
 export class AppModule {}

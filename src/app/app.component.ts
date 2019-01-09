@@ -11,6 +11,7 @@ import { ENV } from "@app/env";
 import { NoUserFoundPage } from '../pages/user/no-user-found/no-user-found';
 import { RegisterUserPage } from "../pages/user/register-user/register-user";
 import {MeetingsOverviewPage} from "../pages/meetings/meetings-overview/meetings-overview";
+import {FirebaseProvider} from "../providers/firebase/firebase";
 
 @Component({
   templateUrl: 'app.html'
@@ -25,7 +26,8 @@ export class MyApp {
       statusBar: StatusBar,
       splashScreen: SplashScreen,
       private deepLinks: Deeplinks,
-      private readonly userSession: UserSessionProvider) {
+      private readonly userSession: UserSessionProvider,
+      private fcmProvider: FirebaseProvider) {
 
     platform.ready().then(() => {
       console.warn("Running in " + ENV.mode);
@@ -41,11 +43,9 @@ export class MyApp {
       }, {
         root: true
       }).subscribe( (match) => {
-        console.log("match", JSON.stringify(match));
         this.isAppOpenedByDeepLink = true;
         this.rootPage = undefined;
       }, (noMatch) => {
-       console.log("no match", JSON.stringify(noMatch));
       });
 
       setTimeout( () => {
