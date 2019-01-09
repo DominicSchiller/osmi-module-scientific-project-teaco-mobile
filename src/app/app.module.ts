@@ -22,6 +22,7 @@ import { UserSessionProvider } from '../providers/user-session/user-session';
 import { OpenMeetingsOverviewPage } from "../pages/meetings/meetings-overview/open-meetings-overview/open-meetings-overview";
 import {MeetingDetailPage} from "../pages/meetings/meeting-detail/meeting-detail";
 import { FirebaseProvider } from '../providers/firebase/firebase';
+import {Firebase} from "@ionic-native/firebase";
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { FirebaseProvider } from '../providers/firebase/firebase';
     StatusBar,
     SplashScreen,
     Deeplinks,
+    Firebase,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     TeaCoApiProvider,
     UserSessionProvider,

@@ -32,7 +32,7 @@ export class FirebaseMessagingWebProvider implements FirebaseMessagingProvider {
         return this._loadingPromise;
     }
 
-    getToken(): Promise<string> {
+    async getToken(): Promise<string> {
         return this.messaging.getToken();
     }
 
@@ -50,7 +50,6 @@ export class FirebaseMessagingWebProvider implements FirebaseMessagingProvider {
         return new Promise((resolve, error) => {
             navigator.serviceWorker.register('service-worker.js')
                 .then((registration) => {
-                    console.log("And now the registration", registration);
                     // apply current service worker
                     this.messaging.useServiceWorker(registration);
                     // request permission

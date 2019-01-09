@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "422344910128",
+    "firebase_url": "https://teaco-thb.firebaseio.com",
+    "project_id": "teaco-thb",
+    "storage_bucket": "teaco-thb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422344910128:android:86c3b000fad264a9",
+        "android_client_info": {
+          "package_name": "de.thb.TeaCo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422344910128-7dglvtlt9c1dtnceeqgoq7pov3cnvmoo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATwJu74AgE8_XzuD9P0kod60WN9T3te9c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

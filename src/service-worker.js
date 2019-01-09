@@ -48,17 +48,28 @@ firebase.initializeApp( {
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
 const messaging = firebase.messaging();
-messaging.setBackgroundMessageHandler(function(payload) {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+messaging.setBackgroundMessageHandler(function(message) {
+    console.log('[firebase-messaging-sw.js] Received background message ', message);
     // Customize notification here
-    const notificationTitle = payload.data.title;
+    const notificationTitle = message.data.title;
+    //
     const notificationOptions = {
-        body: payload.data.message
-        // icon: '/firebase-logo.png'
+        body: message.data.body,
+        icon: "/assets/imgs/logo.png",
+        actions: [
+            {action: 'like', title: '👍Like'},
+            {action: 'reply', title: '⤻ Reply'}]
     };
-
-    console.log(self.registration);
+    //
+    // console.log(self.registration);
 
     return self.registration.showNotification(notificationTitle,
         notificationOptions);
 });
+
+
+self.addEventListener('notificationclick', function(event) {
+    console.log("something clicked", event);
+    //TODO implement routing
+    // self.clients.openWindow("/#/testmessage");
+}, false);
