@@ -7,14 +7,14 @@ import { OpenMeetingCardComponent } from './open-meeting-card/open-meeting-card'
 import { ClosedMeetingCardComponent } from './closed-meeting-card/closed-meeting-card';
 import { SuggestionCardComponent } from './suggestion-card/suggestion-card';
 import { QuickVoteComponent } from './quick-vote/quick-vote';
-import { AddNewMeetingCardComponent } from './add-new-meeting-card/add-new-meeting-card';
+import { InputCardComponent } from './input-card/input-card';
 @NgModule({
 	declarations: [LoadingIndicatorComponent,
     OpenMeetingCardComponent,
     ClosedMeetingCardComponent,
     SuggestionCardComponent,
     QuickVoteComponent,
-    AddNewMeetingCardComponent],
+    InputCardComponent],
 	imports: [
 		BrowserModule,
 		IonicModule.forRoot(MyApp)
@@ -24,6 +24,6 @@ import { AddNewMeetingCardComponent } from './add-new-meeting-card/add-new-meeti
     ClosedMeetingCardComponent,
     SuggestionCardComponent,
     QuickVoteComponent,
-    AddNewMeetingCardComponent]
+    InputCardComponent]
 })
 export class ComponentsModule {}

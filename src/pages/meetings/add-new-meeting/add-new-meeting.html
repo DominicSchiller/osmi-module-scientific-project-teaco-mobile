@@ -1,22 +1,23 @@
-<!--
-  Generated template for the AddNewMeetingPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
     <ion-title>Neues Meeting Anlegen</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-
 <ion-content>
-    <add-new-meeting-card>
-    </add-new-meeting-card>
-
+    <input-card [type]="'text'" [placeholder]="'Titel'" [icon]="'teaco-title'" [onChange]="onTitleEntered">
+    </input-card>
+    <input-card [type]="'text'" [placeholder]="'Ort'" [icon]="'teaco-location'" [onChange]="onLocationEntered">
+    </input-card>
+    <input-card [type]="'date'" [placeholder]="'Datum'" [icon]="'teaco-calendar'" [onChange]="onDateEntered">
+    </input-card>
+    <input-card [type]="'time'" [placeholder]="'Start Uhrzeit'" [icon]="'teaco-startTime'" [onChange]="onStartTimeEntered">
+    </input-card>
+    <input-card [type]="'time'" [placeholder]="'Ende Uhrzeit'" [icon]="'teaco-endTime'" [onChange]="onEndTimeEntered">
+    </input-card>
+    <input-card [type]="'text-area'" [placeholder]="'Kommentar'" [icon]="'teaco-comments'" [onChange]="onCommentEntered">
+    </input-card>
 
   <div class="btnSenden">
       <button ion-button block color="primary" (click)="goToMeetingsOverview()">Meeting Anlegen</button>
