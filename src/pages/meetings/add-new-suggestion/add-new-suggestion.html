@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Terminvorschlag Anlegen</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-content>
+    <input-card [type]="'text'" [placeholder]="'Titel'" [icon]="'teaco-title'" [onChange]="onTitleEntered" >
+    </input-card>
+    <input-card [type]="'date'" [placeholder]="'Datum'" [icon]="'teaco-calendar'" [onChange]="onDateEntered">
+    </input-card>
+    <input-card [type]="'time'" [placeholder]="'Start Uhrzeit'" [icon]="'teaco-startTime'" [onChange]="onStartTimeEntered">
+    </input-card>
+    <input-card [type]="'time'" [placeholder]="'Ende Uhrzeit'" [icon]="'teaco-endTime'" [onChange]="onEndTimeEntered">
+    </input-card>
+    <input-card [type]="'text-area'" [placeholder]="'Kommentar'" [icon]="'teaco-comments'" [onChange]="onCommentEntered">
+    </input-card>
+
+  <div class="btnSenden">
+      <button ion-button block color="primary" (click)="goToMeetingsOverview()">Terminvorschlag Anlegen</button>
+  </div>
+
+</ion-content>
