@@ -3,6 +3,8 @@ import { NavController, NavParams, Navbar } from 'ionic-angular';
 import {Meeting} from "../../../models/meeting";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
+import { AddNewSuggestionPage } from '../add-new-suggestion/add-new-suggestion';
+import { MeetingsOverviewPage } from '../meetings-overview/meetings-overview';
 
 /**
  * Page Controller for meeting details.
@@ -50,6 +52,21 @@ export class MeetingDetailPage {
     headerElement.classList.add('no-bg-image');
     this.navCtrl.pop(
         {animate:true,animation:'transition', direction:'back'}).then();
+  }
+
+
+   /**
+   * Navigate to the "Add New Suggestion" page.
+   */
+  private goToNewSuggestionPage(){
+    this.navCtrl.push(AddNewSuggestionPage).then();
+  }
+
+  /**
+   * Navigate to the "MeetingsOverviewPage" page.
+   */
+  private goToMeetingsOverview(){
+    this.navCtrl.setRoot(MeetingsOverviewPage).then();
   }
 
 }

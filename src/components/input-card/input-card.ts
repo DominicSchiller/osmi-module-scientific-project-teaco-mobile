@@ -25,7 +25,7 @@ export class InputCardComponent {
    * The input's data type
    */
   @Input('type') inputType: string;
-
+  
   /**
    * The callback function to call whenever a model change will occur
    */
@@ -45,7 +45,6 @@ export class InputCardComponent {
    * The current input's value
    */
   value: string;
-
   /**
    * Default Constructor
    */

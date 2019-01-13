@@ -7,6 +7,7 @@ import {UserSessionProvider} from "../../../../providers/user-session/user-sessi
 import {OpenMeetingCardComponent} from "../../../../components/open-meeting-card/open-meeting-card";
 import {MeetingType} from "../../../../models/MeetingType";
 import {MeetingDetailPage} from "../../meeting-detail/meeting-detail";
+import { AddNewSuggestionPage } from '../../add-new-suggestion/add-new-suggestion';
 
 /**
  * Page Controller for listing all open meetings.
@@ -62,7 +63,7 @@ export class OpenMeetingsOverviewPage {
         meeting,
         {animate:true,animation:'transition',duration:500,direction:'forward'}
         ).then();
-  }
+  } 
 
   /**
    * Start repeating interval for updating each card's date label
@@ -80,5 +81,12 @@ export class OpenMeetingsOverviewPage {
    */
   private goToNewMeetingPage(){
     this.navCtrl.push(AddNewMeetingPage).then();
+  }
+
+  /**
+   * Navigate to the "Add New Suggestion" page.
+   */
+  private goToNewSuggestionPage(){
+    this.navCtrl.push(AddNewSuggestionPage).then();
   }
 }

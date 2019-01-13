@@ -16,7 +16,6 @@ import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-ove
 export class AddNewMeetingPage {
 
   private title: string;
-  private location: string;
   private date: string;
   private startTime: string;
   private endTime: string;
@@ -32,11 +31,6 @@ export class AddNewMeetingPage {
   private onTitleEntered(title: string) {
     this.title = title;
     console.log("Title entered: ", this.title);
-  }
-
-  private onLocationEntered(location: string) {
-    this.location = location;
-    console.log("Location entered: ", this.location);
   }
 
   private onDateEntered(date: string) {

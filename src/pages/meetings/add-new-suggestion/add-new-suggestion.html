@@ -7,7 +7,7 @@
 
 <ion-content>
   <ion-content>
-    <input-card [type]="'text'" [placeholder]="'Titel'" [icon]="'teaco-title'" [onChange]="onTitleEntered" >
+    <input-card [type]="'text'" [placeholder]="'Titel'" [icon]="'teaco-title'" [onChange]="onTitleEntered">
     </input-card>
     <input-card [type]="'date'" [placeholder]="'Datum'" [icon]="'teaco-calendar'" [onChange]="onDateEntered">
     </input-card>
@@ -18,8 +18,8 @@
     <input-card [type]="'text-area'" [placeholder]="'Kommentar'" [icon]="'teaco-comments'" [onChange]="onCommentEntered">
     </input-card>
 
-  <div class="btnSenden">
+    <div class="btnSenden">
       <button ion-button block color="primary" (click)="goToMeetingsOverview()">Terminvorschlag Anlegen</button>
-  </div>
+    </div>
 
-</ion-content>
+  </ion-content>

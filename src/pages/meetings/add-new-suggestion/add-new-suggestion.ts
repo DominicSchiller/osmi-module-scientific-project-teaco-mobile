@@ -16,13 +16,14 @@ import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-ove
   templateUrl: 'add-new-suggestion.html',
 })
 export class AddNewSuggestionPage {
+
+  private value: string;
   private title: string;
   private date: string;
   private startTime: string;
   private endTime: string;
   private comment: string;
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
-
   }
 
   goToMeetingsOverview() {
