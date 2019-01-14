@@ -17,22 +17,16 @@ import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-ove
 })
 export class AddNewSuggestionPage {
 
-  private title: string;
   private date: string;
   private startTime: string;
   private endTime: string;
-  private comment: string;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
   }
 
-  goToMeetingsOverview() {
+  private goToMeetingsOverview() {
     this.navCtrl.setRoot(MeetingsOverviewPage).then();
     this.showAlertInfo();
-  }
-
-  private onTitleEntered(title: string) {
-    this.title = title;
-    console.log("Title entered: ", this.title);
   }
 
   private onDateEntered(date: string) {
@@ -51,16 +45,7 @@ export class AddNewSuggestionPage {
     console.log("End time entered: ", this.endTime);
   }
 
-  private onCommentEntered(comment: string) {
-    this.comment = comment;
-    console.log("Comment entered: ", this.comment);
-  }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddNewSuggestionPage');
-  }
-
-
-  showAlertInfo() {
+  private showAlertInfo() {
     const alert = this.alertCtrl.create({
       title: 'Terminvorschlag wurde angelegt!',
       message: 'Dein Termin am xxxx eingetragen',
