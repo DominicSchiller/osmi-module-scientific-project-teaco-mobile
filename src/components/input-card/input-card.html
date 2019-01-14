@@ -1,10 +1,13 @@
 <ion-card>
   <ion-card-content>
     <ion-row>
-      <ion-col col-2>
-        <ion-icon name="{{iconName}}"></ion-icon>
+      <ion-col col-auto>
+        <div class="header-icon-section">
+          <ion-icon name="{{iconName}}"></ion-icon>
+        </div>
+        <div class="vertical-line"></div>
       </ion-col>
-      <ion-col col-10>
+      <ion-col class="content-col">
         <ion-item *ngIf="inputType == 'text'">
           <ion-input type="{{inputType}}" value="" placeholder="{{placeholder}}" [(ngModel)]="value" (change)="notify()"></ion-input>
         </ion-item>

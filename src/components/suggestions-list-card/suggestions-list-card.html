@@ -1,0 +1,29 @@
+<ion-card class="suggestions-card">
+  <ion-row>
+    <ion-col col-auto>
+      <div class="header-icon-section">
+        <ion-icon class="label-icon" name="teaco-meeting" color="primary"></ion-icon>
+      </div>
+      <div class="vertical-line"></div>
+    </ion-col>
+    <ion-col class="content-col">
+      <button ion-button id="show-details-button">
+        <ion-icon name="teaco-add-suggestion" color="light"></ion-icon>
+      </button>
+      <ion-scroll scrollX="true">
+        <ion-row nowrap class="suggestions-list">
+          <div class="spacer"></div>
+          <div class="suggestion-item" *ngFor="let s of suggestions">
+            <div class="suggestion-icon">
+              <ion-icon name="teaco-calendar" color="primary"></ion-icon>
+            </div>
+            <div class="name-label">
+              {{s.date}}
+              {{s.startTime}}
+            </div>
+          </div>
+        </ion-row>
+      </ion-scroll>
+    </ion-col>
+  </ion-row>
+</ion-card>
