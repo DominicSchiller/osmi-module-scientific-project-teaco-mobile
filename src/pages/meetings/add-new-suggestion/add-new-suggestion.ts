@@ -17,7 +17,6 @@ import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-ove
 })
 export class AddNewSuggestionPage {
 
-  private value: string;
   private title: string;
   private date: string;
   private startTime: string;

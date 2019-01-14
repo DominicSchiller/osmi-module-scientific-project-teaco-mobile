@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-overview/open-meetings-overview';
+import {Meeting} from "../../../models/meeting";
+import {User} from "../../../models/user";
+import {UserSessionProvider} from "../../../providers/user-session/user-session";
 
 /**
  * Generated class for the AddNewMeetingPage page.
@@ -15,13 +18,18 @@ import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-ove
 })
 export class AddNewMeetingPage {
 
+  private participants: User[];
+
   private title: string;
-  private date: string;
-  private startTime: string;
-  private endTime: string;
+  private location: string;
   private comment: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, userSession: UserSessionProvider) {
+    this.participants = [];
+    this.participants.push(userSession.activeUser);
+    for (let i=0; i<14; i++) {
+      this.participants.push(userSession.activeUser);
+    }
   }
 
   goToMeetingsOverview(){
@@ -33,19 +41,8 @@ export class AddNewMeetingPage {
     console.log("Title entered: ", this.title);
   }
 
-  private onDateEntered(date: string) {
-    this.date = date;
-    console.log("Date entered: ", this.date);
-  }
-
-  private onStartTimeEntered(time: string) {
-    this.startTime = time;
-    console.log("Start time entered: ", this.startTime);
-  }
-
-  private onEndTimeEntered(time: string) {
-    this.endTime = time;
-    console.log("End time entered: ", this.endTime);
+  private onLocationEntered(location: string) {
+    this.location = location;
   }
 
   private onCommentEntered(comment: string) {

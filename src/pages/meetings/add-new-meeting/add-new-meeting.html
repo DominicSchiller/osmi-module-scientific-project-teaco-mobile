@@ -10,12 +10,33 @@
     </input-card>
     <input-card [type]="'text'" [placeholder]="'Ort'" [icon]="'teaco-location'" [onChange]="onLocationEntered">
     </input-card>
-    <input-card [type]="'date'" [placeholder]="'Datum'" [icon]="'teaco-calendar'" [onChange]="onDateEntered">
-    </input-card>
-    <input-card [type]="'time'" [placeholder]="'Start Uhrzeit'" [icon]="'teaco-startTime'" [onChange]="onStartTimeEntered">
-    </input-card>
-    <input-card [type]="'time'" [placeholder]="'Ende Uhrzeit'" [icon]="'teaco-endTime'" [onChange]="onEndTimeEntered">
-    </input-card>
+
+    <ion-card class="participants-card">
+        <ion-row>
+            <ion-col col-2>
+                <ion-icon class="label-icon" name="teaco-participants" color="primary"></ion-icon>
+            </ion-col>
+            <ion-col col-10>
+                <button ion-button id="show-details-button">
+                    <ion-icon name="teaco-add-participants" color="light"></ion-icon>
+                </button>
+                <ion-scroll scrollX="true">
+                    <ion-row nowrap class="participants-list">
+                        <div class="spacer"></div>
+                        <div class="participant-item" *ngFor="let p of participants">
+                            <div class="participant-icon">
+                                <ion-icon name="teaco-user" color="primary"></ion-icon>
+                            </div>
+                            <div class="name-label">
+                                {{p.name}}
+                            </div>
+                        </div>
+                    </ion-row>
+                </ion-scroll>
+            </ion-col>
+        </ion-row>
+    </ion-card>
+
     <input-card [type]="'text-area'" [placeholder]="'Kommentar'" [icon]="'teaco-comments'" [onChange]="onCommentEntered">
     </input-card>
 
