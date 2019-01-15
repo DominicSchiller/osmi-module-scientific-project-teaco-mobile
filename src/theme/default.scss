@@ -66,6 +66,10 @@ ion-icon {
     height: 1em;
   }
 
+  &[class*="teaco-user"] {
+    mask-image: url("../assets/svg/user/user.svg");
+  }
+
   &[class*="teaco-meeting"] {
     mask-image: url("../assets/svg/meetings/meeting.svg");
   }

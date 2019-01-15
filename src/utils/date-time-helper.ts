@@ -121,7 +121,7 @@ export class DateTimeHelper {
                     let days = time;
 
                     if(days >= 7 && days <= 30) {
-                        let weeks = days / 7;
+                        let weeks = Math.floor(days / 7);
                         dateString = 'vor ' + (weeks <= 1 ? 'einer Woche' : weeks + ' Wochen')
                     } else {
                         // check for months
