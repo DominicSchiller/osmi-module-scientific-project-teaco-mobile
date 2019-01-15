@@ -52,5 +52,18 @@
         <suggestion-card [suggestion]="suggestion"></suggestion-card>
       </ion-item>
     </ion-list>
+
+    
+    
+    <div class="airSpace">
+      <div class="btnSenden">
+        <button ion-button full color="primary">Plannung Abschließen</button>
+      </div>
+    </div>
   </ion-scroll>
+
+  <ion-fab bottom right>
+    <button ion-fab color="primary" (click)="goToNewSuggestionPage()">+</button>
+  </ion-fab>
+  
 </ion-content>
