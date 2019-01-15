@@ -1,10 +1,11 @@
-import {Component, ViewChild} from '@angular/core';
-import { NavController, NavParams, Navbar } from 'ionic-angular';
-import {Meeting} from "../../../models/meeting";
-import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
-import {UserSessionProvider} from "../../../providers/user-session/user-session";
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, Navbar, AlertController, ToastController } from 'ionic-angular';
+import { Meeting } from "../../../models/meeting";
+import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
+import { UserSessionProvider } from "../../../providers/user-session/user-session";
 import { AddNewSuggestionPage } from '../add-new-suggestion/add-new-suggestion';
 import { MeetingsOverviewPage } from '../meetings-overview/meetings-overview';
+import { DateTimeHelper } from "../../../utils/date-time-helper";
 
 /**
  * Page Controller for meeting details.
@@ -24,7 +25,9 @@ export class MeetingDetailPage {
    */
   protected meeting: Meeting;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, private apiService: TeaCoApiProvider, userSession: UserSessionProvider) {
+  constructor(private navCtrl: NavController, private navParams: NavParams, private apiService: TeaCoApiProvider, userSession: UserSessionProvider,
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController) {
     this.meeting = this.navParams.data;
 
     // load participants and suggestions
@@ -69,4 +72,75 @@ export class MeetingDetailPage {
     this.navCtrl.setRoot(MeetingsOverviewPage).then();
   }
 
+    /**
+   * Showing the available Options for choosing one of them.
+   */
+  private showCheckBoxFinalTermin() {
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Finaler Termin');
+    alert.setSubTitle('wählen Sie einen finalen Termin aus');
+
+    for (let i = 0; i < this.meeting.suggestions.length; i++) {
+      console.log(this.meeting.suggestions[i].date);
+      alert.addInput({
+        type: 'radio',
+        label: this.getDate(i) + ' von ' + this.getStartTime(i) + ' - ' + this.getEndTime(i),
+        value: this.getDate(i) + ' von ' + this.getStartTime(i) + ' - ' + this.getEndTime(i),
+        checked: false
+      });
+    }
+
+    alert.addButton({
+      text: 'okay',
+      handler: (data: string) => {
+        if (data == null) {
+          this.toastMessage();
+        } else {
+          console.log(data); //for testing purpose
+          setTimeout(() => {
+            this.goToMeetingsOverview();
+          }, 500);
+        }
+      }
+    });
+    alert.present();
+  }
+
+  /**
+   Shows a Message to the User if he did not choose a final Suggestion from the Options
+   **/
+  toastMessage() {
+    let warning = this.toastCtrl.create({
+      message: 'Sie haben kein Termin ausgewählt. Bitte wählen Sie ein Termin aus!',
+      closeButtonText: 'Schließen',	
+      showCloseButton: true,
+      duration: 3000,
+      position: 'middle'
+    });
+    warning.present();
+  }
+
+  /**
+   * Get the Date Formated.
+   * @param date get the specific date from array
+   */
+  private getDate(date: any) {
+    return DateTimeHelper.getDateString(this.meeting.suggestions[date].date);
+  }
+
+  /**
+   * Get the STart Time Formated.
+   * @param startTime  get the strt time date from array
+   */
+  private getStartTime(startTime: any) {
+    return DateTimeHelper.getTimeString(this.meeting.suggestions[startTime].startTime);
+  }
+
+  /**
+   * Get the End Date Formated.
+   * @param endTime get the end Time from array
+   */
+  private getEndTime(endTime: any) {
+    return DateTimeHelper.getTimeString(this.meeting.suggestions[endTime].endTime);
+  }
 }
