@@ -7,7 +7,7 @@
       <div class="vertical-line"></div>
     </ion-col>
     <ion-col class="content-col">
-      <button ion-button id="show-details-button">
+      <button ion-button id="show-details-button" (click)="emitOnAddClicked()">
         <ion-icon name="teaco-add-suggestion" color="light"></ion-icon>
       </button>
       <ion-scroll scrollX="true">

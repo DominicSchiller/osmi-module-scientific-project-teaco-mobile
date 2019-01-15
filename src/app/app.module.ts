@@ -20,6 +20,7 @@ import { UserSessionProvider } from '../providers/user-session/user-session';
 import { OpenMeetingsOverviewPage } from "../pages/meetings/meetings-overview/open-meetings-overview/open-meetings-overview";
 import {MeetingDetailPage} from "../pages/meetings/meeting-detail/meeting-detail";
 import { AddNewSuggestionPage } from '../pages/meetings/add-new-suggestion/add-new-suggestion';
+import {AddParticipantPage} from "../pages/meetings/add-participant/add-participant";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { AddNewSuggestionPage } from '../pages/meetings/add-new-suggestion/add-n
     AddNewMeetingPage,
     AddNewSuggestionPage,
     MeetingDetailPage,
+    AddParticipantPage,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,8 @@ import { AddNewSuggestionPage } from '../pages/meetings/add-new-suggestion/add-n
     ClosedMeetingsOverviewPage,
     AddNewMeetingPage,
     AddNewSuggestionPage,
-    MeetingDetailPage
+    MeetingDetailPage,
+    AddParticipantPage
   ],
   providers: [
     StatusBar,

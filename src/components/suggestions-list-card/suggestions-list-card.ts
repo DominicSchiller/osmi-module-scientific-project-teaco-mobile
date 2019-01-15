@@ -1,11 +1,8 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Suggestion} from "../../models/suggestion";
 
 /**
- * Generated class for the SuggestionsListCardComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
+ * Custom UI component for horizontally displaying a list of date suggestions.
  */
 @Component({
   selector: 'suggestions-list-card',
@@ -13,10 +10,28 @@ import {Suggestion} from "../../models/suggestion";
 })
 export class SuggestionsListCardComponent {
 
+  /**
+   * List of suggestions which to display
+   */
   @Input('suggestions') suggestions: Suggestion[];
 
+  /**
+   * Event emitter which will be called on each click of the 'add suggestion' button
+   */
+  @Output('onAddClicked') onAddClicked: EventEmitter<any> = new EventEmitter<any>();
+
+  /**
+   * Default Constructor.
+   */
   constructor() {
     this.suggestions = [];
+  }
+
+  /**
+   * Emit the associated 'onAddClicked' event emitter.
+   */
+  emitOnAddClicked() {
+    this.onAddClicked.emit([]);
   }
 
 }

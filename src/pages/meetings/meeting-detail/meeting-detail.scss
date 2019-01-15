@@ -97,7 +97,12 @@ page-meeting-detail {
           background-color: color($colors, gray-light);
         }
       }
+    }
 
+    #createNewSuggestionButton {
+      button {
+        font-size: 3.0rem !important;
+      }
     }
   }
 }

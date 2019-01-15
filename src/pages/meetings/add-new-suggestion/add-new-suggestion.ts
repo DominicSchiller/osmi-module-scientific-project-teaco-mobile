@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import {Component, EventEmitter, ViewChild} from '@angular/core';
+import {NavController, NavParams, AlertController, Navbar} from 'ionic-angular';
 import { MeetingsOverviewPage } from '../meetings-overview/meetings-overview';
 import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-overview/open-meetings-overview';
+import {AddNewMeetingPage} from "../add-new-meeting/add-new-meeting";
 
 /**
  * Generated class for the AddNewSuggestionPage page.
@@ -17,11 +18,40 @@ import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-ove
 })
 export class AddNewSuggestionPage {
 
+  /**
+   * The page's navigation bar UI element
+   */
+  @ViewChild(Navbar) navBar: Navbar;
+
+  private isModalDialog: boolean = false;
+
   private date: string;
   private startTime: string;
   private endTime: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+    console.error(this.navCtrl.getActive().component.name);
+    this.isModalDialog = this.navCtrl.getActive().component.name !== 'AddNewMeetingPage';
+    console.warn(this.isModalDialog);
+  }
+
+  ionViewDidLoad() {
+    this.navBar.hideBackButton = this.isModalDialog;
+    this.navBar.backButtonClick = (e:UIEvent)=>{
+      this.goBack();
+    }
+  }
+
+  /**
+   * Navigate back to the previous screen
+   */
+  goBack() {
+    this.navCtrl.pop(
+        {animate:true,animation:'transition', direction:'back'}).then();
+  }
+
+  closeModal() {
+    this.navCtrl.pop().then();
   }
 
   private goToMeetingsOverview() {
@@ -29,19 +59,19 @@ export class AddNewSuggestionPage {
     this.showAlertInfo();
   }
 
-  private onDateEntered(date: string) {
-    this.date = date;
+  private onDateEntered(event: EventEmitter<any>) {
+    this.date = event[0];
     console.log("Date entered: ", this.date);
     return this.date
   }
 
-  private onStartTimeEntered(time: string) {
-    this.startTime = time;
+  private onStartTimeEntered(event: EventEmitter<any>) {
+    this.startTime = event[0];
     console.log("Start time entered: ", this.startTime);
   }
 
-  private onEndTimeEntered(time: string) {
-    this.endTime = time;
+  private onEndTimeEntered(event: EventEmitter<any>) {
+    this.endTime = event[0];
     console.log("End time entered: ", this.endTime);
   }
 

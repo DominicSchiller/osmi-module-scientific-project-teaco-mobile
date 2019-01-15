@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-overview/open-meetings-overview';
 import {Meeting} from "../../../models/meeting";
 import {User} from "../../../models/user";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
+import {AddParticipantPage} from "../add-participant/add-participant";
+import {AddNewSuggestionPage} from "../add-new-suggestion/add-new-suggestion";
 
 /**
  * Generated class for the AddNewMeetingPage page.
@@ -32,21 +34,34 @@ export class AddNewMeetingPage {
     }
   }
 
-  goToMeetingsOverview(){
-    this.navCtrl.setRoot(OpenMeetingsOverviewPage).then();
+  closeModal(){
+    this.navCtrl.pop().then();
   }
 
-  private onTitleEntered(title: string) {
-    this.title = title;
+  goToAddParticipantPage() {
+    this.navCtrl.push(AddParticipantPage,
+        {},
+        {animate:true,animation:'transition',duration:500,direction:'forward'}).then();
+  }
+
+  goToAddSuggestionPage() {
+    this.navCtrl.push(AddNewSuggestionPage,
+        {},
+        {animate:true,animation:'transition',duration:500,direction:'forward'}).then();
+  }
+
+  private onTitleEntered(event: EventEmitter<any>) {
+    this.title = event[0];
     console.log("Title entered: ", this.title);
   }
 
-  private onLocationEntered(location: string) {
-    this.location = location;
+  private onLocationEntered(event: EventEmitter<any>) {
+    this.location = event[0];
+    console.log("Location entered: ", this.location);
   }
 
-  private onCommentEntered(comment: string) {
-    this.comment = comment;
+  private onCommentEntered(event: EventEmitter<any>) {
+    this.comment = event[0];
     console.log("Comment entered: ", this.comment);
   }
 }

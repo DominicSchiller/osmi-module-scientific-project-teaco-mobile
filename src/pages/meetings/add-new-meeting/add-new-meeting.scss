@@ -1,31 +1,43 @@
 @import "../../../theme/default";
 
 page-add-new-meeting {
+    
+    ion-navbar {
+        ion-buttons {
+            button {
+                font-size: 2.4rem !important;
+            }
+        }
+        ion-icon {
+            color: #fff !important;
+        }
+    }
+    
     ion-content{
         background-color: color($colors, gray-light) !important;
-    }
 
-    ion-icon{
-        color: color($colors, primary) !important;
-        font-size: 2.4rem;
-    }
+        .optional-header {
+            margin: 20px 5px 10px 5px;
+            color: color($colors, text-dark);
+        }
 
-    .optional-header {
-        margin: 20px 5px 10px 5px;
-        color: color($colors, text-dark);
-    }
+        /* .item-inner{
 
-    /* .item-inner{
-        
-    } */
+        } */
 
-    .datetime-ios{
-        padding: 0 !important;
-    }
+        .datetime-ios {
+            padding: 0 !important;
+        }
 
-    .btnSenden{
-        width: 250px;
-        margin: auto;
-        margin-top: 6rem;
+        .btnSenden{
+            width: 250px;
+            margin: auto;
+            margin-top: 6rem;
+        }
+
+        ion-icon{
+            color: color($colors, primary) !important;
+            font-size: 2.4rem;
+        }
     }
 }

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 type InputCardCallbackFunction = (arg1: any) => void;
 
@@ -29,7 +29,7 @@ export class InputCardComponent {
   /**
    * The callback function to call whenever a model change will occur
    */
-  @Input('onChange') callback: InputCardCallbackFunction;
+  @Output('onChange') onChange: EventEmitter<any> = new EventEmitter();
 
   /**
    * A time input's minute selection interval
@@ -56,8 +56,6 @@ export class InputCardComponent {
    * Notify parent controller by calling the given callback function.
    */
   private notify() {
-    if(this.callback !== undefined) {
-      this.callback(this.value);
-    }
+    this.onChange.emit([this.value]);
   }
 }
