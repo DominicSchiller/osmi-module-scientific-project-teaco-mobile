@@ -10,6 +10,7 @@ import {User} from "../../models/user";
 import {Meeting} from "../../models/meeting";
 import {MeetingType} from "../../models/MeetingType";
 import {Vote} from "../../models/vote";
+import {Suggestion} from "../../models/suggestion";
 
 /**
  * API provider for communicating with the TeaCo server endpoint.
@@ -29,6 +30,10 @@ export class TeaCoApiProvider {
    * The API endpoint for Meeting CRUD operations
    */
   private readonly meetingsAPIEndpoint = "/meetings/";
+  /**
+   * The API endpoint for Meeting CRUD operations
+   */
+  private readonly suggestionsAPIEndpoint = "/suggestions/";
   /**
    * The API endpoint for Meeting CRUD operations
    */
@@ -91,6 +96,18 @@ export class TeaCoApiProvider {
           .map(data => {
               return new Meeting(data);
           });
+  }
+
+    /**
+     * Delete a specific suggestion from TeaCo.
+     * @param userKey The user's unique key
+     * @param meetingID The meeting's id which to delete the suggestion for
+     * @param suggestionID The suggestion's id which to delete
+     */
+  deleteSuggestion(userKey: string, meetingID: number, suggestionID: number): Observable<void>  {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl + this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.suggestionsAPIEndpoint + suggestionID;
+      return this.http.delete<void>(url, requestOptions);
   }
 
     /**

@@ -6,6 +6,7 @@ import { UserSessionProvider } from "../../../providers/user-session/user-sessio
 import { AddNewSuggestionPage } from '../add-new-suggestion/add-new-suggestion';
 import { MeetingsOverviewPage } from '../meetings-overview/meetings-overview';
 import { DateTimeHelper } from "../../../utils/date-time-helper";
+import {Suggestion} from "../../../models/suggestion";
 
 /**
  * Page Controller for meeting details.
@@ -25,7 +26,7 @@ export class MeetingDetailPage {
    */
   protected meeting: Meeting;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, private apiService: TeaCoApiProvider, userSession: UserSessionProvider,
+  constructor(private navCtrl: NavController, private navParams: NavParams, private apiService: TeaCoApiProvider, private userSession: UserSessionProvider,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController) {
     this.meeting = this.navParams.data;
@@ -118,6 +119,26 @@ export class MeetingDetailPage {
       position: 'middle'
     });
     warning.present();
+  }
+
+  /**
+   * Delete a specific suggestion.
+   * @param suggestion The suggestion which to delete
+   */
+  private deleteSuggestion(suggestion: Suggestion) {
+    this.apiService.deleteSuggestion(
+        this.userSession.activeUser.key,
+        this.meeting.id,
+        suggestion.id
+    ).subscribe(() => {
+      // search suggestion in array and delete it from there using it's index
+      let index = this.meeting.suggestions.indexOf(suggestion);
+      if(index > -1) {
+        this.meeting.suggestions.splice(index, 1);
+      }
+    }, (error) => {
+      console.error(error);
+    })
   }
 
   /**

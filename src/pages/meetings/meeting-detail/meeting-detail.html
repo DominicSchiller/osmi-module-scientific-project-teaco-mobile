@@ -56,14 +56,14 @@
           <button ion-button color="secondary" text-wrap>
             <ion-icon name="teaco-picked-suggestion"></ion-icon>
           </button>
-          <button ion-button color="primary">
+          <button ion-button color="primary" (click)="deleteSuggestion(suggestion)">
             <ion-icon name="md-trash"></ion-icon>
           </button>
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
 
-    <div class="airSpace">
+    <div class="airSpace" [hidden]="meeting.suggestions.length == 0">
       <div class="btnSenden">
         <button ion-button full color="primary" (click)="showCheckBoxFinalTermin()">Plannung Abschließen</button>
       </div>
