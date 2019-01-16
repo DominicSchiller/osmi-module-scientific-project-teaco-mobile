@@ -114,6 +114,10 @@ ion-icon {
     mask-image: url("../assets/svg/meetings/add-suggestion.svg");
   }
 
+  &[class*="teaco-picked-suggestion"] {
+    mask-image: url("../assets/svg/suggestions/picked_suggestion.svg");
+  }
+
   &[class*="teaco-voted-yes"] {
     mask-image: url("../assets/svg/suggestions/quick-vote/voted-yes.svg");
   }
