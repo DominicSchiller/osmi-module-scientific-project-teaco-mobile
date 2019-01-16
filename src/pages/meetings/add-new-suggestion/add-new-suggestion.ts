@@ -30,7 +30,6 @@ export class AddNewSuggestionPage {
   private endTime: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
-    console.error(this.navCtrl.getActive().component.name);
     this.isModalDialog = this.navCtrl.getActive().component.name !== 'AddNewMeetingPage';
     console.warn(this.isModalDialog);
   }
