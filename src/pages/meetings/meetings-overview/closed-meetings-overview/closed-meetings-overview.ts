@@ -22,8 +22,9 @@ export class ClosedMeetingsOverviewPage extends OpenMeetingsOverviewPage {
    */
   constructor(navCtrl: NavController,
               userSession: UserSessionProvider,
-              apiService: TeaCoApiProvider) {
-    super(navCtrl, userSession, apiService);
+              apiService: TeaCoApiProvider,
+              navParams: NavParams) {
+    super(navCtrl, userSession, apiService,navParams);
   }
 
   ngOnInit() {

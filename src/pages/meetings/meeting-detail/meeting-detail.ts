@@ -35,6 +35,7 @@ export class MeetingDetailPage {
     this.apiService.getMeeting(userSession.activeUser.key, this.meeting.id).subscribe(meeting => {
       this.meeting.participants = meeting.participants;
       this.meeting.suggestions = meeting.suggestions;
+      this.meeting = meeting;
     })
   }
 
@@ -63,7 +64,7 @@ export class MeetingDetailPage {
    * Navigate to the "Add New Suggestion" page.
    */
   private goToNewSuggestionPage(){
-    this.navCtrl.push(AddNewSuggestionPage).then();
+    this.navCtrl.push(AddNewSuggestionPage, this.meeting).then();
   }
 
   /**

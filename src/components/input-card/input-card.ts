@@ -29,7 +29,7 @@ export class InputCardComponent {
   /**
    * The callback function to call whenever a model change will occur
    */
-  @Output('onChange') onChange: EventEmitter<any> = new EventEmitter();
+  @Output('onChange') onChange: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * A time input's minute selection interval
