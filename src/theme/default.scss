@@ -121,7 +121,34 @@ ion-icon {
   &[class*="teaco-voted-maybe"] {
     mask-image: url("../assets/svg/suggestions/quick-vote/voted-maybe.svg");
   }
+  
+  &[class*="teaco-location"] {
+    mask-image: url("../assets/svg/meetings/location.svg");
+  }
 
+  &[class*="teaco-comments"] {
+    mask-image: url("../assets/svg/meetings/comments.svg");
+  }
+
+  &[class*="teaco-startTime"] {
+    mask-image: url("../assets/svg/meetings/startTime.svg");
+  }
+
+  &[class*="teaco-endTime"] {
+    mask-image: url("../assets/svg/meetings/endTime.svg");
+  }
+
+  &[class*="teaco-calendar"] {
+    mask-image: url("../assets/svg/meetings/calendar.svg");
+  }
+
+  &[class*="teaco-title"] {
+    mask-image: url("../assets/svg/meetings/title.svg");
+  }
+
+  &[class*="teaco-comments1"] {
+    mask-image: url("../assets/svg/meetings/comments1.svg");
+  }
   /**
   background images
    */
