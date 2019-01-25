@@ -1,0 +1,26 @@
+<ion-card>
+  <ion-card-content>
+    <ion-row>
+      <ion-col col-auto>
+        <div class="header-icon-section">
+          <ion-icon name="{{iconName}}"></ion-icon>
+        </div>
+        <div class="vertical-line"></div>
+      </ion-col>
+      <ion-col class="content-col">
+        <ion-item *ngIf="inputType == 'text'">
+          <ion-input type="{{inputType}}" value="" placeholder="{{placeholder}}" [(ngModel)]="value" (change)="notify()"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="inputType == 'text-area'">
+          <ion-textarea placeholder="{{placeholder}}" [(ngModel)]="value" (change)="notify()"></ion-textarea>
+        </ion-item>
+        <ion-item *ngIf="inputType == 'date'">
+          <ion-datetime placeholder="{{placeholder}}" displayFormat="DD.MM.YYYY" min={{minDate}} [(ngModel)]="value" (ngModelChange)="notify()"></ion-datetime>
+        </ion-item>
+        <ion-item *ngIf="inputType == 'time'">
+          <ion-datetime placeholder="{{placeholder}}" displayFormat="HH:mm" minuteValues={{minuteValues}} [(ngModel)]="value" (ngModelChange)="notify()"></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-card-content>
+</ion-card>

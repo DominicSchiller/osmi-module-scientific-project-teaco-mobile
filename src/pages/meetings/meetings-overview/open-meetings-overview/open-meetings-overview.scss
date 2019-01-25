@@ -43,5 +43,11 @@ page-open-meetings-overview {
         .scroll-content {
             padding: 0 0px !important;
         }
+
+        #createNewMeetingButton {
+            button {
+                font-size: 3.0rem !important;
+            }
+        }
     }
 }

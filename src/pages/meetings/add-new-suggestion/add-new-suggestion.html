@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+      <ion-buttons left [hidden]="!isModalDialog">
+          <button (click)="closeModal()" ion-button>
+              <ion-icon name="md-close"></ion-icon>
+          </button>
+      </ion-buttons>
+    <ion-title>Terminvorschlag</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+    <input-card [type]="'date'" [placeholder]="'Datum'" [icon]="'teaco-calendar'" (onChange)="onDateEntered($event)">
+    </input-card>
+    <input-card [type]="'time'" [placeholder]="'Start Uhrzeit'" [icon]="'teaco-startTime'" (onChange)="onStartTimeEntered($event)">
+    </input-card>
+    <input-card [type]="'time'" [placeholder]="'Ende Uhrzeit'" [icon]="'teaco-endTime'" (onChange)="onEndTimeEntered($event)">
+    </input-card>
+
+    <div class="btnSenden">
+      <button ion-button block color="primary" (click)="postSuggestion()">Post Anlegen</button>
+
+    </div>
+
+  </ion-content>

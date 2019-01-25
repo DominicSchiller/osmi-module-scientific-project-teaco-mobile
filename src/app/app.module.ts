@@ -23,6 +23,8 @@ import { OpenMeetingsOverviewPage } from "../pages/meetings/meetings-overview/op
 import {MeetingDetailPage} from "../pages/meetings/meeting-detail/meeting-detail";
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import {Firebase} from "@ionic-native/firebase";
+import { AddNewSuggestionPage } from '../pages/meetings/add-new-suggestion/add-new-suggestion';
+import {AddParticipantPage} from "../pages/meetings/add-participant/add-participant";
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import {Firebase} from "@ionic-native/firebase";
     OpenMeetingsOverviewPage,
     ClosedMeetingsOverviewPage,
     AddNewMeetingPage,
+    AddNewSuggestionPage,
     MeetingDetailPage,
+    AddParticipantPage,
   ],
   imports: [
     BrowserModule,
@@ -52,7 +56,9 @@ import {Firebase} from "@ionic-native/firebase";
     OpenMeetingsOverviewPage,
     ClosedMeetingsOverviewPage,
     AddNewMeetingPage,
-    MeetingDetailPage
+    AddNewSuggestionPage,
+    MeetingDetailPage,
+    AddParticipantPage
   ],
   providers: [
     StatusBar,
