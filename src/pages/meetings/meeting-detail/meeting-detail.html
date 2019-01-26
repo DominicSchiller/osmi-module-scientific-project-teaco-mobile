@@ -14,7 +14,7 @@
         <div class="vertical-line"></div>
       </ion-col>
       <ion-col>
-        <div class="meeting-title medium">{{meeting.title}}</div>
+        <div class="meeting-title medium">{{(meeting | async)?.title}}</div>
       </ion-col>
     </ion-row>
     <ion-row class="divider-row">
@@ -32,14 +32,14 @@
         <ion-icon name="teaco-participants"></ion-icon>
         <div class="stats-value light">
           <!--<span class="bold">Teilnehmer</span><br />-->
-          {{meeting.numberOfParticipants}}
+          {{(meeting | async)?.numberOfParticipants}}
         </div>
       </ion-col>
       <ion-col>
         <ion-icon name="teaco-suggestion"></ion-icon>
         <div class="stats-value light">
           <!--<span class="bold">Termine</span><br />-->
-          {{meeting.numberOfSuggestions}}
+          {{(meeting | async)?.numberOfSuggestions}}
         </div>
       </ion-col>
     </ion-row>
@@ -48,7 +48,7 @@
 <ion-content class="no-scroll" id="meeting-details-content">
   <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
     <ion-list no-lines>
-      <ion-item-sliding *ngFor="let suggestion of meeting.suggestions">
+      <ion-item-sliding *ngFor="let suggestion of (meeting | async)?.suggestions">
         <ion-item >
           <suggestion-card [suggestion]="suggestion"></suggestion-card>
         </ion-item>
@@ -63,7 +63,7 @@
       </ion-item-sliding>
     </ion-list>
 
-    <div class="airSpace" [hidden]="meeting.suggestions.length == 0">
+    <div class="airSpace" [hidden]="(meeting | async)?.suggestionsCount == 0">
       <div class="btnSenden">
         <button ion-button full color="primary" (click)="showCheckBoxFinalTermin()">Plannung Abschließen</button>
       </div>

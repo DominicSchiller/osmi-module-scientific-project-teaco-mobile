@@ -8,8 +8,6 @@ import { Deeplinks } from "@ionic-native/deeplinks";
 import {UserSessionProvider} from "../providers/user-session/user-session";
 import { ENV } from "@app/env";
 
-import { NoUserFoundPage } from '../pages/user/no-user-found/no-user-found';
-import { RegisterUserPage } from "../pages/user/register-user/register-user";
 import {MeetingsOverviewPage} from "../pages/meetings/meetings-overview/meetings-overview";
 import {FirebaseProvider} from "../providers/firebase/firebase";
 
@@ -17,7 +15,7 @@ import {FirebaseProvider} from "../providers/firebase/firebase";
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage: any;
+  rootPage: string;
   isAppOpenedByDeepLink = false;
   @ViewChild(Nav) nav:Nav;
 
@@ -39,7 +37,7 @@ export class MyApp {
 
       // Handle deep links
       this.deepLinks.routeWithNavController(this.nav, {
-        '/:userKey': RegisterUserPage
+        '/:userKey': 'RegisterUserPage'
       }, {
         root: true
       }).subscribe( (match) => {
@@ -50,7 +48,7 @@ export class MyApp {
 
       setTimeout( () => {
         userSession.ready().then(activeUser => {
-          this.rootPage = activeUser ? MeetingsOverviewPage : (!this.isAppOpenedByDeepLink ? NoUserFoundPage : undefined);
+          this.rootPage = activeUser ? 'MeetingsOverviewPage' : (!this.isAppOpenedByDeepLink ? 'NoUserFoundPage' : undefined);
         });
       }, 50);
     });

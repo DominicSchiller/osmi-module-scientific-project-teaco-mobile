@@ -1,3 +1,5 @@
+@import '../../../../theme/default';
+
 page-closed-meetings-overview {
   ion-content {
     background-color: color($colors, gray-light) !important;
@@ -40,7 +42,7 @@ page-closed-meetings-overview {
     }
 
     .scroll-content {
-      padding: 0 0px !important;
+      padding: 0 !important;
     }
   }
 }

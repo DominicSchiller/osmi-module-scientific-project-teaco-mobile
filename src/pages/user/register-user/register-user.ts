@@ -1,14 +1,19 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
 import { LoadingIndicatorComponent } from "../../../components/loading-indicator/loading-indicator";
 import { MeetingsOverviewPage } from "../../meetings/meetings-overview/meetings-overview";
 import { UserSessionProvider } from "../../../providers/user-session/user-session";
+import { forwardRef } from '@angular/core';
 
 /**
  * Page Controller for registering a user within the app
  * by his given unique user key.
  */
+@IonicPage({
+    segment: 'welcome/register',
+    defaultHistory: ['NoUserFoundPage']
+})
 @Component({
     selector: 'page-register-user',
     templateUrl: 'register-user.html'
@@ -18,7 +23,7 @@ export class RegisterUserPage {
     /**
      * loading indicator UI component
      */
-    @ViewChild(LoadingIndicatorComponent) loadingIndicator: LoadingIndicatorComponent;
+    @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
     /**
      * The user's personal TeaCo key
      */
@@ -102,13 +107,14 @@ export class RegisterUserPage {
      * meetings overview page.
      */
     private finishRegistration(): void {
-        if(this.isCalledByDeepLink) {
-            this.navCtrl.push(MeetingsOverviewPage).then();
-        } else {
-            this.navCtrl.pop().then(() => {
-                this.navCtrl.setRoot(MeetingsOverviewPage).then();
-            });
-        }
+        // if(this.isCalledByDeepLink) {
+        //     this.navCtrl.push('MeetingsOverviewPage').then();
+        // } else {
+        //     this.navCtrl.pop().then(() => {
+        //         this.navCtrl.setRoot('MeetingsOverviewPage').then();
+        //     });
+        // }
+        this.navCtrl.push('MeetingsOverviewPage').then();
     }
 
     /**

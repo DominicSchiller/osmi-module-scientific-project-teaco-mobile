@@ -1,16 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, Navbar, AlertController, ToastController } from 'ionic-angular';
+import {NavController, NavParams, Navbar, AlertController, ToastController, IonicPage} from 'ionic-angular';
 import { Meeting } from "../../../models/meeting";
 import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
 import { UserSessionProvider } from "../../../providers/user-session/user-session";
-import { AddNewSuggestionPage } from '../add-new-suggestion/add-new-suggestion';
-import { MeetingsOverviewPage } from '../meetings-overview/meetings-overview';
 import { DateTimeHelper } from "../../../utils/date-time-helper";
 import {Suggestion} from "../../../models/suggestion";
+import {Observable} from "rxjs";
 
 /**
  * Page Controller for meeting details.
  */
+@IonicPage({
+  segment: 'open-meetings/:meetingId',
+  defaultHistory: ['MeetingsOverviewPage']
+})
 @Component({
   selector: 'page-meeting-detail',
   templateUrl: 'meeting-detail.html',
@@ -24,21 +27,21 @@ export class MeetingDetailPage {
   /**
    * The meeting to display all detailed information and suggestions for
    */
-  protected meeting: Meeting;
+  protected meeting: Observable<Meeting>;
+
+  protected meetingId: number;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private apiService: TeaCoApiProvider, private userSession: UserSessionProvider,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController) {
-    this.meeting = this.navParams.data;
+    this.meetingId = Number(this.navParams.get('meetingId'));
 
-    // load participants and suggestions
-    this.apiService.getMeeting(userSession.activeUser.key, this.meeting.id).subscribe(meeting => {
-      this.meeting = meeting;
-      this.meeting.numberOfParticipants = meeting.participants.length;
-      this.meeting.numberOfSuggestions = meeting.suggestions.length;
-
-      console.log(this.meeting);
-    })
+    this.meeting = Observable.of(this.navParams.get('meeting'));
+    this.meeting = this.apiService.getMeeting(userSession.activeUser.key, this.meetingId).map(meeting => {
+      meeting.numberOfParticipants = meeting.participants.length;
+      meeting.numberOfSuggestions = meeting.suggestions.length;
+      return meeting;
+    });
   }
 
   ionViewDidLoad() {
@@ -57,8 +60,11 @@ export class MeetingDetailPage {
   goBack() {
     let headerElement: HTMLElement = document.querySelector('#meeting-details-page-header');
     headerElement.classList.add('no-bg-image');
-    this.navCtrl.pop(
-        {animate:true,animation:'transition', direction:'back'}).then();
+    this.navCtrl
+        .pop({animate: true,
+              animation: 'transition',
+              direction: 'back'})
+        .then();
   }
 
 
@@ -66,14 +72,14 @@ export class MeetingDetailPage {
    * Navigate to the "Add New Suggestion" page.
    */
   private goToNewSuggestionPage(){
-    this.navCtrl.push(AddNewSuggestionPage, this.meeting).then();
+    this.navCtrl.push('AddNewSuggestionPage', this.meeting).then();
   }
 
   /**
    * Navigate to the "MeetingsOverviewPage" page.
    */
   private goToMeetingsOverview(){
-    this.navCtrl.setRoot(MeetingsOverviewPage).then();
+    this.navCtrl.setRoot('MeetingsOverviewPage').then();
   }
 
     /**
@@ -84,30 +90,30 @@ export class MeetingDetailPage {
     alert.setTitle('Finaler Termin');
     alert.setSubTitle('wählen Sie einen finalen Termin aus');
 
-    for (let i = 0; i < this.meeting.suggestions.length; i++) {
-      console.log(this.meeting.suggestions[i].date);
-      alert.addInput({
-        type: 'radio',
-        label: this.getDate(i) + ' von ' + this.getStartTime(i) + ' - ' + this.getEndTime(i),
-        value: this.getDate(i) + ' von ' + this.getStartTime(i) + ' - ' + this.getEndTime(i),
-        checked: false
+    this.meeting.subscribe(meeting => {
+      meeting.suggestions.forEach(suggestion => {
+        alert.addInput({
+          type: 'radio',
+          label: this.getDate(suggestion.date) + ' von ' + this.getStartTime(suggestion.startTime) + ' - ' + this.getEndTime(suggestion.endTime),
+          value: this.getDate(suggestion.date) + ' von ' + this.getStartTime(suggestion.startTime) + ' - ' + this.getEndTime(suggestion.endTime),
+          checked: false
+        });
       });
-    }
-
-    alert.addButton({
-      text: 'okay',
-      handler: (data: string) => {
-        if (data == null) {
-          this.toastMessage();
-        } else {
-          console.log(data); //for testing purpose
-          setTimeout(() => {
-            this.goToMeetingsOverview();
-          }, 500);
+      alert.addButton({
+        text: 'okay',
+        handler: (data: string) => {
+          if (data == null) {
+            this.toastMessage();
+          } else {
+            console.log(data); //for testing purpose
+            setTimeout(() => {
+              this.goToMeetingsOverview();
+            }, 500);
+          }
         }
-      }
+      });
+      alert.present();
     });
-    alert.present();
   }
 
   /**
@@ -129,42 +135,53 @@ export class MeetingDetailPage {
    * @param suggestion The suggestion which to delete
    */
   private deleteSuggestion(suggestion: Suggestion) {
-    this.apiService.deleteSuggestion(
-        this.userSession.activeUser.key,
-        this.meeting.id,
-        suggestion.id
-    ).subscribe(() => {
-      // search suggestion in array and delete it from there using it's index
-      let index = this.meeting.suggestions.indexOf(suggestion);
-      if(index > -1) {
-        this.meeting.suggestions.splice(index, 1);
-      }
-    }, (error) => {
-      console.error(error);
-    })
+    this.meeting.subscribe(meeting => {
+      this.apiService.deleteSuggestion(
+          this.userSession.activeUser.key,
+          meeting.id,
+          suggestion.id
+      ).subscribe(() => {
+        // search suggestion in array and delete it from there using it's index
+        // search suggestion in array and delete it from there using it's index
+        let deleteIndex = -1;
+        for(let index = 0; index < meeting.suggestions.length; index++) {
+          if(meeting.suggestions[index].id == suggestion.id) {
+            deleteIndex = index;
+            break;
+          }
+        }
+        if(deleteIndex > -1) {
+          meeting.suggestions.splice(deleteIndex, 1);
+          console.log("suggestion has been successfully deleted");
+        }
+        this.meeting = new Observable(observable => {observable.next(meeting)})
+      }, (error) => {
+        console.error(error);
+      });
+    });
   }
 
   /**
    * Get the Date Formated.
    * @param date get the specific date from array
    */
-  private getDate(date: any) {
-    return DateTimeHelper.getDateString(this.meeting.suggestions[date].date);
+  private getDate(date: Date): string {
+    return DateTimeHelper.getDateString(date);
   }
 
   /**
    * Get the STart Time Formated.
    * @param startTime  get the strt time date from array
    */
-  private getStartTime(startTime: any) {
-    return DateTimeHelper.getTimeString(this.meeting.suggestions[startTime].startTime);
+  private getStartTime(startTime: Date): string {
+    return DateTimeHelper.getTimeString(startTime);
   }
 
   /**
    * Get the End Date Formated.
    * @param endTime get the end Time from array
    */
-  private getEndTime(endTime: any) {
-    return DateTimeHelper.getTimeString(this.meeting.suggestions[endTime].endTime);
+  private getEndTime(endTime: Date): string {
+    return DateTimeHelper.getTimeString(endTime);
   }
 }

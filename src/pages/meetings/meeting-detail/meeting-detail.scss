@@ -18,6 +18,7 @@ page-meeting-detail {
   ion-header {
     #meeting-details-header {
       background-color: color($colors, primary);
+      border-bottom: 1px solid color($colors, light);
       @include box(100%, auto);
       padding: 0 15px 10px 15px;
 
