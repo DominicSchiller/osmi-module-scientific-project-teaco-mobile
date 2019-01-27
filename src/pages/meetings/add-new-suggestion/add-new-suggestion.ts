@@ -1,7 +1,5 @@
 import {Component, EventEmitter, ViewChild} from '@angular/core';
-import {NavController, NavParams, AlertController, Navbar} from 'ionic-angular';
-import { MeetingsOverviewPage } from '../meetings-overview/meetings-overview';
-import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-overview/open-meetings-overview';
+import {NavController, NavParams, AlertController, Navbar, IonicPage} from 'ionic-angular';
 import {TeaCoApiProvider} from '../../../providers/teaco-api/teaco-api-provider';
 import { UserSessionProvider } from "../../../providers/user-session/user-session";
 import { Meeting } from '../../../models/meeting';
@@ -13,8 +11,9 @@ import {Suggestion} from '../../../models/suggestion';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-
-
+@IonicPage({
+  defaultHistory: ['MeetingsOverviewPage']
+})
 @Component({
   selector: 'page-add-new-suggestion',
   templateUrl: 'add-new-suggestion.html',
@@ -34,8 +33,11 @@ export class AddNewSuggestionPage {
   private meeting: Meeting;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public apiService:TeaCoApiProvider, private userSession: UserSessionProvider) {
-    this.isModalDialog = this.navCtrl.getActive().component.name !== 'AddNewMeetingPage';
-    console.warn(this.isModalDialog);
+    if(this.navCtrl.getActive() !== undefined) {
+      this.isModalDialog = this.navCtrl.getActive().component.name !== 'AddNewMeetingPage';
+    } else {
+      this.isModalDialog = true;
+    }
     this.meeting = this.navParams.data;
   }
 
@@ -59,7 +61,7 @@ export class AddNewSuggestionPage {
   }
 
   private goToMeetingsOverview() {
-    this.navCtrl.setRoot(MeetingsOverviewPage).then();
+    this.navCtrl.setRoot('MeetingsOverviewPage').then();
     this.showAlertInfo();
   }
 

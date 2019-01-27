@@ -10,6 +10,7 @@ import { QuickVoteComponent } from './quick-vote/quick-vote';
 import { InputCardComponent } from './input-card/input-card';
 import { ParticipantsListCardComponent } from './participants-list-card/participants-list-card';
 import { SuggestionsListCardComponent } from './suggestions-list-card/suggestions-list-card';
+import {CommonModule} from "@angular/common";
 @NgModule({
 	declarations: [
 	    LoadingIndicatorComponent,
@@ -22,18 +23,19 @@ import { SuggestionsListCardComponent } from './suggestions-list-card/suggestion
         SuggestionsListCardComponent,
     ],
 	imports: [
-		BrowserModule,
-		IonicModule.forRoot(MyApp)
+        IonicModule
 	],
     entryComponents: [
     ],
-	exports: [LoadingIndicatorComponent,
-    OpenMeetingCardComponent,
-    ClosedMeetingCardComponent,
-    SuggestionCardComponent,
-    QuickVoteComponent,
-    InputCardComponent,
-    ParticipantsListCardComponent,
-    SuggestionsListCardComponent]
+	exports: [
+	    LoadingIndicatorComponent,
+        OpenMeetingCardComponent,
+        ClosedMeetingCardComponent,
+        SuggestionCardComponent,
+        QuickVoteComponent,
+        InputCardComponent,
+        ParticipantsListCardComponent,
+        SuggestionsListCardComponent
+    ]
 })
 export class ComponentsModule {}

@@ -1,17 +1,18 @@
 import {Component, ViewChildren} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
-import {AddNewMeetingPage} from '../../add-new-meeting/add-new-meeting';
 import {Meeting} from "../../../../models/meeting";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
 import {OpenMeetingCardComponent} from "../../../../components/open-meeting-card/open-meeting-card";
 import {MeetingType} from "../../../../models/MeetingType";
-import {MeetingDetailPage} from "../../meeting-detail/meeting-detail";
-import { AddNewSuggestionPage } from '../../add-new-suggestion/add-new-suggestion';
 
 /**
  * Page Controller for listing all open meetings.
  */
+@IonicPage({
+  name: 'OpenMeetingsOverviewPage',
+  segment: 'open-meetings'
+})
 @Component({
   selector: 'page-open-meetings-overview',
   templateUrl: 'open-meetings-overview.html'
@@ -39,7 +40,6 @@ export class OpenMeetingsOverviewPage {
       protected userSession: UserSessionProvider,
       protected apiService: TeaCoApiProvider,
       protected navParams: NavParams) {
-    
     this.meetings = [];
     this.meeting = this.navParams.data;
   }
@@ -63,8 +63,8 @@ export class OpenMeetingsOverviewPage {
 
   private showMeetingDetail(meeting: Meeting) {
     this.navCtrl.push(
-        MeetingDetailPage,
-        meeting,
+        'MeetingDetailPage',
+        {meeting: meeting, meetingId: meeting.id},
         {animate:true,animation:'transition',duration:500,direction:'forward'}
         ).then();
   } 
@@ -84,14 +84,14 @@ export class OpenMeetingsOverviewPage {
    * Navigate to the "create new meeting" page.
    */
   private goToNewMeetingPage(){
-    this.navCtrl.push(AddNewMeetingPage).then();
+    this.navCtrl.push('AddNewMeetingPage').then();
   }
 
   /**
    * Navigate to the "Add New Suggestion" page.
    */
   private goToNewSuggestionPage(){
-    this.navCtrl.push(AddNewSuggestionPage).then();
+    this.navCtrl.push('AddNewSuggestionPage').then();
   }
 
   /**

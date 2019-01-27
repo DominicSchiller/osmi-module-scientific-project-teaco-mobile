@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import { ModalController } from 'ionic-angular';
+import {IonicPage, ModalController} from 'ionic-angular';
 import {RegisterUserPage} from "../register-user/register-user";
 
+@IonicPage({
+  segment: 'welcome'
+})
 @Component({
   selector: 'page-no-user-found',
   templateUrl: 'no-user-found.html'
@@ -23,7 +26,7 @@ export class NoUserFoundPage {
    * his personal key.
    */
   openRegisterUserModal() {
-    const modal = this.modalCtrl.create(RegisterUserPage);
+    const modal = this.modalCtrl.create('RegisterUserPage');
     modal.present();
   }
 }

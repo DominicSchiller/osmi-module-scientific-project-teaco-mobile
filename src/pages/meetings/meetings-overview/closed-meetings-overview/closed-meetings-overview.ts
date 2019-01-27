@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {OpenMeetingsOverviewPage} from "../open-meetings-overview/open-meetings-overview";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
@@ -8,6 +8,9 @@ import {MeetingType} from "../../../../models/MeetingType";
 /**
  * Page Controller for listing all closed meetings.
  */
+@IonicPage({
+  segment: 'closed-meetings'
+})
 @Component({
   selector: 'page-closed-meetings-overview',
   templateUrl: 'closed-meetings-overview.html',
