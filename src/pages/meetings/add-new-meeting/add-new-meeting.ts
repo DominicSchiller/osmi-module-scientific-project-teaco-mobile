@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { MeetingsOverviewPage } from '../meetings-overview/meetings-overview';
+import { OpenMeetingsOverviewPage } from '../meetings-overview/open-meetings-overview/open-meetings-overview';
 
 /**
  * Generated class for the AddNewMeetingPage page.
@@ -15,5 +17,9 @@ import { NavController, NavParams } from 'ionic-angular';
 export class AddNewMeetingPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
+
+  goToMeetingsOverview(){
+    this.navCtrl.setRoot(OpenMeetingsOverviewPage).then();
   }
 }
