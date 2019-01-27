@@ -1,5 +1,5 @@
 import {Component, ViewChildren} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
 import {AddNewMeetingPage} from '../../add-new-meeting/add-new-meeting';
 import {Meeting} from "../../../../models/meeting";
@@ -7,6 +7,7 @@ import {UserSessionProvider} from "../../../../providers/user-session/user-sessi
 import {OpenMeetingCardComponent} from "../../../../components/open-meeting-card/open-meeting-card";
 import {MeetingType} from "../../../../models/MeetingType";
 import {MeetingDetailPage} from "../../meeting-detail/meeting-detail";
+import { AddNewSuggestionPage } from '../../add-new-suggestion/add-new-suggestion';
 
 /**
  * Page Controller for listing all open meetings.
@@ -26,7 +27,7 @@ export class OpenMeetingsOverviewPage {
    * List of fetched meetings
    */
   protected meetings: Meeting[];
-
+  protected meeting: Meeting;
   /**
    * Constructor
    * @param navCtrl The page's navigation controller
@@ -36,8 +37,11 @@ export class OpenMeetingsOverviewPage {
   constructor(
       protected navCtrl: NavController,
       protected userSession: UserSessionProvider,
-      protected apiService: TeaCoApiProvider) {
+      protected apiService: TeaCoApiProvider,
+      protected navParams: NavParams) {
+    
     this.meetings = [];
+    this.meeting = this.navParams.data;
   }
 
   ngOnInit() {
@@ -50,6 +54,7 @@ export class OpenMeetingsOverviewPage {
   protected loadMeetings(meetingType: MeetingType) {
     this.apiService.getAllMeetings(this.userSession.activeUser.key, meetingType).subscribe(meetings => {
       this.meetings = meetings;
+      //this.meeting.id = meetings[0].id;
       if(meetings.length > 0) {
         this.startMeetingCardsUpdateInterval();
       }
@@ -62,7 +67,7 @@ export class OpenMeetingsOverviewPage {
         meeting,
         {animate:true,animation:'transition',duration:500,direction:'forward'}
         ).then();
-  }
+  } 
 
   /**
    * Start repeating interval for updating each card's date label
@@ -81,4 +86,28 @@ export class OpenMeetingsOverviewPage {
   private goToNewMeetingPage(){
     this.navCtrl.push(AddNewMeetingPage).then();
   }
+
+  /**
+   * Navigate to the "Add New Suggestion" page.
+   */
+  private goToNewSuggestionPage(){
+    this.navCtrl.push(AddNewSuggestionPage).then();
+  }
+
+  /**
+   *Remove Meeting
+   */
+  removeMeeting(){
+    /* this.apiService.deleteMeeting(this.userSession.activeUser.key, this.meetings[1].id).subscribe(meeting =>{
+      this.meeting.id = meeting.id;
+    }); */
+    
+    console.log(this.meetings);
+    console.log(this.meeting);
+    
+  
+    //console.log('Meeting hs to be removed');
+    
+  }
+  
 }

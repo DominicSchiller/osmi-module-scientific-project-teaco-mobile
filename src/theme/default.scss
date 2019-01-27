@@ -66,6 +66,10 @@ ion-icon {
     height: 1em;
   }
 
+  &[class*="teaco-user"] {
+    mask-image: url("../assets/svg/user/user.svg");
+  }
+
   &[class*="teaco-meeting"] {
     mask-image: url("../assets/svg/meetings/meeting.svg");
   }
@@ -108,6 +112,10 @@ ion-icon {
 
   &[class*="teaco-add-suggestion"] {
     mask-image: url("../assets/svg/meetings/add-suggestion.svg");
+  }
+
+  &[class*="teaco-picked-suggestion"] {
+    mask-image: url("../assets/svg/suggestions/picked_suggestion.svg");
   }
 
   &[class*="teaco-voted-yes"] {

@@ -7,23 +7,33 @@ import { OpenMeetingCardComponent } from './open-meeting-card/open-meeting-card'
 import { ClosedMeetingCardComponent } from './closed-meeting-card/closed-meeting-card';
 import { SuggestionCardComponent } from './suggestion-card/suggestion-card';
 import { QuickVoteComponent } from './quick-vote/quick-vote';
-import { AddNewMeetingCardComponent } from './add-new-meeting-card/add-new-meeting-card';
+import { InputCardComponent } from './input-card/input-card';
+import { ParticipantsListCardComponent } from './participants-list-card/participants-list-card';
+import { SuggestionsListCardComponent } from './suggestions-list-card/suggestions-list-card';
 @NgModule({
-	declarations: [LoadingIndicatorComponent,
-    OpenMeetingCardComponent,
-    ClosedMeetingCardComponent,
-    SuggestionCardComponent,
-    QuickVoteComponent,
-    AddNewMeetingCardComponent],
+	declarations: [
+	    LoadingIndicatorComponent,
+        OpenMeetingCardComponent,
+        ClosedMeetingCardComponent,
+        SuggestionCardComponent,
+        QuickVoteComponent,
+        InputCardComponent,
+        ParticipantsListCardComponent,
+        SuggestionsListCardComponent,
+    ],
 	imports: [
 		BrowserModule,
 		IonicModule.forRoot(MyApp)
 	],
+    entryComponents: [
+    ],
 	exports: [LoadingIndicatorComponent,
     OpenMeetingCardComponent,
     ClosedMeetingCardComponent,
     SuggestionCardComponent,
     QuickVoteComponent,
-    AddNewMeetingCardComponent]
+    InputCardComponent,
+    ParticipantsListCardComponent,
+    SuggestionsListCardComponent]
 })
 export class ComponentsModule {}
