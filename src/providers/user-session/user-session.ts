@@ -20,26 +20,13 @@ export class UserSessionProvider {
   private _activeUser: User;
 
   /**
-   * Promise which will be called back when the user session service
-   * has been completely initialized and ready configured.
-   */
-  private readonly _loadingPromise: Promise<User>;
-
-  /**
-   * Get the active user.
-   */
-  get activeUser(): User {
-    return this._activeUser;
-  }
-
-  /**
    * Set a new user object to be the active user.
    * @param newActiveUser the new user to be the active one
    */
-  set activeUser(newActiveUser: User) {
+  public setActiveUser(newActiveUser: User) {
     this._activeUser = newActiveUser;
-    if(this.activeUser !== null) {
-      this.storage.set(this.USER_STORAGE_KEY, JSON.stringify(newActiveUser)).then();
+    if(this._activeUser !== null) {
+      this.storage.set(this.USER_STORAGE_KEY, JSON.stringify(this._activeUser)).then();
     } else {
       this.storage.remove(this.USER_STORAGE_KEY).then();
     }
@@ -50,7 +37,6 @@ export class UserSessionProvider {
    * @param storage The Ionic storage service.
    */
   constructor(private storage: Storage) {
-    this._loadingPromise = this.loadActiveUser();
   }
 
   /**
@@ -58,23 +44,27 @@ export class UserSessionProvider {
    * when the user session service has been ready initialized and configured.
    */
   public ready(): Promise<User> {
-    return this._loadingPromise;
+    return this.getActiveUser();
   }
 
   /**
    * Try to load the active user from the app's storage.
    * @return Promise which will be called back when the storage finished it's reading process.
    */
-  private loadActiveUser(): Promise<User> {
-     return new Promise(resolve => {
-      this.storage.get(this.USER_STORAGE_KEY).then((userData) => {
-        if(userData !== null) {
-          this._activeUser = new User(JSON.parse(userData));
-          resolve(this._activeUser);
-        } else {
-          resolve(null);
-        }
-      });
+  public async getActiveUser() {
+     return <User>await new Promise(resolve => {
+       if(this._activeUser !== undefined) {
+         resolve(this._activeUser);
+       } else {
+         this.storage.get(this.USER_STORAGE_KEY).then((userData) => {
+           if(userData !== null) {
+             this._activeUser = new User(JSON.parse(userData));
+             resolve(this._activeUser);
+           } else {
+             resolve(null);
+           }
+         });
+       }
     })
   }
 

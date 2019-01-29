@@ -56,9 +56,10 @@ messaging.setBackgroundMessageHandler(function(message) {
     const notificationOptions = {
         body: message.data.body,
         icon: "/assets/imgs/logo.png",
+        data: message.data.data,
         actions: [
-            {action: 'like', title: '👍Like'},
-            {action: 'reply', title: '⤻ Reply'}]
+            {action: 'like', title: '👍 Öffnen'},
+            {action: 'reply', title: '⤻ Verwerfen'}]
     };
     //
     // console.log(self.registration);
@@ -70,6 +71,8 @@ messaging.setBackgroundMessageHandler(function(message) {
 
 self.addEventListener('notificationclick', function(event) {
     console.log("something clicked", event);
-    //TODO implement routing
-    // self.clients.openWindow("/#/testmessage");
+    let data = JSON.parse(event.notification.data);
+    let url = "/#/meetings-overview/open/open-meetings/" + data.meetingId;
+    self.clients.openWindow(url);
+
 }, false);

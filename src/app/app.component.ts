@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
 import {Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -25,7 +26,8 @@ export class MyApp {
       splashScreen: SplashScreen,
       private deepLinks: Deeplinks,
       private readonly userSession: UserSessionProvider,
-      private fcmProvider: FirebaseProvider) {
+      private fcmProvider: FirebaseProvider,
+      public location: Location) {
 
     platform.ready().then(() => {
       console.warn("Running in " + ENV.mode);
@@ -46,11 +48,14 @@ export class MyApp {
       }, (noMatch) => {
       });
 
-      setTimeout( () => {
-        userSession.ready().then(activeUser => {
-          this.rootPage = activeUser ? 'MeetingsOverviewPage' : (!this.isAppOpenedByDeepLink ? 'NoUserFoundPage' : undefined);
-        });
-      }, 50);
+      // timeout is required to have a basic delay for setting the root page and performing a deep link first instead
+      if(this.location.path(true) === "") {
+        setTimeout( () => {
+          userSession.ready().then(activeUser => {
+            this.rootPage = activeUser ? 'MeetingsOverviewPage' : (!this.isAppOpenedByDeepLink ? 'NoUserFoundPage' : undefined);
+          });
+        }, 50);
+      }
     });
   }
 }

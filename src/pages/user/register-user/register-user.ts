@@ -5,6 +5,7 @@ import { LoadingIndicatorComponent } from "../../../components/loading-indicator
 import { MeetingsOverviewPage } from "../../meetings/meetings-overview/meetings-overview";
 import { UserSessionProvider } from "../../../providers/user-session/user-session";
 import { forwardRef } from '@angular/core';
+import {User} from "../../../models/user";
 
 /**
  * Page Controller for registering a user within the app
@@ -28,6 +29,10 @@ export class RegisterUserPage {
      * The user's personal TeaCo key
      */
     private readonly userKey: string;
+    /**
+     * The user's personal TeaCo key
+     */
+    private registeredUser: User;
     /**
      * Status whether this page has been accessed via deep link or not
      */
@@ -80,7 +85,8 @@ export class RegisterUserPage {
         this.apiService.getUser(this.userKey).subscribe(user => {
             this.zone.run(() => {
                 user.key = this.userKey;
-                this.userSession.activeUser = user;
+                this.registeredUser = user;
+                this.userSession.setActiveUser(user);
                 this.hideLoadingIndicator();
                 this.showSuccessInformation();
             });
