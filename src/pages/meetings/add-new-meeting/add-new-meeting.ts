@@ -3,6 +3,7 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Meeting} from "../../../models/meeting";
 import {User} from "../../../models/user";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
+import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 
 /**
  * Generated class for the AddNewMeetingPage page.
@@ -17,23 +18,19 @@ import {UserSessionProvider} from "../../../providers/user-session/user-session"
 })
 export class AddNewMeetingPage {
 
-  private participants: User[];
-
-  private title: string;
+  private meeting: Meeting;
   private location: string;
   private comment: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userSession: UserSessionProvider) {
-    this.participants = [];
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private userSession: UserSessionProvider,
+    private apiService: TeaCoApiProvider) {
+    this.meeting = new Meeting();
   }
 
   ngOnInit() {
-    this.userSession.getActiveUser().then(activeUser => {
-      this.participants.push(activeUser);
-      for (let i=0; i<14; i++) {
-        this.participants.push(activeUser);
-      }
-    });
   }
 
   closeModal(){
@@ -53,17 +50,26 @@ export class AddNewMeetingPage {
   }
 
   private onTitleEntered(event: EventEmitter<any>) {
-    this.title = event[0];
-    console.log("Title entered: ", this.title);
+    this.meeting.title = event[0];
+    console.log("Title entered: ", this.meeting.title);
   }
 
   private onLocationEntered(event: EventEmitter<any>) {
-    this.location = event[0];
-    console.log("Location entered: ", this.location);
+    this.meeting.location = event[0];
+    console.log("Location entered: ", this.meeting.location);
   }
 
   private onCommentEntered(event: EventEmitter<any>) {
     this.comment = event[0];
     console.log("Comment entered: ", this.comment);
+  }
+
+  private createMeeting() {
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.createMeeting(activeUser.key, this.meeting)
+          .subscribe(meeting => {
+              this.closeModal();
+          });
+    });
   }
 }

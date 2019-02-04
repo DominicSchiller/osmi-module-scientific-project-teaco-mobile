@@ -77,7 +77,7 @@ export class TeaCoApiProvider {
         .map(response => {
           let meetings: Meeting[] = [];
           response.forEach(data => {
-            meetings.push(new Meeting(data));
+            meetings.push(Meeting.of(data));
           });
           return meetings;
         });
@@ -94,18 +94,26 @@ export class TeaCoApiProvider {
       const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID;
       return this.http.get<Meeting>(url, requestOptions)
           .map(data => {
-              return new Meeting(data);
+              return Meeting.of(data);
           });
   }
 
+  createMeeting(userKey: string, meeting: Meeting): Observable<Meeting> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint;
+      let postData = JSON.stringify(meeting);
+      return this.http.post<Meeting>(url, postData, requestOptions)
+          .map(data => {
+              return Meeting.of(data);
+          });
+  }
 
-
-     /**
-     * Update a given Vote record on TeaCo.
-     * @param userKey The user's unique key
-     * @param meetingID The meeting id remove
-     * @return operation status (success or error).
-     */
+  /**
+   * Update a given Vote record on TeaCo.
+   * @param userKey The user's unique key
+   * @param meetingID The meeting id remove
+   * @return operation status (success or error).
+   */
   deleteMeeting(userKey: string, meetingID: number): Observable<void>{
     const requestOptions = TeaCoApiProvider.getRequestOptions();
     const url = this.baseUrl + this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID;
@@ -143,7 +151,6 @@ export class TeaCoApiProvider {
       const requestOptions = TeaCoApiProvider.getRequestOptions();
       const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.suggestionsAPIEndpoint;
       let putData = JSON.stringify(suggestion);
-      console.warn(url);
       return this.http.put<void>(url, putData, requestOptions);
   }
   

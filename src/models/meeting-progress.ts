@@ -17,11 +17,23 @@ export class MeetingProgress {
 
     /**
      * Constructor
-     * @param data The JSON date to parse
      */
-    constructor(data: any) {
-        this.pending = data ? data.pending : 0;
-        this.started = data ? data.started : 0;
-        this.completed = data ? data.completed : 0;
+    constructor() {
+        this.pending = 0;
+        this.started = 0;
+        this.completed = 0;
+    }
+
+    /**
+     * Get a new MeetingProgress instance from given data.
+     * @param data The JSON date to parse
+     * @return Build MeetingProgress instance
+     */
+    public static of(data: any): MeetingProgress {
+        let meetingProgress = new MeetingProgress();
+        meetingProgress.pending = data ? data.pending : 0;
+        meetingProgress.started = data ? data.started : 0;
+        meetingProgress.completed = data ? data.completed : 0;
+        return meetingProgress;
     }
 }

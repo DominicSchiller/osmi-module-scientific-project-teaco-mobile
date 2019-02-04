@@ -11,29 +11,28 @@
 </ion-header>
 
 <ion-content>
-    <input-card [type]="'text'" [placeholder]="'Titel'" [icon]="'teaco-title'" (onChange)="onTitleEntered($event)">
-    </input-card>
+    <ion-scroll scrollY="true">
+        <ion-list>
+            <input-card [type]="'text'" [placeholder]="'Titel'" [icon]="'teaco-title'" (onChange)="onTitleEntered($event)">
+            </input-card>
 
-    <div class="medium optional-header">
-        Optional:
-    </div>
+            <div class="medium optional-header">
+                Optional:
+            </div>
 
-    <input-card [type]="'text'" [placeholder]="'Ort'" [icon]="'teaco-location'" (onChange)="onLocationEntered($event)">
-    </input-card>
+            <input-card [type]="'text'" [placeholder]="'Ort'" [icon]="'teaco-location'" (onChange)="onLocationEntered($event)">
+            </input-card>
 
-    <participants-list-card [participants]="participants" (onAddClicked)="goToAddParticipantPage()">
-    </participants-list-card>
+            <participants-list-card [participants]="meeting.participants" (onAddClicked)="goToAddParticipantPage()">
+            </participants-list-card>
 
-    <suggestions-list-card [suggestions]="[]" (onAddClicked)="goToAddSuggestionPage()">
-    </suggestions-list-card>
+            <suggestions-list-card [suggestions]="[]" (onAddClicked)="goToAddSuggestionPage()">
+            </suggestions-list-card>
 
-    <input-card [type]="'text-area'" [placeholder]="'Kommentar'" [icon]="'teaco-comments'" (onChange)="onCommentEntered($event)">
-    </input-card>
-
-  <div class="btnSenden">
-      <button ion-button block color="primary" (click)="closeModalDialog()">Meeting Anlegen
-      </button>
-  </div>
-
-
+            <input-card [type]="'text-area'" [placeholder]="'Kommentar'" [icon]="'teaco-comments'" (onChange)="onCommentEntered($event)">
+            </input-card>
+        </ion-list>
+    </ion-scroll>
+    <button ion-button full block id="createNewMeetingButton" class="normalSize medium" color="primary"
+            (click)="createMeeting()">Meeting Anlegen</button>
 </ion-content>

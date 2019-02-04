@@ -16,28 +16,33 @@ page-add-new-meeting {
     ion-content{
         background-color: color($colors, gray-light) !important;
 
-        .optional-header {
-            margin: 20px 5px 10px 5px;
-            color: color($colors, text-dark);
+        ion-scroll {
+            @include box(100%, 100%);
+
+            ion-list {
+                margin-bottom: 75px !important;
+
+                .optional-header {
+                    margin: 20px 5px 10px 5px;
+                    color: color($colors, text-dark);
+                }
+
+                .datetime-ios {
+                    padding: 0 !important;
+                }
+
+                ion-icon{
+                    color: color($colors, primary) !important;
+                    font-size: 2.4rem;
+                }
+            }
         }
 
-        /* .item-inner{
-
-        } */
-
-        .datetime-ios {
-            padding: 0 !important;
-        }
-
-        .btnSenden{
-            width: 250px;
-            margin: auto;
-            margin-top: 6rem;
-        }
-
-        ion-icon{
-            color: color($colors, primary) !important;
-            font-size: 2.4rem;
+        #createNewMeetingButton {
+            @include box(100%, 55px);
+            position: absolute;
+            bottom: 0;
+            z-index: 200;
         }
     }
 }

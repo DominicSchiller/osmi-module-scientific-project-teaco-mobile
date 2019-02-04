@@ -74,37 +74,50 @@ export class Meeting {
     suggestions: Suggestion[];
 
     /**
-     * Constructor
-     * @param data JSON data to parse all meeting's information from
+     * Default Constructor
      */
-    constructor(data: any) {
-        this.id = data.id;
-        this.initiatorId = data.initiatorId;
-        this.title = data.title;
-        this.createdAt = new Date(data.created_at);
-        this.updatedAt = new Date(data.updated_at);
-        this.isRestricted = data.restricted;
-        this.isClosed = data.is_closed;
-        this.isCancelled = data.is_cancelled != undefined ? data.is_cancelled : false;
-        this.location = data.location != undefined ? data.location : "-";
-        this.numberOfParticipants = data.numberOfParticipants;
-        this.numberOfSuggestions = data.numberOfSuggestions;
-        this.progress = new MeetingProgress(data.progress);
+    constructor() {
+        this.title = "";
+        this.location = "";
+        this.participants = [];
+        this.suggestions = [];
+        this.progress = new MeetingProgress();
+    }
+
+    /**
+     * Create a new meeting instance from given data object
+     * @param data JSON data to parse all meeting's information from
+     * @return Build meeting instance
+     */
+    public static of(data: any): Meeting {
+        let meeting = new Meeting();
+
+        meeting.id = data.id;
+        meeting.initiatorId = data.initiatorId;
+        meeting.title = data.title;
+        meeting.createdAt = new Date(data.created_at);
+        meeting.updatedAt = new Date(data.updated_at);
+        meeting.isRestricted = data.restricted;
+        meeting.isClosed = data.is_closed;
+        meeting.isCancelled = data.is_cancelled != undefined ? data.is_cancelled : false;
+        meeting.location = data.location != undefined ? data.location : "-";
+        meeting.numberOfParticipants = data.numberOfParticipants;
+        meeting.numberOfSuggestions = data.numberOfSuggestions;
+        meeting.progress = MeetingProgress.of(data.progress);
 
         // parse participants
-        this.participants = [];
         if(data.participants != undefined) {
             data.participants.forEach( participantData => {
-               this.participants.push(new User(participantData));
+                meeting.participants.push(new User(participantData));
             });
         }
         // parse suggestions
-        this.suggestions = [];
         if(data.suggestions != undefined) {
             data.suggestions.forEach( suggestionData => {
-               this.suggestions.push(new Suggestion(suggestionData));
+                meeting.suggestions.push(new Suggestion(suggestionData));
             });
         }
-    }
 
+        return meeting;
+    }
 }
