@@ -62,11 +62,14 @@
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
-
-    <button ion-button full
-            id="finishPlanningButton" class="normalSize medium" color="primary"
-            (click)="showCheckBoxFinalTermin()" [hidden]="(meeting | async)?.suggestionsCount == 0">Planung Abschließen</button>
   </ion-scroll>
+
+  <button ion-button full
+          id="finishPlanningButton" class="normalSize medium" color="primary"
+          (click)="showCheckBoxFinalTermin()"
+          [hidden]="(meeting | async)?.suggestionsCount == 0">
+    Planung Abschließen
+  </button>
 
   <ion-fab bottom right id="createNewSuggestionButton">
     <button ion-fab color="primary" (click)="goToNewSuggestionPage()">+</button>

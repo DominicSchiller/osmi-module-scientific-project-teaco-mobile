@@ -86,7 +86,7 @@ page-meeting-detail {
 
     #suggestions-list {
       width: 100% !important;
-      height: 100% !important;
+      height: calc(100% - 55px) !important;
 
       ion-item-sliding {
         background-color: color($colors, gray-light) !important;
@@ -101,6 +101,10 @@ page-meeting-detail {
             margin: 0 !important;
             background-color: color($colors, gray-light);
           }
+        }
+
+        &:last-of-type {
+          margin-bottom: 50px !important;
         }
 
         ion-item-options {

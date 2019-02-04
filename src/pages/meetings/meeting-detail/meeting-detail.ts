@@ -154,11 +154,14 @@ export class MeetingDetailPage {
   private pickSuggestion(suggestion: Suggestion, index: number, slidingItem: ItemSliding) {
     this.meeting.subscribe(meeting => {
       suggestion.isPicked = !suggestion.isPicked; // set the opposite picked status
+      slidingItem.close();
       meeting.suggestions[index] = suggestion;
       this.meeting = new Observable(observable => {observable.next(meeting)});
-      slidingItem.close();
-
-      //TODO: implement updating the pick status on TeaCo-Server
+      this.userSession.getActiveUser().then(activeUser => {
+        this.apiService.updateSuggestion(activeUser.key, suggestion).subscribe(() => {
+          console.log("returned something");
+        });
+      });
     });
   }
 

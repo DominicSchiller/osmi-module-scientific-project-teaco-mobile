@@ -133,6 +133,19 @@ export class TeaCoApiProvider {
     };
     return this.http.post<Meeting>(url, postData, requestOptions);
   }
+
+    /**
+     * Update a given suggestion record on TeaCo.
+     * @param userKey The user's unique key
+     * @param suggestion The suggestion which to update it's data
+     */
+  updateSuggestion(userKey: string, suggestion: Suggestion): Observable<void> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.suggestionsAPIEndpoint;
+      let putData = JSON.stringify(suggestion);
+      console.warn(url);
+      return this.http.put<void>(url, putData, requestOptions);
+  }
   
     /**
      * Delete a specific suggestion from TeaCo.
