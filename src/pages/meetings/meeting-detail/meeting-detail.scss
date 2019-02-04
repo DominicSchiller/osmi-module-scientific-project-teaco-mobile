@@ -1,19 +1,18 @@
 @import '../../../theme/default.scss';
 
 page-meeting-detail {
-    
-  ion-fab[bottom] {
-       bottom: 7rem !important; 
+
+  #finishPlanningButton {
+    @include box(100%, 55px);
+    box-shadow: none;
+    position: absolute !important;
+    bottom: 0;
+    z-index: 200;
   }
 
-  .airSpace{
-    height: 20px;
-    margin-bottom:3rem;
+  .fab {
+    bottom: 58px !important;
   }
-
-   .btnSenden{
-/*     padding-top: 7rem;
- */  } 
 
   ion-header {
     #meeting-details-header {

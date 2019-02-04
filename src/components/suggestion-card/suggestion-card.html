@@ -16,20 +16,28 @@
     </ion-row>
     <ion-row>
       <div class="horizontal-line"></div>
-     <ion-col>
-       <div class="progress-bar">
-         <div class="yes-voted" [ngStyle]="{'width': 'calc(' + progress.yes + '*100%)'}">
-         </div>
-         <div class="maybe-voted" [ngStyle]="{'width': 'calc(' + progress.maybe + '*100%)'}">
-         </div>
-         <div class="no-voted" [ngStyle]="{'width': 'calc(' + progress.no + '*100%)'}">
-         </div>
-         <div class="dont-know-voted" [ngStyle]="{'width': 'calc(' + progress.dontKnow + '*100%)'}">
-         </div>
-       </div>
-     </ion-col>
+       <ion-col col-auto>
+         <ion-icon name="teaco-picked-suggestion" color="{{suggestion.isPicked ? 'secondary' : 'gray-medium'}}" class="picked-star"></ion-icon>
+       </ion-col>
       <ion-col col-auto>
-        {{suggestion.votes.length - suggestion.votes.length*progress.dontKnow}}/{{suggestion.votes.length}}
+        <div class="vertical-line"></div>
+      </ion-col>
+       <ion-col>
+         <div class="progress-bar">
+           <div class="yes-voted" [ngStyle]="{'width': 'calc(' + progress.yes + '*100%)'}">
+           </div>
+           <div class="maybe-voted" [ngStyle]="{'width': 'calc(' + progress.maybe + '*100%)'}">
+           </div>
+           <div class="no-voted" [ngStyle]="{'width': 'calc(' + progress.no + '*100%)'}">
+           </div>
+           <div class="dont-know-voted" [ngStyle]="{'width': 'calc(' + progress.dontKnow + '*100%)'}">
+           </div>
+         </div>
+       </ion-col>
+      <ion-col col-auto>
+        <div class="progress-label">
+          {{suggestion.votes.length - suggestion.votes.length*progress.dontKnow}}/{{suggestion.votes.length}}
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>

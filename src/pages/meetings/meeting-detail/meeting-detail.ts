@@ -1,5 +1,13 @@
 import {Component, NgZone, ViewChild} from '@angular/core';
-import {NavController, NavParams, Navbar, AlertController, ToastController, IonicPage} from 'ionic-angular';
+import {
+  NavController,
+  NavParams,
+  Navbar,
+  AlertController,
+  ToastController,
+  IonicPage,
+  ItemSliding
+} from 'ionic-angular';
 import { Meeting } from "../../../models/meeting";
 import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
 import { UserSessionProvider } from "../../../providers/user-session/user-session";
@@ -135,6 +143,23 @@ export class MeetingDetailPage {
       position: 'middle'
     });
     warning.present();
+  }
+
+  /**
+   * Mark a specific suggestion as picked
+   * @param suggestion The suggestion which to mark as picked
+   * @param index The suggestion's list index
+   * @param slidingItem The sliding item from the UI
+   */
+  private pickSuggestion(suggestion: Suggestion, index: number, slidingItem: ItemSliding) {
+    this.meeting.subscribe(meeting => {
+      suggestion.isPicked = !suggestion.isPicked; // set the opposite picked status
+      meeting.suggestions[index] = suggestion;
+      this.meeting = new Observable(observable => {observable.next(meeting)});
+      slidingItem.close();
+
+      //TODO: implement updating the pick status on TeaCo-Server
+    });
   }
 
   /**

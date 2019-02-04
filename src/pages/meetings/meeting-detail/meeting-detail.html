@@ -48,12 +48,12 @@
 <ion-content class="no-scroll" id="meeting-details-content">
   <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
     <ion-list no-lines>
-      <ion-item-sliding *ngFor="let suggestion of (meeting | async)?.suggestions">
+      <ion-item-sliding *ngFor="let suggestion of (meeting | async)?.suggestions; let i = index" #suggestionSlidingItem>
         <ion-item >
           <suggestion-card [suggestion]="suggestion"></suggestion-card>
         </ion-item>
         <ion-item-options side="right">
-          <button ion-button color="secondary" text-wrap>
+          <button ion-button color="secondary" (click)="pickSuggestion(suggestion, i, suggestionSlidingItem)" text-wrap>
             <ion-icon name="teaco-picked-suggestion"></ion-icon>
           </button>
           <button ion-button color="primary" (click)="deleteSuggestion(suggestion)">
@@ -63,11 +63,9 @@
       </ion-item-sliding>
     </ion-list>
 
-    <div class="airSpace" [hidden]="(meeting | async)?.suggestionsCount == 0">
-      <div class="btnSenden">
-        <button ion-button full color="primary" (click)="showCheckBoxFinalTermin()">Plannung Abschließen</button>
-      </div>
-    </div>
+    <button ion-button full
+            id="finishPlanningButton" class="normalSize medium" color="primary"
+            (click)="showCheckBoxFinalTermin()" [hidden]="(meeting | async)?.suggestionsCount == 0">Planung Abschließen</button>
   </ion-scroll>
 
   <ion-fab bottom right id="createNewSuggestionButton">
