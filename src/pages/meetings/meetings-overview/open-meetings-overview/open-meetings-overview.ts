@@ -52,12 +52,14 @@ export class OpenMeetingsOverviewPage {
    * Load all meetings from the TeaCo server
    */
   protected loadMeetings(meetingType: MeetingType) {
-    this.apiService.getAllMeetings(this.userSession.activeUser.key, meetingType).subscribe(meetings => {
-      this.meetings = meetings;
-      //this.meeting.id = meetings[0].id;
-      if(meetings.length > 0) {
-        this.startMeetingCardsUpdateInterval();
-      }
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.getAllMeetings(activeUser.key, meetingType).subscribe(meetings => {
+        this.meetings = meetings;
+        //this.meeting.id = meetings[0].id;
+        if(meetings.length > 0) {
+          this.startMeetingCardsUpdateInterval();
+        }
+      });
     });
   }
 

@@ -105,13 +105,17 @@ export class AddNewSuggestionPage {
    * Navigate to the Suggestions Page for the specific Meeting 
    */
   postSuggestion(){
-    this.apiService.postNewSuggestion(this.userSession.activeUser.key, this.meeting.id, this.date, this.startTime, this.endTime)
-    .subscribe((data) =>{ 
-      return data
-    })
-    if(this.date!= null && this.startTime!= null && this.endTime != null){
-      //call the Success Alert Function (to navigate to Meetings Page)
-      this.goToMeetingsOverview();
-    }
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.postNewSuggestion(activeUser.key, this.meeting.id, this.date, this.startTime, this.endTime)
+          .subscribe((data) =>{
+            return data
+          });
+      if(this.date!= null && this.startTime!= null && this.endTime != null){
+        //call the Success Alert Function (to navigate to Meetings Page)
+        this.goToMeetingsOverview();
+      }
+    });
+
+
   }
 }

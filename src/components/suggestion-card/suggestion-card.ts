@@ -1,10 +1,11 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, SimpleChange, SimpleChanges} from '@angular/core';
 import {Suggestion} from "../../models/suggestion";
 import {VoteDecision} from "../../models/vote-decision";
 import {SuggestionProgress} from "../../models/suggestion-progress";
 import {DateTimeHelper} from "../../utils/date-time-helper";
 import {UserSessionProvider} from "../../providers/user-session/user-session";
 import {Vote} from "../../models/vote";
+import {Observable} from "rxjs";
 
 /**
  * Generated class for the SuggestionCardComponent component.
@@ -35,7 +36,10 @@ export class SuggestionCardComponent {
 
   ngOnInit() {
     this.updateProgress();
-    this.userVote = this.determineUserVote();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.determineUserVote();
   }
 
   public updateProgress() {
@@ -78,15 +82,14 @@ export class SuggestionCardComponent {
   }
 
   private determineUserVote() {
-    let userVote = undefined;
-    let user = this.userSession.activeUser;
-    this.suggestion.votes.forEach(vote => {
-      if(vote.voterId === user.id) {
-        userVote = vote;
-        return;
-      }
+    this.userSession.getActiveUser().then(activeUser => {
+      this.suggestion.votes.forEach(vote => {
+        if(vote.voterId === activeUser.id) {
+          this.userVote = vote;
+          return;
+        }
+      });
     });
-    return userVote;
   }
 
 }

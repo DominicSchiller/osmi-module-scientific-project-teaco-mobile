@@ -14,18 +14,18 @@
 <ion-content>
     <loading-indicator></loading-indicator>
     <div id="form" *ngIf="!isCalledByDeepLink && !isRegistrationSuccess">
-        <p ion-text color="text-dark">
+        <p ion-text color="text-dark" class="light normalSize">
             Bitte geben Sie nachfolgend Ihren persönliche TeaCo-Key ein, den Sie in Ihrer
             Bestätigungs-Mail erhalten haben:
         </p>
         <ion-list>
             <ion-item>
                 <ion-label floating>TeaCo-Key</ion-label>
-                <ion-input type="text" [(ngModel)]="userKey"></ion-input>
+                <ion-input type="text" [(ngModel)]="userKey" class="normalSize"></ion-input>
                 <!--<ion-textarea rows="2" [(ngModel)]="userKey" name="message"></ion-textarea>-->
             </ion-item>
             <section class="error-section">{{ errorMsg }}</section>
-            <button ion-button round (click)="registerUser()">Anmelden</button>
+            <button ion-button round (click)="registerUser()" class="normalSize medium">Anmelden</button>
         </ion-list>
     </div>
     <div id="direct-registration-info-container" *ngIf="isCalledByDeepLink && !isRegistrationSuccess">
@@ -35,15 +35,15 @@
     </div>
     <div id="success-info-container" *ngIf="isRegistrationSuccess">
         <img alt="no-user icon" src="../../../assets/svg/general/success.svg" />
-        <p>
+        <p class="light normalSize">
             Herzlichen Glückwunsch
             <br />
-            <span>{{ userSession.activeUser.name }}</span>
+            <span>{{ registeredUser.name }}</span>
             <br />
             Ihr Konto wurde erfolgeich registriert.
             <br />
             Sie können die App nun im vollem Umfang verwenden.
         </p>
-        <button ion-button round (click)="finishRegistration()">Fertig</button>
+        <button ion-button round (click)="finishRegistration()" class="normalSize medium">Fertig</button>
     </div>
 </ion-content>

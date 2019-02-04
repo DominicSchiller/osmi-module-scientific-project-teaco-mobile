@@ -1,9 +1,14 @@
+@import "../../../theme/default";
+
 page-register-user {
 
   ion-navbar {
     ion-buttons {
       button {
         font-size: 2.4rem !important;
+        &.bar-button-ios {
+          font-size: 4.0rem !important;
+        }
       }
     }
   }
@@ -17,14 +22,14 @@ page-register-user {
     }
 
     button {
-      @include box(80%);
+      @include box(100%, 50px);
       @include horizontal-center();
-      margin-top: 50px !important;
       text-transform: none !important;
     }
 
     #form {
-      padding: 0 25px;
+      padding: 0 10px;
+      margin-top: -30px !important;
 
       ion-list {
         padding: 0 25px !important;
@@ -39,6 +44,10 @@ page-register-user {
           margin-top: 5px;
           color: color($colors, primary)
         }
+      }
+
+      button {
+        margin-top: 80px !important;
       }
     }
 
@@ -66,6 +75,10 @@ page-register-user {
           line-height: 30px;
           font-weight: 600;
         }
+      }
+
+      button {
+        margin-top: 50px !important;
       }
     }
   }

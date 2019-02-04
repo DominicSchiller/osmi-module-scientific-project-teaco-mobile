@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import {Component, NgZone, ViewChild} from '@angular/core';
 import {NavController, NavParams, Navbar, AlertController, ToastController, IonicPage} from 'ionic-angular';
 import { Meeting } from "../../../models/meeting";
 import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
@@ -36,11 +36,19 @@ export class MeetingDetailPage {
     private toastCtrl: ToastController) {
     this.meetingId = Number(this.navParams.get('meetingId'));
 
-    this.meeting = Observable.of(this.navParams.get('meeting'));
-    this.meeting = this.apiService.getMeeting(userSession.activeUser.key, this.meetingId).map(meeting => {
-      meeting.numberOfParticipants = meeting.participants.length;
-      meeting.numberOfSuggestions = meeting.suggestions.length;
-      return meeting;
+    let meeting = this.navParams.get('meeting');
+    if(meeting !== undefined) {
+      this.meeting = Observable.of(meeting)
+    }
+  }
+
+  ngOnInit() {
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.getMeeting(activeUser.key, this.meetingId).subscribe(meeting => {
+        meeting.numberOfParticipants = meeting.participants.length;
+        meeting.numberOfSuggestions = meeting.suggestions.length;
+        this.meeting = Observable.of(meeting);
+      });
     });
   }
 
@@ -51,7 +59,7 @@ export class MeetingDetailPage {
     this.navBar.backButtonClick = (e:UIEvent)=>{
       // todo something
       this.goBack();
-    }
+    };
   }
 
   /**
@@ -105,7 +113,6 @@ export class MeetingDetailPage {
           if (data == null) {
             this.toastMessage();
           } else {
-            console.log(data); //for testing purpose
             setTimeout(() => {
               this.goToMeetingsOverview();
             }, 500);
@@ -136,27 +143,29 @@ export class MeetingDetailPage {
    */
   private deleteSuggestion(suggestion: Suggestion) {
     this.meeting.subscribe(meeting => {
-      this.apiService.deleteSuggestion(
-          this.userSession.activeUser.key,
-          meeting.id,
-          suggestion.id
-      ).subscribe(() => {
-        // search suggestion in array and delete it from there using it's index
-        // search suggestion in array and delete it from there using it's index
-        let deleteIndex = -1;
-        for(let index = 0; index < meeting.suggestions.length; index++) {
-          if(meeting.suggestions[index].id == suggestion.id) {
-            deleteIndex = index;
-            break;
+      this.userSession.getActiveUser().then(activeUser => {
+        this.apiService.deleteSuggestion(
+            activeUser.key,
+            meeting.id,
+            suggestion.id
+        ).subscribe(() => {
+          // search suggestion in array and delete it from there using it's index
+          // search suggestion in array and delete it from there using it's index
+          let deleteIndex = -1;
+          for(let index = 0; index < meeting.suggestions.length; index++) {
+            if(meeting.suggestions[index].id == suggestion.id) {
+              deleteIndex = index;
+              break;
+            }
           }
-        }
-        if(deleteIndex > -1) {
-          meeting.suggestions.splice(deleteIndex, 1);
-          console.log("suggestion has been successfully deleted");
-        }
-        this.meeting = new Observable(observable => {observable.next(meeting)})
-      }, (error) => {
-        console.error(error);
+          if(deleteIndex > -1) {
+            meeting.suggestions.splice(deleteIndex, 1);
+            console.log("suggestion has been successfully deleted");
+          }
+          this.meeting = new Observable(observable => {observable.next(meeting)})
+        }, (error) => {
+          console.error(error);
+        });
       });
     });
   }

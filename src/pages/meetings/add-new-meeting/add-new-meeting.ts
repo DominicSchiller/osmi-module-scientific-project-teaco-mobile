@@ -23,12 +23,17 @@ export class AddNewMeetingPage {
   private location: string;
   private comment: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, userSession: UserSessionProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userSession: UserSessionProvider) {
     this.participants = [];
-    this.participants.push(userSession.activeUser);
-    for (let i=0; i<14; i++) {
-      this.participants.push(userSession.activeUser);
-    }
+  }
+
+  ngOnInit() {
+    this.userSession.getActiveUser().then(activeUser => {
+      this.participants.push(activeUser);
+      for (let i=0; i<14; i++) {
+        this.participants.push(activeUser);
+      }
+    });
   }
 
   closeModal(){

@@ -35,6 +35,18 @@
   &.heavy {
     font-weight: 900;
   }
+  &.normalSize {
+    font-size: 1.6rem;
+  }
+  &.mediumSize {
+    font-size: 1.8rem;
+  }
+  &.largeSize {
+    font-size: 2.0rem;
+  }
+  &.extraLargeSize {
+    font-size: 2.4rem;
+  }
 }
 
 /**
@@ -153,10 +165,6 @@ ion-icon {
   &[class*="teaco-title"] {
     mask-image: url("../assets/svg/meetings/title.svg");
   }
-
-  &[class*="teaco-comments1"] {
-    mask-image: url("../assets/svg/meetings/comments1.svg");
-  }
   /**
   background images
    */
@@ -165,4 +173,15 @@ ion-icon {
 
     }
   }
+}
+
+/**
+  Default iOS Styles
+   */
+.list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block {
+  border-bottom: none !important;
+}
+
+.list-ios > .item-block:first-child {
+  border-top: none !important;
 }

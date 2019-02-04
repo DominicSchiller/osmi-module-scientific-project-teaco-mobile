@@ -47,7 +47,7 @@ export class FirebaseMessagingWebProvider implements FirebaseMessagingProvider {
      * to be able to receive push notifications.
      */
     private setupServiceWorker(): Promise<void> {
-        return new Promise((resolve, error) => {
+        return new Promise((resolve, onError) => {
             navigator.serviceWorker.register('service-worker.js')
                 .then((registration) => {
                     // apply current service worker
@@ -62,7 +62,8 @@ export class FirebaseMessagingWebProvider implements FirebaseMessagingProvider {
                                 });
                         });
                 }, error => {
-                    error(error);
+                    console.error(error);
+                    onError(error);
                 });
         });
     }

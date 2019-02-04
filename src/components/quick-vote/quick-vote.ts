@@ -1,10 +1,11 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
 import {Vote} from "../../models/vote";
 import {FabButton} from "ionic-angular";
 import {VoteDecision} from "../../models/vote-decision";
 import {UserSessionProvider} from "../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../providers/teaco-api/teaco-api-provider";
 import {SuggestionCardComponent} from "../suggestion-card/suggestion-card";
+import {Observable} from "rxjs";
 
 /**
  * Custom UI component for handling quick vote options.
@@ -42,16 +43,26 @@ export class QuickVoteComponent {
   constructor(private userSession: UserSessionProvider, private apiService: TeaCoApiProvider) {}
 
   ngOnInit() {
-    switch(this.vote.decision) {
-      case VoteDecision.yes:
-        this.voteYes();
-        break;
-      case VoteDecision.maybe:
-        this.voteMaybe();
-        break;
-      case VoteDecision.no:
-        this.voteNo();
-        break;
+    if(this.vote !== undefined) {
+      switch(this.vote.decision) {
+        case VoteDecision.yes:
+          this.voteYes();
+          break;
+        case VoteDecision.maybe:
+          this.voteMaybe();
+          break;
+        case VoteDecision.no:
+          this.voteNo();
+          break;
+      }
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const updatedVote: SimpleChange = changes.vote;
+    if(!updatedVote.isFirstChange()) {
+      this.vote = updatedVote.currentValue;
+      this.ngOnInit();
     }
   }
 
@@ -111,16 +122,18 @@ export class QuickVoteComponent {
       let oldDecision = this.vote.decision;
       this.vote.decision = newDecision;
       this.suggestionCard.updateProgress();
-      this.apiService.updateVote(
-          this.userSession.activeUser.key,
-          this.vote
-      ).subscribe(() => {
-        console.log('successfully updated vote on TeaCo');
-      }, error => {
-        console.error(error.toString());
-        this.vote.decision = oldDecision;
-        this.ngOnInit();
-        this.suggestionCard.updateProgress();
+      this.userSession.getActiveUser().then(activeUser => {
+        this.apiService.updateVote(
+            activeUser.key,
+            this.vote
+        ).subscribe(() => {
+          console.log('successfully updated vote on TeaCo');
+        }, error => {
+          console.error(error.toString());
+          this.vote.decision = oldDecision;
+          this.ngOnInit();
+          this.suggestionCard.updateProgress();
+        });
       });
     }
 
