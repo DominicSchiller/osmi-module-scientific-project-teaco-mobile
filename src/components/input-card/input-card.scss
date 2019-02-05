@@ -30,6 +30,7 @@ input-card {
     ion-icon{
       color: color($colors, primary) !important;
       @include horizontal-center();
+      left: 27% !important;
       margin-top: 15px;
       font-size: 3rem;
     }
@@ -57,5 +58,14 @@ input-card {
   }
   .datetime-ios{
       padding: 0 !important;
+  }
+
+  .unit-label {
+    @include vertical-center();
+    position: absolute !important;
+    top: calc(50% + 5px) !important;
+    left: 140px;
+    font-size:1.7rem;
+    z-index: 300;
   }
 }   

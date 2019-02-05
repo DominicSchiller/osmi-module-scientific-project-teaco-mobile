@@ -125,21 +125,26 @@ export class TeaCoApiProvider {
   /**
      * Update a given Vote record on TeaCo.
      * @param userKey The user's unique key
-     * @param meetingID The meeting id record which to remove
+     * @param meetingID The meeting's id to which the new suggestion will be added to
      * @param date The Suggestion property date which to post for new Suggestion 
      * @param startTime The Suggestion property startTime which to post for new Suggestion
      * @param endTime The Suggestion property endTime which to post for new Suggestion
-     * 
   * */
-  postNewSuggestion(userKey: string, meetingID: number, date:string, startTime: string, endTime:string): Observable<Meeting> {
+  createSuggestion(userKey: string, meetingID: number, date:string, startTime: string, endTime:string): Observable<Suggestion> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
     const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.suggestionsAPIEndpoint;
-    let postData={
-      date : date,
-      startTime: startTime,
-      endTime: endTime
-    };
-    return this.http.post<Meeting>(url, postData, requestOptions);
+    console.warn(url);
+    let postData = JSON.stringify(
+        {
+            date : date,
+            startTime: startTime,
+            endTime: endTime
+        }
+    );
+    return this.http.post<Suggestion>(url, postData, requestOptions)
+        .map(suggestionData => {
+            return new Suggestion(suggestionData);
+        });
   }
 
     /**

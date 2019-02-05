@@ -23,14 +23,14 @@ page-add-new-suggestion {
             margin-left: 10px;
         }
 
-        .datetime-ios{
+        .datetime-ios {
             padding: 0 !important;
         }
 
-        .btnSenden{
-            width: 250px;
-            margin: auto;
-            margin-top: 6rem;
+        #createNewSuggestionButton {
+            @include box(100%, 55px);
+            position: absolute;
+            bottom: 0;
         }
 
         ion-fab[bottom] {

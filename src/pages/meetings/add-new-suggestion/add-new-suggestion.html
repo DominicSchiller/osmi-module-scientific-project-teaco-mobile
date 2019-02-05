@@ -8,20 +8,34 @@
     <ion-title>Terminvorschlag</ion-title>
   </ion-navbar>
 </ion-header>
-
-
 <ion-content>
-
-    <input-card [type]="'date'" [placeholder]="'Datum'" [icon]="'teaco-calendar'" (onChange)="onDateEntered($event)">
+    <input-card #datePicker
+            [type]="'date'"
+            [placeholder]="'Datum'"
+            [icon]="'teaco-calendar'"
+            (onChange)="onDateEntered($event)">
     </input-card>
-    <input-card [type]="'time'" [placeholder]="'Start Uhrzeit'" [icon]="'teaco-startTime'" (onChange)="onStartTimeEntered($event)">
+    <input-card #startTimePicker
+            [type]="'time'"
+            [placeholder]="'Start Uhrzeit'"
+            [icon]="'teaco-startTime'"
+            (onChange)="onStartTimeEntered($event)">
     </input-card>
-    <input-card [type]="'time'" [placeholder]="'Ende Uhrzeit'" [icon]="'teaco-endTime'" (onChange)="onEndTimeEntered($event)">
+    <input-card #durationPicker
+            [type]="'duration'"
+            [placeholder]="'Dauer'"
+            [icon]="'teaco-duration'"
+            (onChange)="onDurationEntered($event)">
     </input-card>
-
-    <div class="btnSenden">
-      <button ion-button block color="primary" (click)="postSuggestion()">Post Anlegen</button>
-
-    </div>
-
+    <input-card #endingTimePicker
+            [type]="'time'"
+            [placeholder]="'Ende Uhrzeit'"
+            [icon]="'teaco-endTime'"
+            (onChange)="onEndTimeEntered($event)">
+    </input-card>
+    <button ion-button full block
+            id="createNewSuggestionButton" class="normalSize medium"
+            color="primary"
+            [disabled]="isInputValueMissing"
+            (click)="createSuggestion()">Neuen Terminvorschlag anlegen</button>
   </ion-content>

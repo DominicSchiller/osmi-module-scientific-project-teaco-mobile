@@ -75,6 +75,54 @@ export class DateTimeHelper {
     }
 
     /**
+     * Get the hours from a time-string.
+     * @param timeString The time-string tom parse the hours from
+     * @return the parsed hours
+     */
+    public static getHours(timeString: string): number {
+        return Number(timeString.split(':')[0]);
+    }
+
+    /**
+     * Add two time-strings.
+     * @param timeStringA time-string A
+     * @param timeStringB time-string B which will be added to A
+     * @return the sum time-string
+     */
+    public static addTimeStrings(timeStringA: string, timeStringB: string): string {
+        let timePartsA = timeStringA.split(':');
+        let timePartsB = timeStringB.split(':');
+        let hours = Number(timePartsA[0]) + Number(timePartsB[0]);
+        let minutes = Number(timePartsA[1]) + Number(timePartsB[1]);
+        if(minutes > 60) {
+            let remainderHours = Math.trunc(minutes/60);
+            hours += remainderHours;
+            minutes = minutes%60;
+        }
+        return DateTimeHelper.addLeadingZeroIfRequired(hours) + hours + ':' + DateTimeHelper.addLeadingZeroIfRequired(minutes) + minutes +
+            DateTimeHelper.addEndingZeroIfRequired(minutes);
+    }
+
+    /**
+     * Subtracts two time-strings.
+     * @param timeStringA time-string A
+     * @param timeStringB time-string B which will be subtracted from A
+     * @return the difference time-string
+     */
+    public static subtractTimeStrings(timeStringA: string, timeStringB: string): string {
+        let timePartsA = timeStringA.split(':');
+        let timePartsB = timeStringB.split(':');
+        let hours = Number(timePartsA[0]) - Number(timePartsB[0]);
+        let minutes = Number(timePartsA[1]) - Number(timePartsB[1]);
+        if(minutes < 0) {
+            hours -= 1;
+            minutes = 60 - Math.abs(minutes);
+        }
+        return DateTimeHelper.addLeadingZeroIfRequired(hours) + hours + ':' + DateTimeHelper.addLeadingZeroIfRequired(minutes) + minutes +
+            DateTimeHelper.addEndingZeroIfRequired(minutes);
+    }
+
+    /**
      * Determines whether to add ending zeros to a time string or not.
      * @param time The time to potentially add an ending zero to
      * @return a zero or empty string

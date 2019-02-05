@@ -165,6 +165,10 @@ ion-icon {
   &[class*="teaco-title"] {
     mask-image: url("../assets/svg/meetings/title.svg");
   }
+
+  &[class*="teaco-duration"] {
+    mask-image: url("../assets/svg/suggestions/duration.svg");
+  }
   /**
   background images
    */

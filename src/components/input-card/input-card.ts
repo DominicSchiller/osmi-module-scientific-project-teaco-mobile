@@ -34,22 +34,39 @@ export class InputCardComponent {
   /**
    * A time input's minute selection interval
    */
-  private minuteValues: string = "0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55";
+  private minuteValuesFull: string = "0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55";
+
+  private minuteValuesDuration: string = "0, 30";
+
+  private minDate: string;
 
   /**
    * A date input's minimum date (here: fom now to somewhere in the future)
    */
-  private minDate: string;
+  private maxDate: string;
 
   /**
    * The current input's value
    */
-  value: string;
+  public value: string;
+
   /**
    * Default Constructor
    */
   constructor() {
-    this.minDate = new Date().toISOString();
+    this.value = "";
+    let now = new Date();
+    now.setHours(1, 0, 0, 1);
+    this.maxDate = now.toISOString();
+    now.setHours(2, 0, 0, 1);
+    this.minDate = now.toISOString();
+  }
+
+  public setMaxDate(dateString: string) {
+    let timeParts = dateString.split(':');
+    let now = new Date();
+    now.setHours(Number(timeParts[0]) + 1, Number(timeParts[1]), 0, 1);
+    this.maxDate = now.toISOString();
   }
 
   /**

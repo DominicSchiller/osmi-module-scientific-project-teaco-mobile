@@ -88,7 +88,12 @@ export class MeetingDetailPage {
    * Navigate to the "Add New Suggestion" page.
    */
   private goToNewSuggestionPage(){
-    this.navCtrl.push('AddNewSuggestionPage', this.meeting).then();
+    this.meeting.subscribe(meeting => {
+      this.navCtrl.push(
+          'AddNewSuggestionPage', {'meeting': meeting }
+      ).then();
+    });
+
   }
 
   /**

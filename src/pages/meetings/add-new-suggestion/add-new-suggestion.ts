@@ -1,9 +1,11 @@
-import {Component, EventEmitter, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, ViewChild} from '@angular/core';
 import {NavController, NavParams, AlertController, Navbar, IonicPage} from 'ionic-angular';
 import {TeaCoApiProvider} from '../../../providers/teaco-api/teaco-api-provider';
 import { UserSessionProvider } from "../../../providers/user-session/user-session";
 import { Meeting } from '../../../models/meeting';
 import {Suggestion} from '../../../models/suggestion';
+import {InputCardComponent} from "../../../components/input-card/input-card";
+import {DateTimeHelper} from "../../../utils/date-time-helper";
 
 /**
  * Generated class for the AddNewSuggestionPage page.
@@ -24,12 +26,13 @@ export class AddNewSuggestionPage {
    * The page's navigation bar UI element
    */
   @ViewChild(Navbar) navBar: Navbar;
+  @ViewChild('datePicker') datePicker: InputCardComponent;
+  @ViewChild('durationPicker') durationPicker: InputCardComponent;
+  @ViewChild('startTimePicker') startTimePicker: InputCardComponent;
+  @ViewChild('endingTimePicker') endingTimePicker: InputCardComponent;
 
-  private isModalDialog: boolean = false;
-
-  private date: string;
-  private startTime: string;
-  private endTime: string;
+  private readonly isModalDialog: boolean = false;
+  private isInputWrong: boolean = true;
   private meeting: Meeting;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public apiService:TeaCoApiProvider, private userSession: UserSessionProvider) {
@@ -38,84 +41,141 @@ export class AddNewSuggestionPage {
     } else {
       this.isModalDialog = true;
     }
-    this.meeting = this.navParams.data;
+    this.meeting = this.navParams.get('meeting');
   }
 
   ionViewDidLoad() {
     this.navBar.hideBackButton = this.isModalDialog;
     this.navBar.backButtonClick = (e:UIEvent)=>{
       this.goBack();
-    }
+    };
   }
 
   /**
-   * Navigate back to the previous screen
+   * Navigate back to the previous screen.
    */
   goBack() {
     this.navCtrl.pop(
         {animate:true,animation:'transition', direction:'back'}).then();
   }
 
+  /**
+   * Close modal dialog.
+   */
   closeModal() {
     this.navCtrl.pop().then();
   }
 
-  private goToMeetingsOverview() {
-    this.navCtrl.setRoot('MeetingsOverviewPage').then();
-    this.showAlertInfo();
-  }
-
-  public onDateEntered(event: EventEmitter<any>) {
-    this.date = event[0];
-    console.log("Date entered: ", this.date);
-    return this.date
+  public onDateEntered() {
+    this.validateCanCreateSuggestionState();
   }
 
   private onStartTimeEntered(event: EventEmitter<any>) {
-    this.startTime = event[0];
-    console.log("Start time entered: ", this.startTime);
+    let startTime = event[0];
+    this.durationPicker.setMaxDate(
+        DateTimeHelper.subtractTimeStrings(
+            "24:00",
+            startTime
+        )
+    );
+    if(this.endingTimePicker.value.length > 0) {
+      this.durationPicker.value = DateTimeHelper.subtractTimeStrings(
+          this.endingTimePicker.value,
+          startTime
+      );
+    } else if(this.durationPicker.value.length > 0) {
+      this.endingTimePicker.value = DateTimeHelper.addTimeStrings(
+          startTime,
+          this.durationPicker.value
+      );
+    }
+    this.validateCanCreateSuggestionState();
   }
 
   private onEndTimeEntered(event: EventEmitter<any>) {
-    this.endTime = event[0];
-    console.log("End time entered: ", this.endTime);
+    let endingTime = event[0];
+    if(this.startTimePicker.value.length > 0) {
+      this.durationPicker.value = DateTimeHelper.subtractTimeStrings(
+          endingTime,
+          this.startTimePicker.value
+      );
+    } else if(this.durationPicker.value.length > 0) {
+      this.startTimePicker.value = DateTimeHelper.subtractTimeStrings(
+          endingTime,
+          this.durationPicker.value
+      );
+    }
+    this.validateCanCreateSuggestionState();
   }
 
+  private onDurationEntered(event: EventEmitter<any>) {
+    let duration = event[0];
+    if(this.startTimePicker.value.length > 0) {
+      this.endingTimePicker.value = DateTimeHelper.addTimeStrings(
+          this.startTimePicker.value,
+          this.durationPicker.value
+      );
+    } else if(this.endingTimePicker.value.length > 0) {
+      this.startTimePicker.value = DateTimeHelper.subtractTimeStrings(
+          this.endingTimePicker.value,
+          duration
+      );
+    }
+    this.validateCanCreateSuggestionState();
+  }
+
+  /**
+   * Check whether the 'create suggestion' button can be enabled or not.
+   */
+  private validateCanCreateSuggestionState() {
+    this.isInputWrong =
+        this.datePicker.value.length == 0 ||
+        this.startTimePicker.value.length == 0 ||
+        this.endingTimePicker.value.length == 0 ||
+        (
+            DateTimeHelper.getHours(this.startTimePicker.value) >
+            DateTimeHelper.getHours(this.endingTimePicker.value)
+        )
+  }
 
   /**
    * Show Alert of Success created new Suggestion. 
    * Navigate to the Meetings Page.
    */
   private showAlertInfo() {
-    const alert = this.alertCtrl.create({
-      title: 'Terminvorschlag wurde angelegt!',
-      message: 'Dein Termin am ' + this.date + ' um ' + this.startTime + ' - ' + this.endTime + ' wurde eingetragen',
-      buttons: [
-        {
-          text: 'Okay!',
-        }
-      ]
-    });
-    alert.present();
+    // const alert = this.alertCtrl.create({
+    //   title: 'Terminvorschlag wurde angelegt!',
+    //   message: 'Dein Termin am ' + this.date + ' um ' + this.startTime + ' - ' + this.endTime + ' wurde eingetragen',
+    //   buttons: [
+    //     {
+    //       text: 'Okay!',
+    //     }
+    //   ]
+    // });
+    // alert.present();
   }
 
-
   /**
-   * Add new Suggestion with new Date, Start Time and Endtime 
+   * Add new Suggestion with new Date, Start Time and ending time
    * Navigate to the Suggestions Page for the specific Meeting 
    */
-  postSuggestion(){
+  createSuggestion(){
     this.userSession.getActiveUser().then(activeUser => {
-      this.apiService.postNewSuggestion(activeUser.key, this.meeting.id, this.date, this.startTime, this.endTime)
-          .subscribe((data) =>{
-            return data
+      this.apiService.createSuggestion(
+          activeUser.key,
+          this.meeting.id,
+          this.datePicker.value,
+          this.startTimePicker.value,
+          this.endingTimePicker.value)
+          .subscribe(suggestion => {
+            // TODO show success alert
+            // TODO return created suggestion to previous screen
+            if(this.isModalDialog) {
+              this.closeModal();
+            } else {
+              this.goBack();
+            }
           });
-      if(this.date!= null && this.startTime!= null && this.endTime != null){
-        //call the Success Alert Function (to navigate to Meetings Page)
-        this.goToMeetingsOverview();
-      }
     });
-
-
   }
 }

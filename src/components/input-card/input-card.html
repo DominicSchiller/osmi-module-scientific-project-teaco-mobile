@@ -2,6 +2,9 @@
   <ion-card-content>
     <ion-row>
       <ion-col col-auto>
+        <div class="unit-label light" [hidden]="value.length == 0 || (inputType !== 'time' && inputType !== 'duration')">
+          {{inputType == 'time' ? 'Uhr' : 'Stunden'}}
+        </div>
         <div class="header-icon-section">
           <ion-icon name="{{iconName}}"></ion-icon>
         </div>
@@ -15,10 +18,23 @@
           <ion-textarea placeholder="{{placeholder}}" [(ngModel)]="value" (change)="notify()"></ion-textarea>
         </ion-item>
         <ion-item *ngIf="inputType == 'date'">
-          <ion-datetime placeholder="{{placeholder}}" displayFormat="DD.MM.YYYY" min={{minDate}} [(ngModel)]="value" (ngModelChange)="notify()"></ion-datetime>
+          <ion-datetime placeholder="{{placeholder}}" displayFormat="DD.MM.YYYY" [(ngModel)]="value" (ngModelChange)="notify()"></ion-datetime>
         </ion-item>
         <ion-item *ngIf="inputType == 'time'">
-          <ion-datetime placeholder="{{placeholder}}" displayFormat="HH:mm" minuteValues={{minuteValues}} [(ngModel)]="value" (ngModelChange)="notify()"></ion-datetime>
+          <ion-datetime placeholder="{{placeholder}}"
+                        displayFormat="HH:mm"
+                        minuteValues="{{minuteValuesFull}}"
+                        [(ngModel)]="value"
+                        (ngModelChange)="notify()"></ion-datetime>
+        </ion-item>
+        <ion-item *ngIf="inputType == 'duration'">
+          <ion-datetime placeholder="{{placeholder}}"
+                        displayFormat="HH:mm"
+                        minuteValues="{{minuteValuesDuration}}"
+                        min="{{minDate}}"
+                        max="{{maxDate}}"
+                        [(ngModel)]="value"
+                        (ngModelChange)="notify()"></ion-datetime>
         </ion-item>
       </ion-col>
     </ion-row>
