@@ -3,6 +3,7 @@ import {IonicPage, Navbar, NavController, NavParams, TextInput} from 'ionic-angu
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {User} from "../../../models/user";
+import {EditMeetingEventDelegate} from "../add-new-meeting/edit-meeting-event-delegate";
 
 /**
  * Page Controller for selecting and adding participants
@@ -47,6 +48,8 @@ export class AddParticipantPage {
    */
   private queuedParticipants: User[];
 
+  private delegate: EditMeetingEventDelegate;
+
   /**
    * Constructor
    * @param navCtrl The app's navigation controller
@@ -62,6 +65,7 @@ export class AddParticipantPage {
     this.waitTimeoutID = -1;
     this.foundUsers = [];
     this.queuedParticipants = [];
+    this.delegate = navParams.get('delegate');
   }
 
   ionViewDidLoad() {
@@ -74,7 +78,7 @@ export class AddParticipantPage {
   /**
    * Navigate back to the previous screen
    */
-  goBack() {
+  private goBack() {
     this.navCtrl.pop(
         {animate:true,animation:'transition', direction:'back'}).then();
   }
@@ -195,5 +199,12 @@ export class AddParticipantPage {
       this.queuedParticipants.push(user);
     }
     this.searchTerm = "";
+  }
+
+  private finish() {
+    if(this.delegate !== undefined) {
+      this.delegate.onAddParticipants(this.queuedParticipants);
+    }
+    this.goBack();
   }
 }

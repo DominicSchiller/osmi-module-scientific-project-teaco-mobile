@@ -4,6 +4,8 @@ import {Meeting} from "../../../models/meeting";
 import {User} from "../../../models/user";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
+import {EditMeetingEventDelegate} from "./edit-meeting-event-delegate";
+import {Suggestion} from "../../../models/suggestion";
 
 /**
  * Generated class for the AddNewMeetingPage page.
@@ -16,7 +18,7 @@ import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider"
   selector: 'page-add-new-meeting',
   templateUrl: 'add-new-meeting.html',
 })
-export class AddNewMeetingPage {
+export class AddNewMeetingPage implements EditMeetingEventDelegate {
 
   private meeting: Meeting;
   private location: string;
@@ -39,7 +41,9 @@ export class AddNewMeetingPage {
 
   goToAddParticipantPage() {
     this.navCtrl.push('AddParticipantPage',
-        {},
+        {
+          "delegate": this
+        },
         {animate:true,animation:'transition',duration:500,direction:'forward'}).then();
   }
 
@@ -71,5 +75,12 @@ export class AddNewMeetingPage {
               this.closeModal();
           });
     });
+  }
+
+  onAddParticipants(participants: User[]) {
+    this.meeting.participants = participants;
+  }
+
+  onAddSuggestion(suggestion: Suggestion) {
   }
 }
