@@ -49,25 +49,44 @@ export class Suggestion {
 
     /**
      * Constructor
-     * @param data JSON data to parse suggestion information here
      */
-    constructor(data: any) {
-        this.id = data.id;
-        this.meetingId = data.meeting_id;
-        this.creatorId = data.creator_id;
-        this.isPicked = data.picked;
-        this.createdAt = new Date(data.created_at);
-        this.updatedAt = new Date(data.updated_at);
-        this.date = new Date(data.date);
-        this.startTime = new Date(data.start);
-        this.endTime = new Date(data.end);
+    constructor() {
+        let now = new Date();
+        this.id = -1;
+        this.creatorId = -1;
+        this.createdAt = now;
+        this.updatedAt = now;
+        this.date = undefined;
+        this.startTime = undefined;
+        this.endTime = undefined;
+        this.votes = [];
+    }
+
+    /**
+     * Create a new suggestion instance from given data object
+     * @param data JSON data to parse suggestion information here
+     * @return Build suggestion instance
+     */
+    public static of(data: any): Suggestion {
+        let suggestion = new Suggestion();
+        
+        suggestion.id = data.id;
+        suggestion.meetingId = data.meeting_id;
+        suggestion.creatorId = data.creator_id;
+        suggestion.isPicked = data.picked;
+        suggestion.createdAt = new Date(data.created_at);
+        suggestion.updatedAt = new Date(data.updated_at);
+        suggestion.date = new Date(data.date);
+        suggestion.startTime = new Date(data.start);
+        suggestion.endTime = new Date(data.end);
 
         // parse votes
-        this.votes = [];
         if(data.votes != undefined) {
             data.votes.forEach(voteData => {
-                this.votes.push(new Vote(voteData))
+                suggestion.votes.push(new Vote(voteData))
             });
         }
+
+        return suggestion;
     }
 }

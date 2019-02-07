@@ -84,6 +84,25 @@ export class DateTimeHelper {
     }
 
     /**
+     * Create a date object from date and time string
+     * @param date The date string in the format YYYY-MM-DD
+     * @param time the time string in the format hh:mm
+     * @return the date object
+     */
+    public static getDate(date: string, time: string): Date {
+        let dateParts = date.split('-');
+        let timeParts = time.split(':');
+        return new Date(
+            Number(dateParts[0]),
+            Number(dateParts[1])-1,
+            Number(dateParts[2]),
+            Number(timeParts[0]),
+            Number(timeParts[1]),
+            0, 0
+        );
+    }
+
+    /**
      * Add two time-strings.
      * @param timeStringA time-string A
      * @param timeStringB time-string B which will be added to A

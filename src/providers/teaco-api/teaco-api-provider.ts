@@ -165,7 +165,6 @@ export class TeaCoApiProvider {
   createSuggestion(userKey: string, meetingID: number, date:string, startTime: string, endTime:string): Observable<Suggestion> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
     const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.suggestionsAPIEndpoint;
-    console.warn(url);
     let postData = JSON.stringify(
         {
             date : date,
@@ -175,7 +174,7 @@ export class TeaCoApiProvider {
     );
     return this.http.post<Suggestion>(url, postData, requestOptions)
         .map(suggestionData => {
-            return new Suggestion(suggestionData);
+            return Suggestion.of(suggestionData);
         });
   }
 

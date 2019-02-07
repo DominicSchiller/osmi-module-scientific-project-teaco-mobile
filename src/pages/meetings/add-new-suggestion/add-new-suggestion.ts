@@ -1,11 +1,13 @@
-import {Component, ElementRef, EventEmitter, ViewChild} from '@angular/core';
-import {NavController, NavParams, AlertController, Navbar, IonicPage} from 'ionic-angular';
+import {Component, EventEmitter, ViewChild} from '@angular/core';
+import {AlertController, IonicPage, Navbar, NavController, NavParams} from 'ionic-angular';
 import {TeaCoApiProvider} from '../../../providers/teaco-api/teaco-api-provider';
-import { UserSessionProvider } from "../../../providers/user-session/user-session";
-import { Meeting } from '../../../models/meeting';
-import {Suggestion} from '../../../models/suggestion';
+import {UserSessionProvider} from "../../../providers/user-session/user-session";
+import {Meeting} from '../../../models/meeting';
 import {InputCardComponent} from "../../../components/input-card/input-card";
 import {DateTimeHelper} from "../../../utils/date-time-helper";
+import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
+import {Suggestion} from "../../../models/suggestion";
+import {CreateSuggestionEventDelegate} from "./create-suggestion-event-delegate";
 
 /**
  * Generated class for the AddNewSuggestionPage page.
@@ -31,17 +33,29 @@ export class AddNewSuggestionPage {
   @ViewChild('startTimePicker') startTimePicker: InputCardComponent;
   @ViewChild('endingTimePicker') endingTimePicker: InputCardComponent;
 
+  private delegate: CreateSuggestionEventDelegate;
+
   private readonly isModalDialog: boolean = false;
   private isInputWrong: boolean = true;
   private meeting: Meeting;
+  private syncMode: TeaCoSyncMode;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, public apiService:TeaCoApiProvider, private userSession: UserSessionProvider) {
+  constructor(
+      private navCtrl: NavController,
+      private navParams: NavParams,
+      private alertCtrl: AlertController,
+      private apiService:TeaCoApiProvider,
+      private userSession: UserSessionProvider) {
     if(this.navCtrl.getActive() !== undefined) {
       this.isModalDialog = this.navCtrl.getActive().component.name !== 'AddNewMeetingPage';
     } else {
       this.isModalDialog = true;
     }
     this.meeting = this.navParams.get('meeting');
+    let syncMode = this.navParams.get('syncMode');
+    this.syncMode =  syncMode !== undefined ? syncMode : TeaCoSyncMode.syncData;
+    this.delegate = this.navParams.get('delegate');
+    console.warn("SyncMode: ", this.syncMode);
   }
 
   ionViewDidLoad() {
@@ -160,22 +174,40 @@ export class AddNewSuggestionPage {
    * Navigate to the Suggestions Page for the specific Meeting 
    */
   createSuggestion(){
-    this.userSession.getActiveUser().then(activeUser => {
-      this.apiService.createSuggestion(
-          activeUser.key,
-          this.meeting.id,
-          this.datePicker.value,
-          this.startTimePicker.value,
-          this.endingTimePicker.value)
-          .subscribe(suggestion => {
-            // TODO show success alert
-            // TODO return created suggestion to previous screen
-            if(this.isModalDialog) {
-              this.closeModal();
-            } else {
-              this.goBack();
-            }
-          });
-    });
+    switch(this.syncMode) {
+      case TeaCoSyncMode.syncData:
+        this.userSession.getActiveUser().then(activeUser => {
+          this.apiService.createSuggestion(
+              activeUser.key,
+              this.meeting.id,
+              this.datePicker.value,
+              this.startTimePicker.value,
+              this.endingTimePicker.value)
+              .subscribe(suggestion => {
+                // TODO show success alert
+                // TODO return created suggestion to previous screen
+                this.triggerDelegateAndClose(suggestion);
+              });
+        });
+        break;
+      case TeaCoSyncMode.noDataSync:
+        let suggestion = new Suggestion();
+        suggestion.date = DateTimeHelper.getDate(this.datePicker.value, "0:0");
+        suggestion.startTime = DateTimeHelper.getDate(this.datePicker.value, this.startTimePicker.value);
+        suggestion.endTime = DateTimeHelper.getDate(this.datePicker.value, this.endingTimePicker.value);
+        this.triggerDelegateAndClose(suggestion);
+        break;
+    }
+  }
+
+  private triggerDelegateAndClose(suggestion: Suggestion) {
+    if(this.delegate !== undefined) {
+      this.delegate.onSuggestionCreated(suggestion);
+    }
+    if(this.isModalDialog) {
+      this.closeModal();
+    } else {
+      this.goBack();
+    }
   }
 }

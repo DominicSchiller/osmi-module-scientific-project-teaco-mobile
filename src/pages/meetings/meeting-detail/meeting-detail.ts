@@ -14,6 +14,7 @@ import { UserSessionProvider } from "../../../providers/user-session/user-sessio
 import { DateTimeHelper } from "../../../utils/date-time-helper";
 import {Suggestion} from "../../../models/suggestion";
 import {Observable} from "rxjs";
+import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
 
 /**
  * Page Controller for meeting details.
@@ -26,7 +27,7 @@ import {Observable} from "rxjs";
   selector: 'page-meeting-detail',
   templateUrl: 'meeting-detail.html',
 })
-export class MeetingDetailPage {
+export class MeetingDetailPage implements CreateSuggestionEventDelegate {
 
   /**
    * The page's navigation bar UI element
@@ -36,14 +37,28 @@ export class MeetingDetailPage {
    * The meeting to display all detailed information and suggestions for
    */
   protected meeting: Observable<Meeting>;
-
+  /**
+   * The selected meeting's unique TeaCo id
+   */
   protected meetingId: number;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams, private apiService: TeaCoApiProvider, private userSession: UserSessionProvider,
-    private alertCtrl: AlertController,
-    private toastCtrl: ToastController) {
+  /**
+   * Constructor
+   * @param navCtrl
+   * @param navParams
+   * @param apiService
+   * @param userSession
+   * @param alertCtrl
+   * @param toastCtrl
+   */
+  constructor(
+      private navCtrl: NavController,
+      private navParams: NavParams,
+      private apiService: TeaCoApiProvider,
+      private userSession: UserSessionProvider,
+      private alertCtrl: AlertController,
+      private toastCtrl: ToastController) {
     this.meetingId = Number(this.navParams.get('meetingId'));
-
     let meeting = this.navParams.get('meeting');
     if(meeting !== undefined) {
       this.meeting = Observable.of(meeting)
@@ -90,10 +105,13 @@ export class MeetingDetailPage {
   private goToNewSuggestionPage(){
     this.meeting.subscribe(meeting => {
       this.navCtrl.push(
-          'AddNewSuggestionPage', {'meeting': meeting }
+          'AddNewSuggestionPage',
+          {
+            'meeting': meeting ,
+            'delegate': this,
+          }
       ).then();
     });
-
   }
 
   /**
@@ -106,7 +124,7 @@ export class MeetingDetailPage {
     /**
    * Showing the available Options for choosing one of them.
    */
-  private showCheckBoxFinalTermin() {
+  private chooseFinalSuggestion() {
     let alert = this.alertCtrl.create();
     alert.setTitle('Finaler Termin');
     alert.setSubTitle('wählen Sie einen finalen Termin aus');
@@ -161,7 +179,7 @@ export class MeetingDetailPage {
       suggestion.isPicked = !suggestion.isPicked; // set the opposite picked status
       slidingItem.close();
       meeting.suggestions[index] = suggestion;
-      this.meeting = new Observable(observable => {observable.next(meeting)});
+      this.meeting = new Observable(observer => {observer.next(meeting)});
       this.userSession.getActiveUser().then(activeUser => {
         this.apiService.updateSuggestion(activeUser.key, suggestion).subscribe(() => {
           console.log("returned something");
@@ -225,5 +243,13 @@ export class MeetingDetailPage {
    */
   private getEndTime(endTime: Date): string {
     return DateTimeHelper.getTimeString(endTime);
+  }
+
+  onSuggestionCreated(suggestion: Suggestion) {
+    console.log("Retrieved suggestion", suggestion);
+    this.meeting.subscribe(meeting => {
+      meeting.suggestions.push(suggestion);
+      this.meeting = new Observable(observer => {observer.next(meeting)});
+    });
   }
 }

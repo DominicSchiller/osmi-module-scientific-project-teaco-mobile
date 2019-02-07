@@ -1,9 +1,9 @@
-import {Component, ElementRef, NgZone, ViewChild} from '@angular/core';
-import {IonicPage, Navbar, NavController, NavParams, TextInput} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {IonicPage, Navbar, NavController, NavParams} from 'ionic-angular';
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {User} from "../../../models/user";
-import {EditMeetingEventDelegate} from "../add-new-meeting/edit-meeting-event-delegate";
+import {AddParticipantsEventDelegate} from "./add-participants-event-delegate";
 
 /**
  * Page Controller for selecting and adding participants
@@ -48,7 +48,7 @@ export class AddParticipantPage {
    */
   private queuedParticipants: User[];
 
-  private delegate: EditMeetingEventDelegate;
+  private delegate: AddParticipantsEventDelegate;
 
   /**
    * Constructor
@@ -203,7 +203,7 @@ export class AddParticipantPage {
 
   private finish() {
     if(this.delegate !== undefined) {
-      this.delegate.onAddParticipants(this.queuedParticipants);
+      this.delegate.onParticipantsAdded(this.queuedParticipants);
     }
     this.goBack();
   }

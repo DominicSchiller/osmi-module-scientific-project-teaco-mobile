@@ -5,6 +5,7 @@ import {Meeting} from "../../../../models/meeting";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
 import {OpenMeetingCardComponent} from "../../../../components/open-meeting-card/open-meeting-card";
 import {MeetingType} from "../../../../models/MeetingType";
+import {TeaCoSyncMode} from "../../../../models/teaco-sync-mode";
 
 /**
  * Page Controller for listing all open meetings.
@@ -93,7 +94,12 @@ export class OpenMeetingsOverviewPage {
    * Navigate to the "Add New Suggestion" page.
    */
   private goToNewSuggestionPage(){
-    this.navCtrl.push('AddNewSuggestionPage').then();
+    this.navCtrl.push(
+        'AddNewSuggestionPage',
+        {
+          'syncMode': TeaCoSyncMode.syncData
+        }
+    ).then();
   }
 
   /**

@@ -18,8 +18,8 @@
               <ion-icon name="teaco-calendar" color="primary"></ion-icon>
             </div>
             <div class="name-label">
-              {{s.date}}
-              {{s.startTime}}
+              {{parseDate(s.date)}}
+              {{parseTime(s.startTime)}}-{{parseTime(s.endTime)}}
             </div>
           </div>
         </ion-row>

@@ -114,7 +114,7 @@ export class Meeting {
         // parse suggestions
         if(data.suggestions != undefined) {
             data.suggestions.forEach( suggestionData => {
-                meeting.suggestions.push(new Suggestion(suggestionData));
+                meeting.suggestions.push(Suggestion.of(suggestionData));
             });
         }
 

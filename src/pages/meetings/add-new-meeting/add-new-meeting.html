@@ -26,7 +26,7 @@
             <participants-list-card [participants]="meeting.participants" (onAddClicked)="goToAddParticipantPage()">
             </participants-list-card>
 
-            <suggestions-list-card [suggestions]="[]" (onAddClicked)="goToAddSuggestionPage()">
+            <suggestions-list-card [suggestions]="meeting.suggestions" (onAddClicked)="goToAddSuggestionPage()">
             </suggestions-list-card>
 
             <input-card [type]="'text-area'" [placeholder]="'Kommentar'" [icon]="'teaco-comments'" (onChange)="onCommentEntered($event)">
