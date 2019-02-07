@@ -82,6 +82,10 @@ ion-icon {
     mask-image: url("../assets/svg/user/user.svg");
   }
 
+  &[class*="teaco-email"] {
+    mask-image: url("../assets/svg/user/email.svg");
+  }
+
   &[class*="teaco-meeting"] {
     mask-image: url("../assets/svg/meetings/meeting.svg");
   }
@@ -177,6 +181,10 @@ ion-icon {
 
     }
   }
+}
+
+button {
+  text-transform: none !important;
 }
 
 /**

@@ -108,7 +108,7 @@ export class Meeting {
         // parse participants
         if(data.participants != undefined) {
             data.participants.forEach( participantData => {
-                meeting.participants.push(new User(participantData));
+                meeting.participants.push(User.of(participantData));
             });
         }
         // parse suggestions

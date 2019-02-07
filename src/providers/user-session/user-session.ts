@@ -58,7 +58,7 @@ export class UserSessionProvider {
        } else {
          this.storage.get(this.USER_STORAGE_KEY).then((userData) => {
            if(userData !== null) {
-             this._activeUser = new User(JSON.parse(userData));
+             this._activeUser = User.of(JSON.parse(userData));
              resolve(this._activeUser);
            } else {
              resolve(null);

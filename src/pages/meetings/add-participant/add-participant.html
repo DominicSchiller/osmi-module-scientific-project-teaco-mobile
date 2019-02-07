@@ -1,18 +1,73 @@
-<!--
-  Generated template for the AddParticipantPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
     <ion-title>Teilnehmer hinzufügen</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
-
+  <form id="search-bar" #f="ngForm" (ngSubmit)="onAddParticipantsToQueue()">
+    <div id="search-input">
+      <ion-icon id="search-icon" name="teaco-email" color="primary"></ion-icon>
+      <ion-input type="email" autofocus="true"
+                 placeholder="E-Mail des Teilnehmers ..."
+                 [(ngModel)]="searchTerm"
+                 (keyup)="onSearchWordTyped()" email name="search-term-input">
+      </ion-input>
+    </div>
+    <div id="search-results-list" [ngClass]="foundUsers.length > 0 ? 'results-available' : ''">
+      <ion-scroll scrollY="true">
+        <p class="results-title mediumSize medium">Meinen Sie ...</p>
+        <ion-item class="search-result" *ngFor="let result of foundUsers; let i=index">
+          <ion-label>
+            <ion-icon class="user-icon" name="teaco-user"></ion-icon>
+            <div class="user-information">
+              <p class="normalSize medium">{{result.name}}</p>
+              <p class="smallSize light">{{result.email}}</p>
+            </div>
+          </ion-label>
+          <ion-checkbox item-right
+                        (ionChange)="verifySelectedUsers(i)"
+                        name="user-result-checkbox"
+                        [checked]="result.selected"></ion-checkbox>
+        </ion-item>
+      </ion-scroll>
+    </div>
+    <button id="queue-user-button"
+      class="normalSize medium" ion-button full
+      [hidden]="!isSearchTermQualifiedEmail && !isUserSelected" type="submit">
+      Hinzufügen</button>
+  </form>
+  <section id="participants-queue">
+    <ion-scroll scrollY="true">
+      <ion-item class="participant-item" *ngFor="let participant of queuedParticipants; let i=index">
+        <ion-row>
+          <ion-col col-auto>
+            <div class="user-icon">
+              <ion-icon name="teaco-user" color="gray-dark"></ion-icon>
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="user-information">
+              <p class="normalSize medium">
+                {{participant.name}}
+              </p>
+              <p class="normalSize light">
+                {{participant.email}}
+              </p>
+            </div>
+          </ion-col>
+          <ion-col col-auto class="actions-column">
+            <button ion-button class="remove-from-queue-button"
+                    color="primary"
+                    (click)="onRemoveParticipantFromQueue(i)">
+              <ion-icon name="close" class="bold"></ion-icon>
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-scroll>
+  </section>
+  <button id="add-participants-button" ion-button full class="mediumSize medium">
+    Fertig
+  </button>
 </ion-content>

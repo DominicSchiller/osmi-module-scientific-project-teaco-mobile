@@ -25,14 +25,28 @@ export class User {
     created_at: Date;
 
     /**
-     * Constructor
-     * @param data JSON data to parse all information from
+     * Default Constructor
      */
-    constructor(data: any) {
-        this.id = data.id;
-        this.name = data.name;
-        this.email = data.email;
-        this.created_at = new Date(data.createdAt);
-        this.key = data.key !== undefined ? data.key : "";
+    constructor() {
+        this.id = -1;
+        this.name = "";
+        this.email = "";
+        this.key = "";
+        this.created_at = new Date();
+    }
+
+    /**
+     * Create a new user instance from given data object
+     * @param data JSON data to parse all user's information from
+     * @return Build user instance
+     */
+    public static of(data: any): User {
+        let user = new User();
+        user.id = data.id;
+        user.name = data.name;
+        user.email = data.email;
+        user.key = data.key;
+        user.created_at = new Date(data.createdAt);
+        return user;
     }
 }

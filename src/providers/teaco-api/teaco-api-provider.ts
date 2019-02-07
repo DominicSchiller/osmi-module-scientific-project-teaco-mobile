@@ -27,6 +27,10 @@ export class TeaCoApiProvider {
    */
   private readonly usersAPIEndpoint = "users/";
   /**
+   * The API endpoint for search calls (e.g. user search)
+   */
+  private readonly searchEndpoint = "/search";
+  /**
    * The API endpoint for Meeting CRUD operations
    */
   private readonly meetingsAPIEndpoint = "/meetings/";
@@ -56,12 +60,35 @@ export class TeaCoApiProvider {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
     const url = this.baseUrl + this.usersAPIEndpoint + userKey;
     return this.http.get<User>(url, requestOptions)
-        .map(response => {
-          if(response === null) {
+        .map(responseData => {
+          if(responseData === null) {
             throw new Error("No user found for this key");
           }
-          return new User(response);
+          return User.of(responseData);
         });
+  }
+
+  /**
+   * Get all users which match a certain term in their emails
+   * @param userKey The registered user's unique key
+   * @param email The full email-address or sub-term of it
+   * @return List of retrieved users matching the given email term
+   */
+  getUserByEmail(userKey, email: string): Observable<User[]> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl + this.usersAPIEndpoint + userKey +
+          this.searchEndpoint + "?email=" + email;
+      return this.http.get<User[]>(url, requestOptions)
+          .map(responseData => {
+              if(responseData === null || responseData.length === 0) {
+                  throw new Error("No users found");
+              }
+              let users: User[] = [];
+              responseData.forEach(userData => {
+                  users.push(User.of(userData));
+              });
+              return users;
+          });
   }
 
   /**
@@ -73,6 +100,7 @@ export class TeaCoApiProvider {
   getAllMeetings(userKey: string, meetingType: MeetingType): Observable<Meeting[]> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
     const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + "?type=" + meetingType.toString();
+    console.log(userKey);
     return this.http.get<Meeting[]>(url, requestOptions)
         .map(response => {
           let meetings: Meeting[] = [];
@@ -83,12 +111,12 @@ export class TeaCoApiProvider {
         });
   }
 
-    /**
-     * Get a specific meeting from TeaCo.
-     * @param userKey The user's unique key
-     * @param meetingID The meeting's id which to load
-     * @return The retrieved meeting
-     */
+  /**
+   * Get a specific meeting from TeaCo.
+   * @param userKey The user's unique key
+   * @param meetingID The meeting's id which to load
+   * @return The retrieved meeting
+   */
   getMeeting(userKey: string, meetingID: number): Observable<Meeting> {
       const requestOptions = TeaCoApiProvider.getRequestOptions();
       const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID;
@@ -98,6 +126,12 @@ export class TeaCoApiProvider {
           });
   }
 
+  /**
+   * Create a new meeting on TeaCo.
+   * @param userKey The registered user's unique key
+   * @param meeting The meeting instance which to create on TeaCo
+   * @return The retrieved meeting containing the TeaCo's assigned unique id
+   */
   createMeeting(userKey: string, meeting: Meeting): Observable<Meeting> {
       const requestOptions = TeaCoApiProvider.getRequestOptions();
       const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint;
@@ -120,16 +154,14 @@ export class TeaCoApiProvider {
     return this.http.delete<void>(url, requestOptions);
   } 
 
-
-  
   /**
-     * Update a given Vote record on TeaCo.
-     * @param userKey The user's unique key
-     * @param meetingID The meeting's id to which the new suggestion will be added to
-     * @param date The Suggestion property date which to post for new Suggestion 
-     * @param startTime The Suggestion property startTime which to post for new Suggestion
-     * @param endTime The Suggestion property endTime which to post for new Suggestion
-  * */
+   * Update a given Vote record on TeaCo.
+   * @param userKey The user's unique key
+   * @param meetingID The meeting's id to which the new suggestion will be added to
+   * @param date The Suggestion property date which to post for new Suggestion
+   * @param startTime The Suggestion property startTime which to post for new Suggestion
+   * @param endTime The Suggestion property endTime which to post for new Suggestion
+   */
   createSuggestion(userKey: string, meetingID: number, date:string, startTime: string, endTime:string): Observable<Suggestion> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
     const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.suggestionsAPIEndpoint;
@@ -147,11 +179,11 @@ export class TeaCoApiProvider {
         });
   }
 
-    /**
-     * Update a given suggestion record on TeaCo.
-     * @param userKey The user's unique key
-     * @param suggestion The suggestion which to update it's data
-     */
+  /**
+   * Update a given suggestion record on TeaCo.
+   * @param userKey The user's unique key
+   * @param suggestion The suggestion which to update it's data
+   */
   updateSuggestion(userKey: string, suggestion: Suggestion): Observable<void> {
       const requestOptions = TeaCoApiProvider.getRequestOptions();
       const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.suggestionsAPIEndpoint;
@@ -159,12 +191,12 @@ export class TeaCoApiProvider {
       return this.http.put<void>(url, putData, requestOptions);
   }
   
-    /**
-     * Delete a specific suggestion from TeaCo.
-     * @param userKey The user's unique key
-     * @param meetingID The meeting's id which to delete the suggestion for
-     * @param suggestionID The suggestion's id which to delete
-     */
+  /**
+   * Delete a specific suggestion from TeaCo.
+   * @param userKey The user's unique key
+   * @param meetingID The meeting's id which to delete the suggestion for
+   * @param suggestionID The suggestion's id which to delete
+   */
   deleteSuggestion(userKey: string, meetingID: number, suggestionID: number): Observable<void>  {
       const requestOptions = TeaCoApiProvider.getRequestOptions();
       const url = this.baseUrl + this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.suggestionsAPIEndpoint + suggestionID;
@@ -173,12 +205,12 @@ export class TeaCoApiProvider {
 
  
 
-    /**
-     * Update a given Vote record on TeaCo.
-     * @param userKey The user's unique key
-     * @param vote The vote record which to update
-     * @return operation status (success or error).
-     */
+  /**
+   * Update a given Vote record on TeaCo.
+   * @param userKey The user's unique key
+   * @param vote The vote record which to update
+   * @return operation status (success or error).
+   */
   updateVote(userKey: string, vote: Vote): Observable<void> {
       const requestOptions = TeaCoApiProvider.getRequestOptions();
       const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.votesAPIEndpoint;
