@@ -4,9 +4,11 @@ import {Meeting} from "../../../models/meeting";
 import {User} from "../../../models/user";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
-import {EditMeetingEventDelegate} from "./edit-meeting-event-delegate";
 import {Suggestion} from "../../../models/suggestion";
 import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
+import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
+import {AddParticipantsEventDelegate} from "../add-participant/add-participants-event-delegate";
+import {CreateMeetingEventDelegate} from "./create-meeting-event-delegate";
 
 /**
  * Generated class for the AddNewMeetingPage page.
@@ -19,7 +21,9 @@ import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
   selector: 'page-add-new-meeting',
   templateUrl: 'add-new-meeting.html',
 })
-export class AddNewMeetingPage implements EditMeetingEventDelegate {
+export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddParticipantsEventDelegate {
+
+  private delegate: CreateMeetingEventDelegate;
 
   private meeting: Meeting;
   private location: string;
@@ -31,7 +35,7 @@ export class AddNewMeetingPage implements EditMeetingEventDelegate {
     private userSession: UserSessionProvider,
     private apiService: TeaCoApiProvider) {
     this.meeting = new Meeting();
-    console.warn(this.meeting);
+    this.delegate = navParams.get('delegate');
   }
 
   ngOnInit() {
@@ -77,7 +81,10 @@ export class AddNewMeetingPage implements EditMeetingEventDelegate {
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.createMeeting(activeUser.key, this.meeting)
           .subscribe(meeting => {
-              this.closeModal();
+            if(this.delegate !== undefined) {
+              this.delegate.onMeetingCreated(meeting);
+            }
+            this.closeModal();
           });
     });
   }

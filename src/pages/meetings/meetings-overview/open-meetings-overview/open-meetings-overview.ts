@@ -6,6 +6,7 @@ import {UserSessionProvider} from "../../../../providers/user-session/user-sessi
 import {OpenMeetingCardComponent} from "../../../../components/open-meeting-card/open-meeting-card";
 import {MeetingType} from "../../../../models/MeetingType";
 import {TeaCoSyncMode} from "../../../../models/teaco-sync-mode";
+import {CreateMeetingEventDelegate} from "../../add-new-meeting/create-meeting-event-delegate";
 
 /**
  * Page Controller for listing all open meetings.
@@ -18,7 +19,7 @@ import {TeaCoSyncMode} from "../../../../models/teaco-sync-mode";
   selector: 'page-open-meetings-overview',
   templateUrl: 'open-meetings-overview.html'
 })
-export class OpenMeetingsOverviewPage {
+export class OpenMeetingsOverviewPage implements CreateMeetingEventDelegate {
 
   /**
    * List of open meeting cards UI components
@@ -35,6 +36,7 @@ export class OpenMeetingsOverviewPage {
    * @param navCtrl The page's navigation controller
    * @param userSession The app's user session service
    * @param apiService The app's TeaCo API service
+   * @param navParams The handed navigation params
    */
   constructor(
       protected navCtrl: NavController,
@@ -87,7 +89,12 @@ export class OpenMeetingsOverviewPage {
    * Navigate to the "create new meeting" page.
    */
   private goToNewMeetingPage(){
-    this.navCtrl.push('AddNewMeetingPage').then();
+    this.navCtrl.push(
+        'AddNewMeetingPage',
+        {
+          'delegate': this
+        }
+    ).then();
   }
 
   /**
@@ -102,20 +109,8 @@ export class OpenMeetingsOverviewPage {
     ).then();
   }
 
-  /**
-   *Remove Meeting
-   */
-  removeMeeting(){
-    /* this.apiService.deleteMeeting(this.userSession.activeUser.key, this.meetings[1].id).subscribe(meeting =>{
-      this.meeting.id = meeting.id;
-    }); */
-    
-    console.log(this.meetings);
-    console.log(this.meeting);
-    
-  
-    //console.log('Meeting hs to be removed');
-    
+  onMeetingCreated(meeting: Meeting) {
+    console.warn("Retrieved new meeting: ", meeting);
+    this.meetings.push(meeting);
   }
-  
 }

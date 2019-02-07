@@ -53,7 +53,7 @@ export class AddParticipantPage {
   /**
    * Constructor
    * @param navCtrl The app's navigation controller
-   * @param navParams The handed navigation params which should contain the user's key
+   * @param navParams The handed navigation params
    * @param userSession The app's user session service
    * @param apiService The TeaCo API Service to communicate with the TeaCo server
    */
