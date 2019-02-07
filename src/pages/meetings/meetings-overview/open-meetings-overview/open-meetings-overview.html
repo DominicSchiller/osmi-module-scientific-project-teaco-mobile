@@ -6,19 +6,19 @@
 
 <ion-content>
   <ion-list no-lines>
-    <ion-item-sliding *ngFor="let meeting of meetings">
+    <ion-item-sliding *ngFor="let meeting of meetings; let i=index" #meetingSlidingItem>
       <ion-item>
         <open-meeting-card [meeting]="meeting" (click)="showMeetingDetail(meeting)">
         </open-meeting-card>
       </ion-item>
       <ion-item-options side="right">
-        <button ion-button color="tertiary" text-wrap>
+        <button ion-button color="tertiary" (click)="goToAddParticipantsPage(meetingSlidingItem)" text-wrap>
           <ion-icon name="teaco-add-participant"></ion-icon>
         </button>
-        <button ion-button color="secondary" (click)="goToNewSuggestionPage()" text-wrap>
+        <button ion-button color="secondary" (click)="goToNewSuggestionPage(meetingSlidingItem)" text-wrap>
           <ion-icon name="teaco-add-suggestion"></ion-icon>
         </button>
-        <button ion-button color="primary">
+        <button ion-button color="primary" (click)="deleteMeeting(meeting, i)">
           <ion-icon name="md-trash"></ion-icon>
         </button>
       </ion-item-options>

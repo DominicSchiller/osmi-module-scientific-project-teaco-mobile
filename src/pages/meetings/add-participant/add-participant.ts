@@ -19,6 +19,9 @@ export class AddParticipantPage {
    * The page's navigation bar UI element
    */
   @ViewChild(Navbar) navBar: Navbar;
+
+  private readonly isModalDialog: boolean = false;
+
   /**
    * The current entered search term
    */
@@ -61,6 +64,12 @@ export class AddParticipantPage {
               public navParams: NavParams,
               private userSession: UserSessionProvider,
               private apiService: TeaCoApiProvider) {
+    // check if page is launched as modal dialog
+    if(this.navCtrl.getActive() !== undefined) {
+      this.isModalDialog = this.navCtrl.getActive().component.name !== 'AddNewMeetingPage';
+    } else {
+      this.isModalDialog = true;
+    }
     this.searchTerm = "";
     this.waitTimeoutID = -1;
     this.foundUsers = [];
@@ -69,6 +78,7 @@ export class AddParticipantPage {
   }
 
   ionViewDidLoad() {
+    this.navBar.hideBackButton = this.isModalDialog;
     this.navBar.backButtonClick = (e:UIEvent)=>{
       // todo something
       this.goBack();
@@ -81,6 +91,13 @@ export class AddParticipantPage {
   private goBack() {
     this.navCtrl.pop(
         {animate:true,animation:'transition', direction:'back'}).then();
+  }
+
+  /**
+   * Close modal dialog.
+   */
+  private closeModal() {
+    this.navCtrl.pop().then();
   }
 
   /**

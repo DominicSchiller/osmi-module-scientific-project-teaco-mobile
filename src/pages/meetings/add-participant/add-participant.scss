@@ -2,6 +2,17 @@
 
 page-add-participant {
 
+  ion-navbar {
+    ion-buttons {
+      button {
+        font-size: 2.4rem !important;
+      }
+    }
+    ion-icon {
+      color: color($colors, light) !important;
+    }
+  }
+
   .scroll-content {
     display: flex !important;
     flex-direction: column !important;

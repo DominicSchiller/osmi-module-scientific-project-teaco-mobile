@@ -1,5 +1,5 @@
 import {Component, ViewChildren} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, ItemSliding, NavController, NavParams} from 'ionic-angular';
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
 import {Meeting} from "../../../../models/meeting";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
@@ -99,14 +99,42 @@ export class OpenMeetingsOverviewPage implements CreateMeetingEventDelegate {
 
   /**
    * Navigate to the "Add New Suggestion" page.
+   * @param slidingItem The sliding item from the UI
    */
-  private goToNewSuggestionPage(){
+  private goToNewSuggestionPage(slidingItem: ItemSliding){
+    slidingItem.close();
     this.navCtrl.push(
         'AddNewSuggestionPage',
         {
           'syncMode': TeaCoSyncMode.syncData
         }
     ).then();
+  }
+
+  /**
+   * Navigate to the "Add Participants" page.
+   * @param slidingItem The sliding item from the UI
+   */
+  private goToAddParticipantsPage(slidingItem: ItemSliding){
+    slidingItem.close();
+    this.navCtrl.push(
+        'AddParticipantPage'
+    ).then();
+  }
+
+  /**
+   * Delete a specific meeting.
+   * @param meeting The selected meeting which to delete
+   * @param index The selected meeting's index within the meetings list
+   */
+  private deleteMeeting(meeting: Meeting, index: number) {
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.deleteMeeting(activeUser.key, meeting.id).subscribe(() => {
+        this.meetings.splice(index, 1);
+      }, error => {
+        console.error("Could not delete meeting: ", error);
+      });
+    });
   }
 
   onMeetingCreated(meeting: Meeting) {
