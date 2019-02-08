@@ -1,12 +1,14 @@
 import {Component, ViewChildren} from '@angular/core';
-import {IonicPage, ItemSliding, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, ItemSliding, ModalController, NavController, NavParams} from 'ionic-angular';
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
 import {Meeting} from "../../../../models/meeting";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
 import {OpenMeetingCardComponent} from "../../../../components/open-meeting-card/open-meeting-card";
 import {MeetingType} from "../../../../models/MeetingType";
 import {TeaCoSyncMode} from "../../../../models/teaco-sync-mode";
-import {CreateMeetingEventDelegate} from "../../add-new-meeting/create-meeting-event-delegate";
+import {Suggestion} from "../../../../models/suggestion";
+import {EditMeetingEventDelegate} from "./edit-meeting-event-delegate";
+import {User} from "../../../../models/user";
 
 /**
  * Page Controller for listing all open meetings.
@@ -19,7 +21,7 @@ import {CreateMeetingEventDelegate} from "../../add-new-meeting/create-meeting-e
   selector: 'page-open-meetings-overview',
   templateUrl: 'open-meetings-overview.html'
 })
-export class OpenMeetingsOverviewPage implements CreateMeetingEventDelegate {
+export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
 
   /**
    * List of open meeting cards UI components
@@ -30,21 +32,22 @@ export class OpenMeetingsOverviewPage implements CreateMeetingEventDelegate {
    * List of fetched meetings
    */
   protected meetings: Meeting[];
-  protected meeting: Meeting;
+
   /**
    * Constructor
    * @param navCtrl The page's navigation controller
+   * @param navParams The handed navigation params
+   * @param modalCtrl The Ionic's default modal controller
    * @param userSession The app's user session service
    * @param apiService The app's TeaCo API service
-   * @param navParams The handed navigation params
    */
   constructor(
       protected navCtrl: NavController,
+      protected navParams: NavParams,
+      private modalCtrl: ModalController,
       protected userSession: UserSessionProvider,
-      protected apiService: TeaCoApiProvider,
-      protected navParams: NavParams) {
+      protected apiService: TeaCoApiProvider) {
     this.meetings = [];
-    this.meeting = this.navParams.data;
   }
 
   ngOnInit() {
@@ -69,7 +72,11 @@ export class OpenMeetingsOverviewPage implements CreateMeetingEventDelegate {
   private showMeetingDetail(meeting: Meeting) {
     this.navCtrl.push(
         'MeetingDetailPage',
-        {meeting: meeting, meetingId: meeting.id},
+        {
+          meeting: meeting,
+          'delegate': this,
+          meetingId: meeting.id
+        },
         {animate:true,animation:'transition',duration:500,direction:'forward'}
         ).then();
   } 
@@ -89,37 +96,46 @@ export class OpenMeetingsOverviewPage implements CreateMeetingEventDelegate {
    * Navigate to the "create new meeting" page.
    */
   private goToNewMeetingPage(){
-    this.navCtrl.push(
+    this.modalCtrl.create(
         'AddNewMeetingPage',
         {
           'delegate': this
         }
-    ).then();
+    ).present().then();
   }
 
   /**
    * Navigate to the "Add New Suggestion" page.
+   * @param meeting The meeting instance to add further suggestions to
    * @param slidingItem The sliding item from the UI
    */
-  private goToNewSuggestionPage(slidingItem: ItemSliding){
+  private goToNewSuggestionPage(meeting: Meeting, slidingItem: ItemSliding){
     slidingItem.close();
-    this.navCtrl.push(
+    this.modalCtrl.create(
         'AddNewSuggestionPage',
         {
+          'meeting': meeting,
+          'delegate': this,
           'syncMode': TeaCoSyncMode.syncData
         }
-    ).then();
+    ).present().then()
   }
 
   /**
    * Navigate to the "Add Participants" page.
+   * @param meeting The meeting instance to add further participants to
    * @param slidingItem The sliding item from the UI
    */
-  private goToAddParticipantsPage(slidingItem: ItemSliding){
+  private goToAddParticipantsPage(meeting: Meeting, slidingItem: ItemSliding){
     slidingItem.close();
-    this.navCtrl.push(
-        'AddParticipantPage'
-    ).then();
+    this.modalCtrl.create(
+        'AddParticipantPage',
+        {
+          'delegate': this,
+          'meeting': meeting,
+          'syncMode': TeaCoSyncMode.syncData
+        }
+    ).present().then();
   }
 
   /**
@@ -140,5 +156,33 @@ export class OpenMeetingsOverviewPage implements CreateMeetingEventDelegate {
   onMeetingCreated(meeting: Meeting) {
     console.warn("Retrieved new meeting: ", meeting);
     this.meetings.push(meeting);
+  }
+
+  onSuggestionCreated(suggestion: Suggestion) {
+    this.meetings.forEach(meeting => {
+      if(suggestion.meetingId == meeting.id) {
+        meeting.suggestions.push(suggestion);
+        meeting.numberOfSuggestions += 1;
+        return;
+      }
+    })
+  }
+
+  onSuggestionDeleted(meetingId: number, suggestion: number) {
+    this.meetings.forEach(meeting => {
+      if(meeting.id == meetingId) {
+        meeting.numberOfSuggestions -= 1;
+        return;
+      }
+    });
+  }
+
+  onParticipantsAdded(meetingId: number, participants: User[]) {
+    this.meetings.forEach(meeting => {
+      if(meeting.id == meetingId) {
+        meeting.numberOfParticipants += participants.length;
+        return;
+      }
+    });
   }
 }

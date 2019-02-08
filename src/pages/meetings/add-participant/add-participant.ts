@@ -4,6 +4,7 @@ import {UserSessionProvider} from "../../../providers/user-session/user-session"
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {User} from "../../../models/user";
 import {AddParticipantsEventDelegate} from "./add-participants-event-delegate";
+import {Meeting} from "../../../models/meeting";
 
 /**
  * Page Controller for selecting and adding participants
@@ -19,6 +20,8 @@ export class AddParticipantPage {
    * The page's navigation bar UI element
    */
   @ViewChild(Navbar) navBar: Navbar;
+
+  private meeting: Meeting;
 
   private readonly isModalDialog: boolean = false;
 
@@ -74,6 +77,7 @@ export class AddParticipantPage {
     this.waitTimeoutID = -1;
     this.foundUsers = [];
     this.queuedParticipants = [];
+    this.meeting = navParams.get('meeting');
     this.delegate = navParams.get('delegate');
   }
 
@@ -220,7 +224,7 @@ export class AddParticipantPage {
 
   private finish() {
     if(this.delegate !== undefined) {
-      this.delegate.onParticipantsAdded(this.queuedParticipants);
+      this.delegate.onParticipantsAdded(this.meeting.id, this.queuedParticipants);
     }
     this.goBack();
   }

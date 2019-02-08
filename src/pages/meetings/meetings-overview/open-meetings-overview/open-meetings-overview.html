@@ -12,10 +12,10 @@
         </open-meeting-card>
       </ion-item>
       <ion-item-options side="right">
-        <button ion-button color="tertiary" (click)="goToAddParticipantsPage(meetingSlidingItem)" text-wrap>
+        <button ion-button color="tertiary" (click)="goToAddParticipantsPage(meeting, meetingSlidingItem)" text-wrap>
           <ion-icon name="teaco-add-participant"></ion-icon>
         </button>
-        <button ion-button color="secondary" (click)="goToNewSuggestionPage(meetingSlidingItem)" text-wrap>
+        <button ion-button color="secondary" (click)="goToNewSuggestionPage(meeting, meetingSlidingItem)" text-wrap>
           <ion-icon name="teaco-add-suggestion"></ion-icon>
         </button>
         <button ion-button color="primary" (click)="deleteMeeting(meeting, i)">

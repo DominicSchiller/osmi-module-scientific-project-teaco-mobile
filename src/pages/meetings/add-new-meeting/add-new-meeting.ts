@@ -89,7 +89,7 @@ export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddPart
     });
   }
 
-  onParticipantsAdded(participants: User[]) {
+  onParticipantsAdded(meetingId:number, participants: User[]) {
     this.meeting.participants = participants;
   }
 

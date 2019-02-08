@@ -15,6 +15,7 @@ import { DateTimeHelper } from "../../../utils/date-time-helper";
 import {Suggestion} from "../../../models/suggestion";
 import {Observable} from "rxjs";
 import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
+import {EditMeetingEventDelegate} from "../meetings-overview/open-meetings-overview/edit-meeting-event-delegate";
 
 /**
  * Page Controller for meeting details.
@@ -42,6 +43,8 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    */
   protected meetingId: number;
 
+  private delegate: EditMeetingEventDelegate;
+
   /**
    * Constructor
    * @param navCtrl
@@ -60,6 +63,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       private toastCtrl: ToastController) {
     this.meetingId = Number(this.navParams.get('meetingId'));
     let meeting = this.navParams.get('meeting');
+    this.delegate = this.navParams.get('delegate');
     if(meeting !== undefined) {
       this.meeting = Observable.of(meeting)
     }
@@ -210,7 +214,10 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
             }
           }
           if(deleteIndex > -1) {
+            let suggestion = meeting.suggestions[deleteIndex];
             meeting.suggestions.splice(deleteIndex, 1);
+            meeting.numberOfSuggestions -= 1;
+            this.delegate.onSuggestionDeleted(this.meetingId, suggestion.id);
             console.log("suggestion has been successfully deleted");
           }
           this.meeting = new Observable(observable => {observable.next(meeting)})
