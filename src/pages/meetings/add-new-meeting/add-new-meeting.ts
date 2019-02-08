@@ -48,7 +48,8 @@ export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddPart
   goToAddParticipantPage() {
     this.navCtrl.push('AddParticipantPage',
         {
-          "delegate": this
+          'meeting': this.meeting,
+          'delegate': this
         },
         {animate:true,animation:'transition',duration:500,direction:'forward'}).then();
   }

@@ -80,21 +80,21 @@ suggestions-list-card {
             @include box(50px, 50px);
             @include horizontal-center();
             background: color($colors, gray-light);
-            border: 1px solid color($colors, gray-medium);
+            border: 1px solid color($colors, gray-dark);
             border-radius: 50%;
 
             ion-icon {
               font-size: 3rem;
               @include center();
-              background: color($colors, gray-dark);
+              background: color($colors, gray-extra-dark);
             }
           }
 
-          .name-label {
+          .dates-label {
             overflow: hidden;
             text-align: center;
             margin-top: 5px;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             max-height: 36px;
           }
         }

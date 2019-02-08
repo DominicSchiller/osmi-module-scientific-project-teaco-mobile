@@ -1,21 +1,22 @@
-import {Component, NgZone, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {
+  AlertController,
+  IonicPage,
+  ItemSliding,
+  Navbar,
   NavController,
   NavParams,
-  Navbar,
-  AlertController,
-  ToastController,
-  IonicPage,
-  ItemSliding
+  ToastController
 } from 'ionic-angular';
-import { Meeting } from "../../../models/meeting";
-import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
-import { UserSessionProvider } from "../../../providers/user-session/user-session";
-import { DateTimeHelper } from "../../../utils/date-time-helper";
+import {Meeting} from "../../../models/meeting";
+import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
+import {UserSessionProvider} from "../../../providers/user-session/user-session";
+import {DateTimeHelper} from "../../../utils/date-time-helper";
 import {Suggestion} from "../../../models/suggestion";
 import {Observable} from "rxjs";
 import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
 import {EditMeetingEventDelegate} from "../meetings-overview/open-meetings-overview/edit-meeting-event-delegate";
+import {MeetingUtils} from "../../../utils/meeting-utils";
 
 /**
  * Page Controller for meeting details.
@@ -220,7 +221,9 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
             this.delegate.onSuggestionDeleted(this.meetingId, suggestion.id);
             console.log("suggestion has been successfully deleted");
           }
-          this.meeting = new Observable(observable => {observable.next(meeting)})
+          MeetingUtils.recalculateMeetingStatus(meeting);
+          this.delegate.onMeetingProgressChanged(meeting.id, meeting.progress);
+          this.meeting = new Observable(observer => {observer.next(meeting)})
         }, (error) => {
           console.error(error);
         });

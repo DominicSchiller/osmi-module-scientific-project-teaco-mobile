@@ -9,6 +9,7 @@ import {TeaCoSyncMode} from "../../../../models/teaco-sync-mode";
 import {Suggestion} from "../../../../models/suggestion";
 import {EditMeetingEventDelegate} from "./edit-meeting-event-delegate";
 import {User} from "../../../../models/user";
+import {MeetingProgress} from "../../../../models/meeting-progress";
 
 /**
  * Page Controller for listing all open meetings.
@@ -172,7 +173,6 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
     this.meetings.forEach(meeting => {
       if(meeting.id == meetingId) {
         meeting.numberOfSuggestions -= 1;
-        return;
       }
     });
   }
@@ -181,6 +181,16 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
     this.meetings.forEach(meeting => {
       if(meeting.id == meetingId) {
         meeting.numberOfParticipants += participants.length;
+        return;
+      }
+    });
+  }
+
+  onMeetingProgressChanged(meetingId: number, progress: MeetingProgress) {
+    console.log("trieved updated progress", progress);
+    this.meetings.forEach(meeting => {
+      if(meeting.id == meetingId) {
+        meeting.progress = progress;
         return;
       }
     });

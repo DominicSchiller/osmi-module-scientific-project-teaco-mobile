@@ -191,11 +191,14 @@ export class AddNewSuggestionPage {
         });
         break;
       case TeaCoSyncMode.noDataSync:
-        let suggestion = new Suggestion();
-        suggestion.date = DateTimeHelper.getDate(this.datePicker.value, "0:0");
-        suggestion.startTime = DateTimeHelper.getDate(this.datePicker.value, this.startTimePicker.value);
-        suggestion.endTime = DateTimeHelper.getDate(this.datePicker.value, this.endingTimePicker.value);
-        this.triggerDelegateAndClose(suggestion);
+        this.userSession.getActiveUser().then(activeUser => {
+          let suggestion = new Suggestion();
+          suggestion.creatorId = activeUser.id;
+          suggestion.date = DateTimeHelper.getDate(this.datePicker.value, "0:0");
+          suggestion.startTime = DateTimeHelper.getDate(this.datePicker.value, this.startTimePicker.value);
+          suggestion.endTime = DateTimeHelper.getDate(this.datePicker.value, this.endingTimePicker.value);
+          this.triggerDelegateAndClose(suggestion);
+        });
         break;
     }
   }

@@ -15,9 +15,9 @@
           <div class="spacer"></div>
           <div class="suggestion-item" *ngFor="let s of suggestions">
             <div class="suggestion-icon">
-              <ion-icon name="teaco-calendar" color="primary"></ion-icon>
+              <ion-icon name="teaco-calendar" color="gray-dark"></ion-icon>
             </div>
-            <div class="name-label">
+            <div class="dates-label">
               {{parseDate(s.date)}}
               {{parseTime(s.startTime)}}-{{parseTime(s.endTime)}}
             </div>
