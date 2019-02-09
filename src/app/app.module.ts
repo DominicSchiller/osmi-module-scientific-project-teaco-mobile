@@ -16,6 +16,7 @@ import { TeaCoApiProvider } from '../providers/teaco-api/teaco-api-provider';
 import { UserSessionProvider } from '../providers/user-session/user-session';
 import { FirebaseProvider } from '../providers/firebase/firebase';
 import {Firebase} from "@ionic-native/firebase";
+import {Calendar} from "@ionic-native/calendar";
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import {Firebase} from "@ionic-native/firebase";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     TeaCoApiProvider,
     UserSessionProvider,
-    FirebaseProvider
+    FirebaseProvider,
+    Calendar
   ]
 })
 export class AppModule {}
