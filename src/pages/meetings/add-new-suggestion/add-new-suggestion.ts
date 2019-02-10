@@ -55,7 +55,6 @@ export class AddNewSuggestionPage {
     let syncMode = this.navParams.get('syncMode');
     this.syncMode =  syncMode !== undefined ? syncMode : TeaCoSyncMode.syncData;
     this.delegate = this.navParams.get('delegate');
-    console.warn("SyncMode: ", this.syncMode);
   }
 
   ionViewDidLoad() {

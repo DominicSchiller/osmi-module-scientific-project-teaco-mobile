@@ -65,17 +65,14 @@ export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddPart
 
   private onTitleEntered(event: EventEmitter<any>) {
     this.meeting.title = event[0];
-    console.log("Title entered: ", this.meeting.title);
   }
 
   private onLocationEntered(event: EventEmitter<any>) {
     this.meeting.location = event[0];
-    console.log("Location entered: ", this.meeting.location);
   }
 
   private onCommentEntered(event: EventEmitter<any>) {
     this.comment = event[0];
-    console.log("Comment entered: ", this.comment);
   }
 
   private createMeeting() {

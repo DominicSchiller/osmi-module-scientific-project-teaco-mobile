@@ -35,6 +35,10 @@ export class TeaCoApiProvider {
    */
   private readonly meetingsAPIEndpoint = "/meetings/";
   /**
+   * The API endpoint to finish a meeting planning
+   */
+  private readonly finishMeetingAPIEndpint = "/finish";
+  /**
    * The API endpoint for Meeting CRUD operations
    */
   private readonly suggestionsAPIEndpoint = "/suggestions/";
@@ -148,11 +152,22 @@ export class TeaCoApiProvider {
    * @param meetingID The meeting id remove
    * @return operation status (success or error).
    */
-  deleteMeeting(userKey: string, meetingID: number): Observable<void>{
+  deleteMeeting(userKey: string, meetingID: number): Observable<void> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
     const url = this.baseUrl + this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID;
     return this.http.delete<void>(url, requestOptions);
-  } 
+  }
+
+  finishMeeting(userKey: string, meetingID: number, suggestions: Suggestion[], location: string, comment: string): Observable<void> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.finishMeetingAPIEndpint;
+      const putData = {
+          "suggestions": suggestions,
+          "location": location,
+          "comment": comment
+      };
+      return this.http.put<void>(url, putData, requestOptions);
+  }
 
   /**
    * Update a given Vote record on TeaCo.

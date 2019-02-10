@@ -27,7 +27,7 @@ input-card {
     height: 100%;
     padding: 0 10px !important;
 
-    ion-icon{
+    ion-icon {
       color: color($colors, primary) !important;
       @include horizontal-center();
       left: 27% !important;

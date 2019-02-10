@@ -10,10 +10,6 @@ page-meeting-detail {
     z-index: 200;
   }
 
-  .fab {
-    bottom: 58px !important;
-  }
-
   ion-header {
     #meeting-details-header {
       background-color: color($colors, primary);
@@ -84,6 +80,10 @@ page-meeting-detail {
   ion-content {
     background-color: color($colors, gray-light) !important;
 
+    .fab {
+      bottom: 58px !important;
+    }
+
     #suggestions-list {
       width: 100% !important;
       height: calc(100% - 55px) !important;
@@ -133,6 +133,163 @@ page-meeting-detail {
       button {
         font-size: 3.0rem !important;
       }
+    }
+
+    .action-overlay {
+      position: absolute;
+      top: 0;
+      z-index: 900;
+      @include box(100%, 100%);
+      background-color: #1e2126;
+      visibility: hidden;
+      opacity: 0;
+      -webkit-transition-property: all;
+      transition-property: all;
+      -webkit-transition-duration: 0.1s;
+      transition-duration: 0.1s;
+      -webkit-transition-timing-function: ease-in-out;
+      transition-timing-function: ease-in-out;
+      -webkit-backdrop-filter: blur(0px);
+      backdrop-filter: blur(0px);
+
+      &.active {
+        visibility: visible;
+        opacity: 0.2;
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+      }
+    }
+  }
+}
+
+#finish_planning_section {
+  @include box(100%, 463px);
+  top: 100%;
+  position: absolute;
+  z-index: 1000 !important;
+  background-color: white;
+  -webkit-transition-property: top;
+  transition-property: top;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+
+  &.active {
+    top: calc(100% - 463px) !important;
+  }
+
+  h5 {
+    @include box(100%, 15px);
+    margin: 15px 0;
+    text-align: center;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: color($colors, primary) !important;
+  }
+
+  .slide-zoom {
+    @include box(100%, 463px);
+    padding-bottom: 0 !important;
+  }
+
+  .footer {
+    @include box(100%, 75px);
+    position: relative;
+    background-color: color($colors, gray-light);
+    border-top: 1px solid color($colors, gray-dark);
+
+    #swipe-forward-button {
+      @include horizontal-center();
+      margin-top: 15px;
+      position: absolute !important;
+    }
+  }
+
+  ion-scroll {
+    @include box(100%, calc(100% - 150px));
+    overflow: hidden;
+
+    ion-item {
+      width: 100% !important;
+      height: 80px !important;
+      position: relative;
+
+      &:last-of-type {
+        .item-inner {
+          border-bottom: none !important;
+        }
+      }
+
+      &:first-of-type {
+        .item-inner {
+          border-bottom: 1px solid #c8c7cc !important;
+        }
+      }
+
+      .suggestion-icon {
+        font-size: 3rem;
+        color: color($colors, gray-extra-dark);
+        @include vertical-center();
+      }
+
+      .date-info {
+        padding: 0 10px;
+      }
+    }
+  }
+
+  #location-input {
+    ion-icon {
+      margin-left: 6px !important;
+      margin-right: -8px !important;
+    }
+  }
+
+  #comment-input {
+    overflow: hidden;
+    .card, ion-textarea {
+      height: 180px !important;
+      max-height: 180px !important;
+      overflow-y: hidden;
+
+      textarea {
+        height: 180px !important;
+        max-height: 180px !important;
+        overflow-y: auto !important;
+      }
+    }
+    ion-icon {
+      margin-left: 6px !important;
+      margin-right: -1px !important;
+    }
+  }
+
+
+  .card {
+    box-shadow: none !important;
+  }
+
+  .finish-section {
+    @include box(100%, 188px);
+    background-color: color($colors, gray-light);
+    position: absolute;
+    bottom: 0;
+    padding: 10px 15px;
+    border-top: 1px solid color($colors, gray-dark);
+
+    .actions {
+      @include box(140px, 48px);
+      @include horizontal-center();
+      position: absolute !important;
+      bottom: 20px !important;
+    }
+    .fab {
+      float: left;
+      margin: 0 10px;
+      @include box(48px, 48px);
+
     }
   }
 }

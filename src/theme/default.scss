@@ -183,6 +183,10 @@ ion-icon {
   }
 }
 
+ion-fab {
+  z-index: 800 !important;
+}
+
 button {
   text-transform: none !important;
 }
@@ -200,6 +204,6 @@ button {
 
 .fab {
   &.fab-ios {
-    padding-bottom: 5px !important;
+    //padding-bottom: 5px !important;
   }
 }

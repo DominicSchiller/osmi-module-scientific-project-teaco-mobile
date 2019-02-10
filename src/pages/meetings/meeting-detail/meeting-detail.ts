@@ -1,17 +1,8 @@
-import {Component, ViewChild} from '@angular/core';
-import {
-  AlertController,
-  IonicPage,
-  ItemSliding,
-  Navbar,
-  NavController,
-  NavParams,
-  ToastController
-} from 'ionic-angular';
+import {Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
+import {IonicPage, ItemSliding, Navbar, NavController, NavParams, Slides} from 'ionic-angular';
 import {Meeting} from "../../../models/meeting";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
-import {DateTimeHelper} from "../../../utils/date-time-helper";
 import {Suggestion} from "../../../models/suggestion";
 import {Observable} from "rxjs";
 import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
@@ -36,32 +27,68 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    */
   @ViewChild(Navbar) navBar: Navbar;
   /**
-   * The meeting to display all detailed information and suggestions for
+   * The pages 'finish the meeting planning' action sheet UI element
    */
-  protected meeting: Observable<Meeting>;
+  @ViewChild('finishPlanningActionSheet') finishActionSheet: Slides;
+  /**
+   * The pages overlay UI element for i.e. indicating stuff in progress
+   */
+  @ViewChild('actionOverlay') actionOverlay: ElementRef;
+
   /**
    * The selected meeting's unique TeaCo id
    */
   protected meetingId: number;
 
+  /**
+   * The meeting to display all detailed information and suggestions for
+   */
+  protected meeting: Observable<Meeting>;
+
+  /**
+   * List of picked suggestion which will be offered
+   * when entering the finish process
+   */
+  private pickedSuggestions: Suggestion[];
+
+  /**
+   * The entered comment from the finish planning process
+   */
+  private comment: string;
+
+  /**
+   * The entered comment from the finish planning process
+   */
+  private location: string;
+
+  /**
+   * The count of currently picked suggestions
+   */
+  private pickedSuggestionsCount = 0;
+
+  /**
+   * The associated edit meeting delegate which will be called
+   * on certain meeting edits
+   */
   private delegate: EditMeetingEventDelegate;
 
   /**
    * Constructor
-   * @param navCtrl
-   * @param navParams
-   * @param apiService
-   * @param userSession
-   * @param alertCtrl
-   * @param toastCtrl
+   * @param navCtrl The app's navigation controller
+   * @param navParams The handed navigation params
+   * @param apiService The TeaCo API Service to communicate with the TeaCo server
+   * @param userSession The app's user session service
+   * @param renderer The Angular UI renderer for changing HTML elements
    */
   constructor(
       private navCtrl: NavController,
       private navParams: NavParams,
       private apiService: TeaCoApiProvider,
       private userSession: UserSessionProvider,
-      private alertCtrl: AlertController,
-      private toastCtrl: ToastController) {
+      private renderer: Renderer2) {
+    this.pickedSuggestions = [];
+    this.comment = "";
+    this.location = "";
     this.meetingId = Number(this.navParams.get('meetingId'));
     let meeting = this.navParams.get('meeting');
     this.delegate = this.navParams.get('delegate');
@@ -76,6 +103,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
         meeting.numberOfParticipants = meeting.participants.length;
         meeting.numberOfSuggestions = meeting.suggestions.length;
         this.meeting = Observable.of(meeting);
+        this.refreshPickedSuggestionsList();
       });
     });
   }
@@ -88,6 +116,8 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       // todo something
       this.goBack();
     };
+
+    console.warn(this.finishActionSheet);
   }
 
   /**
@@ -104,7 +134,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   }
 
 
-   /**
+  /**
    * Navigate to the "Add New Suggestion" page.
    */
   private goToNewSuggestionPage(){
@@ -120,57 +150,83 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   }
 
   /**
-   * Navigate to the "MeetingsOverviewPage" page.
+   * Open the finish planning action sheet providing options
+   * for finalizing the meeting planning.
    */
-  private goToMeetingsOverview(){
-    this.navCtrl.setRoot('MeetingsOverviewPage').then();
-  }
-
-    /**
-   * Showing the available Options for choosing one of them.
-   */
-  private chooseFinalSuggestion() {
-    let alert = this.alertCtrl.create();
-    alert.setTitle('Finaler Termin');
-    alert.setSubTitle('wählen Sie einen finalen Termin aus');
-
-    this.meeting.subscribe(meeting => {
-      meeting.suggestions.forEach(suggestion => {
-        alert.addInput({
-          type: 'radio',
-          label: this.getDate(suggestion.date) + ' von ' + this.getStartTime(suggestion.startTime) + ' - ' + this.getEndTime(suggestion.endTime),
-          value: this.getDate(suggestion.date) + ' von ' + this.getStartTime(suggestion.startTime) + ' - ' + this.getEndTime(suggestion.endTime),
-          checked: false
-        });
-      });
-      alert.addButton({
-        text: 'okay',
-        handler: (data: string) => {
-          if (data == null) {
-            this.toastMessage();
-          } else {
-            setTimeout(() => {
-              this.goToMeetingsOverview();
-            }, 500);
-          }
-        }
-      });
-      alert.present();
-    });
+  private openFinishPlanningActionSheet() {
+    this.refreshPickedSuggestionsList();
+    this.renderer.addClass(this.actionOverlay.nativeElement, 'active');
+    this.renderer.addClass(this.finishActionSheet.getElementRef().nativeElement, 'active');
   }
 
   /**
-   Shows a Message to the User if he did not choose a final Suggestion from the Options
-   **/
-  toastMessage() {
-    let warning = this.toastCtrl.create({
-      message: 'Sie haben kein Termin ausgewählt. Bitte wählen Sie ein Termin aus!',
-      closeButtonText: 'Schließen',	
-      showCloseButton: true,
-      duration: 3000,
-      position: 'middle'
+   * Close the finish planning action sheet.
+   */
+  private closeFinishPlanningActionSheet() {
+    this.renderer.removeClass(this.finishActionSheet.getElementRef().nativeElement, 'active');
+    this.renderer.removeClass(this.actionOverlay.nativeElement, 'active');
+    setTimeout(() => {
+      this.finishActionSheet.slidePrev();
+    }, 200);
+  }
+
+  /**
+   * Callback function when a picked suggestion got
+   * unchecked or re-checked from the displayed list in the finish planning action sheet.
+   * @param suggestion The unpicked suggestion
+   */
+  private onPickStatusChange(suggestion: Suggestion) {
+    suggestion.isPicked = false;
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.updateSuggestion(activeUser.key, suggestion).subscribe(() => {
+      });
     });
-    warning.present();
+    this.refreshPickedSuggestionsList(true);
+  }
+
+  /**
+   * Refresh the list of picked suggestions by
+   * re-determining all picked suggestions.
+   */
+  private refreshPickedSuggestionsList(isCountOnly = false) {
+    this.meeting.subscribe(meeting => {
+      let pickedSuggestions: Suggestion[] = [];
+      meeting.suggestions.forEach(suggestion => {
+        if(suggestion.isPicked) {
+          pickedSuggestions.push(suggestion);
+        }
+        this.pickedSuggestionsCount = pickedSuggestions.length;
+        if(!isCountOnly) {
+          this.pickedSuggestions = pickedSuggestions;
+        }
+      });
+    });
+  }
+
+  private onLocationEntered(event) {
+    this.location = event[0];
+  }
+
+  private onCommentEntered(event) {
+    this.comment = event[0];
+  }
+
+  /**
+   * Finish the meeting planning.
+   */
+  private finishPlanning() {
+    this.closeFinishPlanningActionSheet();
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.finishMeeting(
+          activeUser.key,
+          this.meetingId,
+          this.pickedSuggestions,
+          this.location,
+          this.comment)
+          .subscribe(() => {
+            console.log("Successfully finished meeting planning");
+          });
+    });
   }
 
   /**
@@ -187,9 +243,9 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       this.meeting = new Observable(observer => {observer.next(meeting)});
       this.userSession.getActiveUser().then(activeUser => {
         this.apiService.updateSuggestion(activeUser.key, suggestion).subscribe(() => {
-          console.log("returned something");
         });
       });
+      this.refreshPickedSuggestionsList();
     });
   }
 
@@ -205,7 +261,6 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
             meeting.id,
             suggestion.id
         ).subscribe(() => {
-          // search suggestion in array and delete it from there using it's index
           // search suggestion in array and delete it from there using it's index
           let deleteIndex = -1;
           for(let index = 0; index < meeting.suggestions.length; index++) {
@@ -229,30 +284,6 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
         });
       });
     });
-  }
-
-  /**
-   * Get the Date Formated.
-   * @param date get the specific date from array
-   */
-  private getDate(date: Date): string {
-    return DateTimeHelper.getDateString(date);
-  }
-
-  /**
-   * Get the STart Time Formated.
-   * @param startTime  get the strt time date from array
-   */
-  private getStartTime(startTime: Date): string {
-    return DateTimeHelper.getTimeString(startTime);
-  }
-
-  /**
-   * Get the End Date Formated.
-   * @param endTime get the end Time from array
-   */
-  private getEndTime(endTime: Date): string {
-    return DateTimeHelper.getTimeString(endTime);
   }
 
   onSuggestionCreated(suggestion: Suggestion) {
