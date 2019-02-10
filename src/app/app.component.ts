@@ -11,6 +11,7 @@ import { ENV } from "@app/env";
 
 import {MeetingsOverviewPage} from "../pages/meetings/meetings-overview/meetings-overview";
 import {FirebaseProvider} from "../providers/firebase/firebase";
+import {RegisterUserPage} from "../pages/user/register-user/register-user";
 
 @Component({
   templateUrl: 'app.html'
@@ -44,7 +45,6 @@ export class MyApp {
         root: true
       }).subscribe( (match) => {
         this.isAppOpenedByDeepLink = true;
-        this.rootPage = undefined;
       }, (noMatch) => {
       });
 
@@ -52,7 +52,9 @@ export class MyApp {
       if(this.location.path(true) === "") {
         setTimeout( () => {
           userSession.ready().then(activeUser => {
-            this.rootPage = activeUser ? 'MeetingsOverviewPage' : (!this.isAppOpenedByDeepLink ? 'NoUserFoundPage' : undefined);
+            if(!this.isAppOpenedByDeepLink) {
+              this.rootPage = activeUser ? 'MeetingsOverviewPage' : 'NoUserFoundPage';
+            }
           });
         }, 50);
       }

@@ -64,6 +64,7 @@ export class RegisterUserPage {
         this.errorMsg = "";
         this.userKey = this.navParams.get('userKey');
         if(this.userKey != undefined) {
+        if(this.userKey !== undefined) {
             this.isCalledByDeepLink = true;
             this.registerUserViaDeepLink();
         }
