@@ -113,15 +113,10 @@ export class RegisterUserPage {
     }
 
     private sendPushToken() {
-        this.userSession.getActiveUser().then(activeUser => {
-           this.fcmService.getPushToken().then(token => {
-               console.warn("After registration: sending token to TeaCo: ", token, activeUser);
-               this.apiService.updatePushToken(activeUser.key, token).subscribe(() => {
-                   console.log("Successfully updated push token");
-               }, error => {
-                   console.error("Could not update the CM push token on TeaCo");
-               });
-           });
+        this.fcmService.getPushToken().then(token => {
+            this.fcmService.updateTeaCoPushToken(token);
+        }, error => {
+            console.error("Error occurred while getting the FCM push token");
         });
     }
 

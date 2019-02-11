@@ -134,8 +134,6 @@ export class TeaCoApiProvider {
           "os": os,
           "device_class": deviceClass
       };
-      console.warn(url);
-      console.warn(putData);
       return this.http.put<void>(url, putData, requestOptions);
   }
 

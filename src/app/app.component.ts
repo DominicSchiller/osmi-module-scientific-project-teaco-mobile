@@ -10,9 +10,8 @@ import {UserSessionProvider} from "../providers/user-session/user-session";
 import { ENV } from "@app/env";
 
 import {MeetingsOverviewPage} from "../pages/meetings/meetings-overview/meetings-overview";
-import {FirebaseProvider} from "../providers/firebase/firebase";
 import {RegisterUserPage} from "../pages/user/register-user/register-user";
-import {TeaCoApiProvider} from "../providers/teaco-api/teaco-api-provider";
+import {FirebaseProvider} from "../providers/firebase/firebase";
 
 @Component({
   templateUrl: 'app.html'
@@ -28,8 +27,7 @@ export class MyApp {
       splashScreen: SplashScreen,
       private deepLinks: Deeplinks,
       private readonly userSession: UserSessionProvider,
-      private fcmService: FirebaseProvider,
-      private apiService: TeaCoApiProvider,
+      private readonly firebaseService: FirebaseProvider,
       public location: Location) {
 
     platform.ready().then(() => {
@@ -50,20 +48,13 @@ export class MyApp {
       }, (noMatch) => {
       });
 
+      // starting the Firebase Service
+      this.firebaseService.start();
+
       // timeout is required to have a basic delay for setting the root page and performing a deep link first instead
       if(this.location.path(true) === "") {
         setTimeout( () => {
-          userSession.ready().then(activeUser => {
-            if(activeUser !== undefined) {
-              this.fcmService.getPushToken().then(token => {
-                console.warn("Launch: sending token to TeaCo: ", token);
-                this.apiService.updatePushToken(activeUser.key, token).subscribe(() => {
-                  console.log("Successfully updated push token");
-                }, error => {
-                  console.error("Could not update the CM push token on TeaCo");
-                });
-              });
-            }
+          this.userSession.ready().then(activeUser => {
             if(!this.isAppOpenedByDeepLink) {
               this.rootPage = activeUser ? 'MeetingsOverviewPage' : 'NoUserFoundPage';
             }

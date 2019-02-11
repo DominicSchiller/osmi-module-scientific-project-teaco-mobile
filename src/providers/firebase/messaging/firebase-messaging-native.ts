@@ -22,11 +22,11 @@ export class FirebaseMessagingNativeProvider implements FirebaseMessagingProvide
      * @param firebaseNative Instance of native firebase plugin
      */
     constructor(private platform: Platform, private firebaseNative: Firebase) {
-        this._loadingPromise = new Promise((resolve, error) => {
+        // TODO: Check for internet connection!!!
+
+        this._loadingPromise = new Promise((resolve) => {
             this.platform.ready().then(() => {
-                this.getToken().then( () => {
-                    resolve();
-                });
+                resolve();
             })
         });
     }
@@ -40,9 +40,6 @@ export class FirebaseMessagingNativeProvider implements FirebaseMessagingProvide
             token = await this.firebaseNative.getToken();
             await this.firebaseNative.grantPermission();
         }
-
-        console.log("Received token:");
-        console.log(token);
         return token;
     }
 

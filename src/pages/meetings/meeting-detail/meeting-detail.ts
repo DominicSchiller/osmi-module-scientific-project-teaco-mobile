@@ -111,13 +111,10 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   ionViewDidLoad() {
     let headerElement: HTMLElement = document.querySelector('#meeting-details-page-header');
     headerElement.classList.add('no-bg-image');
-
     this.navBar.backButtonClick = (e:UIEvent)=>{
       // todo something
       this.goBack();
     };
-
-    console.warn(this.finishActionSheet);
   }
 
   /**

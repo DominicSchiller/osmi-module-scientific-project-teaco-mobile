@@ -24,6 +24,7 @@ export class FirebaseMessagingWebProvider implements FirebaseMessagingProvider {
      * Default Constructor
      */
     constructor() {
+        //TODO: check for internat connection !!!
         this.messaging = firebase.messaging();
         this._loadingPromise = this.setupServiceWorker();
     }
@@ -55,15 +56,10 @@ export class FirebaseMessagingWebProvider implements FirebaseMessagingProvider {
                     // request permission
                     this.messaging.requestPermission()
                         .then(() => {
-                            this.getToken()
-                                .then((token) => {
-                                    console.log("Received FCM token: ", token);
-                                    resolve();
-                                });
+                            resolve();
                         });
                 }, error => {
-                    console.error(error);
-                    onError(error);
+                    console.error("Failed to register FCM service worker", error);
                 });
         });
     }
