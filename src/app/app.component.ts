@@ -12,6 +12,7 @@ import { ENV } from "@app/env";
 import {MeetingsOverviewPage} from "../pages/meetings/meetings-overview/meetings-overview";
 import {FirebaseProvider} from "../providers/firebase/firebase";
 import {RegisterUserPage} from "../pages/user/register-user/register-user";
+import {TeaCoApiProvider} from "../providers/teaco-api/teaco-api-provider";
 
 @Component({
   templateUrl: 'app.html'
@@ -27,7 +28,8 @@ export class MyApp {
       splashScreen: SplashScreen,
       private deepLinks: Deeplinks,
       private readonly userSession: UserSessionProvider,
-      private fcmProvider: FirebaseProvider,
+      private fcmService: FirebaseProvider,
+      private apiService: TeaCoApiProvider,
       public location: Location) {
 
     platform.ready().then(() => {
@@ -52,6 +54,16 @@ export class MyApp {
       if(this.location.path(true) === "") {
         setTimeout( () => {
           userSession.ready().then(activeUser => {
+            if(activeUser !== undefined) {
+              this.fcmService.getPushToken().then(token => {
+                console.warn("Launch: sending token to TeaCo: ", token);
+                this.apiService.updatePushToken(activeUser.key, token).subscribe(() => {
+                  console.log("Successfully updated push token");
+                }, error => {
+                  console.error("Could not update the CM push token on TeaCo");
+                });
+              });
+            }
             if(!this.isAppOpenedByDeepLink) {
               this.rootPage = activeUser ? 'MeetingsOverviewPage' : 'NoUserFoundPage';
             }

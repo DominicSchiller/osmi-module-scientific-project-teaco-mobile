@@ -35,4 +35,12 @@ export class FirebaseProvider {
         console.error(error);
       });
   }
+
+  /**
+   * Get the current FCM push token.
+   * @return p Promise returning the push token
+   */
+  getPushToken(): Promise<string> {
+    return this.fcm.getToken();
+  }
 }

@@ -11,6 +11,9 @@ import {Meeting} from "../../models/meeting";
 import {MeetingType} from "../../models/MeetingType";
 import {Vote} from "../../models/vote";
 import {Suggestion} from "../../models/suggestion";
+import {DeviceClass} from "../../models/device-class";
+import {OperatingSystem} from "../../models/operating-system";
+import {Platform} from "ionic-angular";
 
 /**
  * API provider for communicating with the TeaCo server endpoint.
@@ -30,6 +33,10 @@ export class TeaCoApiProvider {
    * The API endpoint for search calls (e.g. user search)
    */
   private readonly searchEndpoint = "/search";
+  /**
+   * The API endpoint for PushToken CRUD operations
+   */
+  private readonly pushTokenAPIEndpoint = "/push_tokens";
   /**
    * The API endpoint for Meeting CRUD operations
    */
@@ -51,7 +58,7 @@ export class TeaCoApiProvider {
    * Constructor
    * @param http The Ionic HTTP client instance
    */
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private platform: Platform) {
     this.baseUrl = ENV.api.baseURL;
   }
 
@@ -73,7 +80,7 @@ export class TeaCoApiProvider {
   }
 
   /**
-   * Get all users which match a certain term in their emails
+   * Get all users which match a certain term in their emails.
    * @param userKey The registered user's unique key
    * @param email The full email-address or sub-term of it
    * @return List of retrieved users matching the given email term
@@ -95,6 +102,43 @@ export class TeaCoApiProvider {
           });
   }
 
+    /**
+     * Update a user's push token on TeaCo.
+     * @param userKey The registered user's unique key
+     * @param fcmToken The (updated) Firebase Cloud Messaging token
+     */
+  updatePushToken(userKey: string, fcmToken: string): Observable<void> {
+      // determine operating system
+      let os;
+      if(this.platform.is('ios')) {
+          os = OperatingSystem.iOS
+      } else if(this.platform.is('android')) {
+          os = OperatingSystem.android
+      } else {
+          os = OperatingSystem.browser
+      }
+      // determine the device class
+      let deviceClass;
+      if(this.platform.is('ipad') || this.platform.is('tablet')) {
+          deviceClass = DeviceClass.tablet;
+      } else if(!this.platform.is('cordova')) {
+          deviceClass = DeviceClass.desktop;
+      } else {
+          deviceClass = DeviceClass.smartphone;
+      }
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl + this.usersAPIEndpoint + userKey +
+          this.pushTokenAPIEndpoint;
+      let putData = {
+          "token": fcmToken,
+          "os": os,
+          "device_class": deviceClass
+      };
+      console.warn(url);
+      console.warn(putData);
+      return this.http.put<void>(url, putData, requestOptions);
+  }
+
   /**
    * Get all meetings for a specific user from TeaCo.
    * @param userKey  The user's unique key
@@ -104,7 +148,6 @@ export class TeaCoApiProvider {
   getAllMeetings(userKey: string, meetingType: MeetingType): Observable<Meeting[]> {
     const requestOptions = TeaCoApiProvider.getRequestOptions();
     const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + "?type=" + meetingType.toString();
-    console.log(userKey);
     return this.http.get<Meeting[]>(url, requestOptions)
         .map(response => {
           let meetings: Meeting[] = [];

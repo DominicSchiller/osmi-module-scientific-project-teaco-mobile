@@ -6,6 +6,7 @@ import { MeetingsOverviewPage } from "../../meetings/meetings-overview/meetings-
 import { UserSessionProvider } from "../../../providers/user-session/user-session";
 import { forwardRef } from '@angular/core';
 import {User} from "../../../models/user";
+import {FirebaseProvider} from "../../../providers/firebase/firebase";
 
 /**
  * Page Controller for registering a user within the app
@@ -53,13 +54,15 @@ export class RegisterUserPage {
      * @param zone The current template zone this controller refers to
      * @param apiService The TeaCo API Service to communicate with the TeaCo server
      * @param userSession The app's user session service
+     * @param fcmService The app's Firebase service
      */
     constructor(
         private navCtrl: NavController,
         private navParams: NavParams,
         private zone: NgZone,
         private apiService: TeaCoApiProvider,
-        private userSession: UserSessionProvider) {
+        private userSession: UserSessionProvider,
+        private fcmService: FirebaseProvider) {
 
         this.errorMsg = "";
         this.userKey = this.navParams.get('userKey');
@@ -83,13 +86,14 @@ export class RegisterUserPage {
     private registerUser() {
         this.loadingIndicator.show();
         this.apiService.getUser(this.userKey).subscribe(user => {
+            this.userSession.setActiveUser(user);
             this.zone.run(() => {
                 user.key = this.userKey;
                 this.registeredUser = user;
-                this.userSession.setActiveUser(user);
                 this.hideLoadingIndicator();
                 this.showSuccessInformation();
             });
+            this.sendPushToken();
         }, error => {
             console.error(error);
             this.showErrorMessage();
@@ -106,6 +110,19 @@ export class RegisterUserPage {
         setTimeout(() => {
             this.registerUser();
         }, 100);
+    }
+
+    private sendPushToken() {
+        this.userSession.getActiveUser().then(activeUser => {
+           this.fcmService.getPushToken().then(token => {
+               console.warn("After registration: sending token to TeaCo: ", token, activeUser);
+               this.apiService.updatePushToken(activeUser.key, token).subscribe(() => {
+                   console.log("Successfully updated push token");
+               }, error => {
+                   console.error("Could not update the CM push token on TeaCo");
+               });
+           });
+        });
     }
 
     /**
