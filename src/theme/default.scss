@@ -211,3 +211,7 @@ button {
 .alert-message {
   font-size: 1.4rem !important;
 }
+
+.refresher-refreshing .spinner-crescent circle, .refresher-refreshing .spinner-ios line, .refresher-refreshing .spinner-ios-small line{
+  stroke : color($colors, secondary);
+}

@@ -1,5 +1,13 @@
 import {Component, forwardRef, ViewChild, ViewChildren} from '@angular/core';
-import {AlertController, IonicPage, ItemSliding, ModalController, NavController, NavParams} from 'ionic-angular';
+import {
+  AlertController,
+  IonicPage,
+  ItemSliding,
+  ModalController,
+  NavController,
+  NavParams,
+  Refresher
+} from 'ionic-angular';
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
 import {Meeting} from "../../../../models/meeting";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
@@ -29,6 +37,11 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    * loading indicator UI component
    */
   @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
+
+  /**
+   * Currently active refresher UI component
+   */
+  protected listRefresher: Refresher;
 
   /**
    * List of open meeting cards UI components
@@ -65,9 +78,12 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
 
   /**
    * Load all meetings from the TeaCo server
+   * @param meetingType The type of meetings which to load
    */
   protected loadMeetings(meetingType: MeetingType) {
-    this.loadingIndicator.show();
+    if(!this.listRefresher) {
+      this.loadingIndicator.show();
+    }
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.getAllMeetings(activeUser.key, meetingType).subscribe(meetings => {
         this.meetings = meetings;
@@ -75,9 +91,23 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
         if(meetings.length > 0) {
           this.startMeetingCardsUpdateInterval();
         }
-        this.hideLoadingIndicator();
+        if(this.listRefresher) {
+          this.listRefresher.complete();
+          this.listRefresher = null;
+        } else {
+          this.hideLoadingIndicator();
+        }
       });
     });
+  }
+
+  /**
+   * Triggered if refreshing the meetings list as been requested.
+   * @param refresher The active refresher UI component
+   */
+  protected onRefreshMeetings(refresher: Refresher) {
+    this.listRefresher = refresher;
+    this.loadMeetings(MeetingType.open);
   }
 
   private showMeetingDetail(meeting: Meeting) {

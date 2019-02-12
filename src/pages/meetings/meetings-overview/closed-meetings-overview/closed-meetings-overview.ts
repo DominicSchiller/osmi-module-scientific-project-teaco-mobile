@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams, Refresher} from 'ionic-angular';
 import {OpenMeetingsOverviewPage} from "../open-meetings-overview/open-meetings-overview";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
@@ -23,6 +23,7 @@ export class ClosedMeetingsOverviewPage extends OpenMeetingsOverviewPage {
    * @param navParams The handed navigation params
    * @param userSession The app's user session service
    * @param apiService The app's TeaCo API service
+   * @param alertCtrl The page's alert controller to create alert and confirmation dialogs
    */
   constructor(navCtrl: NavController,
               navParams: NavParams,
@@ -34,5 +35,14 @@ export class ClosedMeetingsOverviewPage extends OpenMeetingsOverviewPage {
 
   ngOnInit() {
     super.loadMeetings(MeetingType.closed);
+  }
+
+  /**
+   * Triggered if refreshing the meetings list as been requested.
+   * @param refresher The active refresher UI component
+   */
+  protected onRefreshMeetings(refresher: Refresher) {
+    this.listRefresher = refresher;
+    this.loadMeetings(MeetingType.closed);
   }
 }

@@ -8,6 +8,15 @@
 <ion-content>
   <loading-indicator></loading-indicator>
 
+  <ion-refresher (ionRefresh)="onRefreshMeetings($event)">
+    <ion-refresher-content
+            pullingIcon="arrow-round-down"
+            pullingText="Meetings aktualisieren"
+            refreshingSpinner="crescent"
+            refreshingText="Aktualisiere Meetings ...">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <ion-list no-lines>
     <ion-item-sliding *ngFor="let meeting of meetings">
       <ion-item>
