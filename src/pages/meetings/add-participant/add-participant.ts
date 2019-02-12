@@ -1,10 +1,11 @@
-import {Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
-import {IonicPage, Navbar, NavController, NavParams, Spinner} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {IonicPage, Navbar, NavController, NavParams} from 'ionic-angular';
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {User} from "../../../models/user";
 import {AddParticipantsEventDelegate} from "./add-participants-event-delegate";
 import {Meeting} from "../../../models/meeting";
+import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
 
 /**
  * Page Controller for selecting and adding participants
@@ -60,6 +61,8 @@ export class AddParticipantPage {
 
   private delegate: AddParticipantsEventDelegate;
 
+  private syncMode: TeaCoSyncMode;
+
   /**
    * Constructor
    * @param navCtrl The app's navigation controller
@@ -84,6 +87,8 @@ export class AddParticipantPage {
     this.queuedParticipants = [];
     this.meeting = navParams.get('meeting');
     this.delegate = navParams.get('delegate');
+    let syncMode = this.navParams.get('syncMode');
+    this.syncMode = syncMode !== undefined ? syncMode : TeaCoSyncMode.syncData;
   }
 
   ionViewDidLoad() {
@@ -232,9 +237,25 @@ export class AddParticipantPage {
   }
 
   private finish() {
-    if(this.delegate !== undefined) {
-      this.delegate.onParticipantsAdded(this.meeting.id, this.queuedParticipants);
+    switch(this.syncMode) {
+      case TeaCoSyncMode.syncData:
+        this.userSession.getActiveUser().then(activeUser => {
+          this.apiService.addParticipants(activeUser.key, this.meeting.id, this.queuedParticipants)
+              .subscribe(() => {
+                console.log("Successfully added participant to meeting on TeaCo");
+                if(this.delegate !== undefined) {
+                  this.delegate.onParticipantsAdded(this.meeting.id, this.queuedParticipants);
+                }
+                this.goBack();
+              });
+        });
+        break;
+      case TeaCoSyncMode.noDataSync:
+        if(this.delegate !== undefined) {
+          this.delegate.onParticipantsAdded(this.meeting.id, this.queuedParticipants);
+        }
+        this.goBack();
+        break;
     }
-    this.goBack();
   }
 }

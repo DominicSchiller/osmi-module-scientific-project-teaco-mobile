@@ -46,6 +46,10 @@ export class TeaCoApiProvider {
    */
   private readonly finishMeetingAPIEndpint = "/finish";
   /**
+   * The API endpoint to add participants to an existing meeting
+   */
+  private readonly addParticipantAPIEndpoint = "/add_participant";
+  /**
    * The API endpoint for Meeting CRUD operations
    */
   private readonly suggestionsAPIEndpoint = "/suggestions/";
@@ -102,11 +106,11 @@ export class TeaCoApiProvider {
           });
   }
 
-    /**
-     * Update a user's push token on TeaCo.
-     * @param userKey The registered user's unique key
-     * @param fcmToken The (updated) Firebase Cloud Messaging token
-     */
+  /**
+   * Update a user's push token on TeaCo.
+   * @param userKey The registered user's unique key
+   * @param fcmToken The (updated) Firebase Cloud Messaging token
+   */
   updatePushToken(userKey: string, fcmToken: string): Observable<void> {
       // determine operating system
       let os;
@@ -185,6 +189,25 @@ export class TeaCoApiProvider {
           .map(data => {
               return Meeting.of(data);
           });
+  }
+
+    /**
+     * Add new participants to an existing meeting.
+     * @param userKey The registered user's unique key
+     * @param meetingID The meeting instance to which to add the selected participants to
+     * @param participants List of participants which to add
+     */
+  addParticipants(userKey: string, meetingID: number, participants: User[]): Observable<void> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl + this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.addParticipantAPIEndpoint;
+      let participant_ids: number[] = [];
+      participants.forEach(participant => {
+         participant_ids.push(participant.id);
+      });
+      let putData = {
+          "participant_ids": participant_ids
+      };
+      return this.http.put<void>(url, putData, requestOptions);
   }
 
   /**

@@ -119,8 +119,6 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
     if(meeting !== undefined) {
       this.meeting = Observable.of(meeting)
     }
-
-    console.warn(this.meetingId);
   }
 
   ngOnInit() {
