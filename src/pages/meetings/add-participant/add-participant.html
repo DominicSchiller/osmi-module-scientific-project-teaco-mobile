@@ -10,6 +10,8 @@
 </ion-header>
 
 <ion-content padding>
+  <loading-indicator></loading-indicator>
+
   <form id="search-bar" #f="ngForm" (ngSubmit)="onAddParticipantsToQueue()">
     <div id="search-input">
       <ion-icon id="search-icon" name="teaco-email" color="primary"></ion-icon>

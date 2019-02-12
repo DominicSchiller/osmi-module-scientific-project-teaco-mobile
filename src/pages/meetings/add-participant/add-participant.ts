@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, forwardRef, ViewChild} from '@angular/core';
 import {IonicPage, Navbar, NavController, NavParams} from 'ionic-angular';
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
@@ -6,6 +6,7 @@ import {User} from "../../../models/user";
 import {AddParticipantsEventDelegate} from "./add-participants-event-delegate";
 import {Meeting} from "../../../models/meeting";
 import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
+import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
 
 /**
  * Page Controller for selecting and adding participants
@@ -21,6 +22,11 @@ export class AddParticipantPage {
    * The page's navigation bar UI element
    */
   @ViewChild(Navbar) navBar: Navbar;
+
+  /**
+   * loading indicator UI component
+   */
+  @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
 
   private meeting: Meeting;
 
@@ -239,6 +245,7 @@ export class AddParticipantPage {
   private finish() {
     switch(this.syncMode) {
       case TeaCoSyncMode.syncData:
+        this.loadingIndicator.show();
         this.userSession.getActiveUser().then(activeUser => {
           this.apiService.addParticipants(activeUser.key, this.meeting.id, this.queuedParticipants)
               .subscribe(() => {
@@ -246,7 +253,12 @@ export class AddParticipantPage {
                 if(this.delegate !== undefined) {
                   this.delegate.onParticipantsAdded(this.meeting.id, this.queuedParticipants);
                 }
-                this.goBack();
+               setTimeout(() => {
+                 this.loadingIndicator.hide();
+                 setTimeout(() => {
+                   this.goBack();
+                 }, 500);
+               }, 400);
               });
         });
         break;
