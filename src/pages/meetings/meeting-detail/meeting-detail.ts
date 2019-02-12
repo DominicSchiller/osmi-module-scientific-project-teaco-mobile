@@ -1,5 +1,14 @@
 import {Component, ElementRef, forwardRef, Renderer2, ViewChild} from '@angular/core';
-import {AlertController, IonicPage, ItemSliding, Navbar, NavController, NavParams, Slides} from 'ionic-angular';
+import {
+  AlertController,
+  IonicPage,
+  ItemSliding,
+  Navbar,
+  NavController,
+  NavParams,
+  Refresher,
+  Slides
+} from 'ionic-angular';
 import {Meeting} from "../../../models/meeting";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
@@ -9,6 +18,7 @@ import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-sugges
 import {EditMeetingEventDelegate} from "../meetings-overview/open-meetings-overview/edit-meeting-event-delegate";
 import {MeetingUtils} from "../../../utils/meeting-utils";
 import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
+import {MeetingType} from "../../../models/MeetingType";
 
 /**
  * Page Controller for meeting details.
@@ -40,6 +50,11 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    * The pages overlay UI element for i.e. indicating stuff in progress
    */
   @ViewChild('actionOverlay') actionOverlay: ElementRef;
+
+  /**
+   * Currently active refresher UI component
+   */
+  protected listRefresher: Refresher;
 
   /**
    * The selected meeting's unique TeaCo id
@@ -106,16 +121,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   }
 
   ngOnInit() {
-    this.loadingIndicator.show();
-    this.userSession.getActiveUser().then(activeUser => {
-      this.apiService.getMeeting(activeUser.key, this.meetingId).subscribe(meeting => {
-        meeting.numberOfParticipants = meeting.participants.length;
-        meeting.numberOfSuggestions = meeting.suggestions.length;
-        this.meeting = Observable.of(meeting);
-        this.hideLoadingIndicator();
-        this.refreshPickedSuggestionsList();
-      });
-    });
+    this.loadMeetingDetails();
   }
 
   ionViewDidLoad() {
@@ -125,6 +131,38 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       // todo something
       this.goBack();
     };
+  }
+
+  /**
+   * Load meeting details.
+   */
+  private loadMeetingDetails() {
+    if(!this.listRefresher) {
+      this.loadingIndicator.show();
+    }
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.getMeeting(activeUser.key, this.meetingId).subscribe(meeting => {
+        meeting.numberOfParticipants = meeting.participants.length;
+        meeting.numberOfSuggestions = meeting.suggestions.length;
+        this.meeting = Observable.of(meeting);
+        if(this.listRefresher) {
+          this.listRefresher.complete();
+          this.listRefresher = null;
+        } else {
+          this.hideLoadingIndicator();
+        }
+        this.refreshPickedSuggestionsList();
+      });
+    });
+  }
+
+  /**
+   * Triggered if refreshing the meetings list as been requested.
+   * @param refresher The active refresher UI component
+   */
+  protected onRefreshMeeting(refresher: Refresher) {
+    this.listRefresher = refresher;
+    this.loadMeetingDetails();
   }
 
   /**

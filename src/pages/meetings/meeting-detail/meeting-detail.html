@@ -48,6 +48,15 @@
 <ion-content class="no-scroll" id="meeting-details-content">
   <loading-indicator></loading-indicator>
 
+  <ion-refresher (ionRefresh)="onRefreshMeeting($event)">
+    <ion-refresher-content
+            pullingIcon="arrow-round-down"
+            pullingText="Terminvorschläge aktualisieren"
+            refreshingSpinner="crescent"
+            refreshingText="Aktualisiere Terminvorschläge ...">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <div class="action-overlay" #actionOverlay (click)="closeFinishPlanningActionSheet()"></div>
 
   <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
