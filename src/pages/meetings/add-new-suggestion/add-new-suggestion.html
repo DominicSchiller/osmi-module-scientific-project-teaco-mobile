@@ -5,10 +5,12 @@
               <ion-icon name="md-close"></ion-icon>
           </button>
       </ion-buttons>
-    <ion-title>Terminvorschlag</ion-title>
+    <ion-title>Neuer Terminvorschlag</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content>
+    <loading-indicator></loading-indicator>
+
     <input-card #datePicker
             [type]="'date'"
             [placeholder]="'Datum'"

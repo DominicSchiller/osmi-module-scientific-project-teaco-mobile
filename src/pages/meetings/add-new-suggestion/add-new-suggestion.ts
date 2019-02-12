@@ -1,4 +1,4 @@
-import {Component, EventEmitter, ViewChild} from '@angular/core';
+import {Component, EventEmitter, forwardRef, ViewChild} from '@angular/core';
 import {AlertController, IonicPage, Navbar, NavController, NavParams} from 'ionic-angular';
 import {TeaCoApiProvider} from '../../../providers/teaco-api/teaco-api-provider';
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
@@ -8,6 +8,7 @@ import {DateTimeHelper} from "../../../utils/date-time-helper";
 import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
 import {Suggestion} from "../../../models/suggestion";
 import {CreateSuggestionEventDelegate} from "./create-suggestion-event-delegate";
+import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
 
 /**
  * Generated class for the AddNewSuggestionPage page.
@@ -23,6 +24,11 @@ import {CreateSuggestionEventDelegate} from "./create-suggestion-event-delegate"
   templateUrl: 'add-new-suggestion.html',
 })
 export class AddNewSuggestionPage {
+
+  /**
+   * loading indicator UI component
+   */
+  @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
 
   /**
    * The page's navigation bar UI element
@@ -175,6 +181,7 @@ export class AddNewSuggestionPage {
   createSuggestion(){
     switch(this.syncMode) {
       case TeaCoSyncMode.syncData:
+        this.loadingIndicator.show();
         this.userSession.getActiveUser().then(activeUser => {
           this.apiService.createSuggestion(
               activeUser.key,
@@ -185,7 +192,12 @@ export class AddNewSuggestionPage {
               .subscribe(suggestion => {
                 // TODO show success alert
                 // TODO return created suggestion to previous screen
-                this.triggerDelegateAndClose(suggestion);
+                setTimeout( () => {
+                  this.loadingIndicator.hide();
+                  setTimeout(() => {
+                    this.triggerDelegateAndClose(suggestion);
+                  }, 400);
+                }, 400);
               });
         });
         break;

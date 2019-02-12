@@ -1,4 +1,4 @@
-import {Component, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, forwardRef, ViewChild} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Meeting} from "../../../models/meeting";
 import {User} from "../../../models/user";
@@ -9,6 +9,7 @@ import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
 import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
 import {AddParticipantsEventDelegate} from "../add-participant/add-participants-event-delegate";
 import {CreateMeetingEventDelegate} from "./create-meeting-event-delegate";
+import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
 
 /**
  * Generated class for the AddNewMeetingPage page.
@@ -22,6 +23,12 @@ import {CreateMeetingEventDelegate} from "./create-meeting-event-delegate";
   templateUrl: 'add-new-meeting.html',
 })
 export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddParticipantsEventDelegate {
+
+  /**
+   * loading indicator UI component
+   */
+  @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
+
 
   private delegate: CreateMeetingEventDelegate;
 
@@ -76,13 +83,17 @@ export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddPart
   }
 
   private createMeeting() {
+    this.loadingIndicator.show();
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.createMeeting(activeUser.key, this.meeting)
           .subscribe(meeting => {
-            if(this.delegate !== undefined) {
-              this.delegate.onMeetingCreated(meeting);
-            }
-            this.closeModal();
+            setTimeout( () => {
+              this.loadingIndicator.hide();
+              if(this.delegate !== undefined) {
+                this.delegate.onMeetingCreated(meeting);
+              }
+              this.closeModal();
+            }, 400);
           });
     });
   }

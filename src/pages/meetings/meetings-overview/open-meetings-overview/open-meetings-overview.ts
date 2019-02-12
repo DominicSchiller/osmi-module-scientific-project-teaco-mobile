@@ -1,4 +1,4 @@
-import {Component, ViewChildren} from '@angular/core';
+import {Component, forwardRef, ViewChild, ViewChildren} from '@angular/core';
 import {IonicPage, ItemSliding, ModalController, NavController, NavParams} from 'ionic-angular';
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
 import {Meeting} from "../../../../models/meeting";
@@ -10,6 +10,7 @@ import {Suggestion} from "../../../../models/suggestion";
 import {EditMeetingEventDelegate} from "./edit-meeting-event-delegate";
 import {User} from "../../../../models/user";
 import {MeetingProgress} from "../../../../models/meeting-progress";
+import {LoadingIndicatorComponent} from "../../../../components/loading-indicator/loading-indicator";
 
 /**
  * Page Controller for listing all open meetings.
@@ -23,6 +24,11 @@ import {MeetingProgress} from "../../../../models/meeting-progress";
   templateUrl: 'open-meetings-overview.html'
 })
 export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
+
+  /**
+   * loading indicator UI component
+   */
+  @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
 
   /**
    * List of open meeting cards UI components
@@ -59,6 +65,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    * Load all meetings from the TeaCo server
    */
   protected loadMeetings(meetingType: MeetingType) {
+    this.loadingIndicator.show();
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.getAllMeetings(activeUser.key, meetingType).subscribe(meetings => {
         this.meetings = meetings;
@@ -66,6 +73,10 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
         if(meetings.length > 0) {
           this.startMeetingCardsUpdateInterval();
         }
+
+        setTimeout( () => {
+          this.loadingIndicator.hide();
+        }, 400);
       });
     });
   }

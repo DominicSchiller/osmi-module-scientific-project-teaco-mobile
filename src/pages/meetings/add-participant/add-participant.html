@@ -18,6 +18,7 @@
                  [(ngModel)]="searchTerm"
                  (keyup)="onSearchWordTyped()" email name="search-term-input">
       </ion-input>
+      <ion-spinner id="search-loading-indicator" name="crescent" color="secondary" [hidden]="!isSearching"></ion-spinner>
     </div>
     <div id="search-results-list" [ngClass]="foundUsers.length > 0 ? 'results-available' : ''">
       <ion-scroll scrollY="true">

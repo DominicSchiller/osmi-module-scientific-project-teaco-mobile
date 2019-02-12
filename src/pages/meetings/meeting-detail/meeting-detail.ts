@@ -1,4 +1,4 @@
-import {Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
+import {Component, ElementRef, forwardRef, Renderer2, ViewChild} from '@angular/core';
 import {IonicPage, ItemSliding, Navbar, NavController, NavParams, Slides} from 'ionic-angular';
 import {Meeting} from "../../../models/meeting";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
@@ -8,6 +8,7 @@ import {Observable} from "rxjs";
 import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
 import {EditMeetingEventDelegate} from "../meetings-overview/open-meetings-overview/edit-meeting-event-delegate";
 import {MeetingUtils} from "../../../utils/meeting-utils";
+import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
 
 /**
  * Page Controller for meeting details.
@@ -21,6 +22,11 @@ import {MeetingUtils} from "../../../utils/meeting-utils";
   templateUrl: 'meeting-detail.html',
 })
 export class MeetingDetailPage implements CreateSuggestionEventDelegate {
+
+  /**
+   * loading indicator UI component
+   */
+  @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
 
   /**
    * The page's navigation bar UI element
@@ -98,11 +104,17 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   }
 
   ngOnInit() {
+    this.loadingIndicator.show();
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.getMeeting(activeUser.key, this.meetingId).subscribe(meeting => {
         meeting.numberOfParticipants = meeting.participants.length;
         meeting.numberOfSuggestions = meeting.suggestions.length;
         this.meeting = Observable.of(meeting);
+
+        setTimeout( () => {
+          this.loadingIndicator.hide();
+        }, 400);
+
         this.refreshPickedSuggestionsList();
       });
     });
@@ -213,6 +225,9 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    */
   private finishPlanning() {
     this.closeFinishPlanningActionSheet();
+    setTimeout( () => {
+      this.loadingIndicator.show();
+    }, 100);
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.finishMeeting(
           activeUser.key,
@@ -221,6 +236,9 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
           this.location,
           this.comment)
           .subscribe(() => {
+            setTimeout( () => {
+              this.loadingIndicator.hide();
+            }, 400);
             console.log("Successfully finished meeting planning");
           });
     });

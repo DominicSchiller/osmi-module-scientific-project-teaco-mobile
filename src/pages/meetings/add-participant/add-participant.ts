@@ -1,5 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
-import {IonicPage, Navbar, NavController, NavParams} from 'ionic-angular';
+import {Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
+import {IonicPage, Navbar, NavController, NavParams, Spinner} from 'ionic-angular';
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {User} from "../../../models/user";
@@ -25,6 +25,10 @@ export class AddParticipantPage {
 
   private readonly isModalDialog: boolean = false;
 
+  /**
+   * Status whether the app is searching for existing participants or not.
+   */
+  private isSearching: boolean;
   /**
    * The current entered search term
    */
@@ -73,6 +77,7 @@ export class AddParticipantPage {
     } else {
       this.isModalDialog = true;
     }
+    this.isSearching = false;
     this.searchTerm = "";
     this.waitTimeoutID = -1;
     this.foundUsers = [];
@@ -86,7 +91,7 @@ export class AddParticipantPage {
     this.navBar.backButtonClick = (e:UIEvent)=>{
       // todo something
       this.goBack();
-    }
+    };
   }
 
   /**
@@ -137,6 +142,7 @@ export class AddParticipantPage {
    * Performs a users lookup on TeaCo.
    */
   private performSearch() {
+    this.isSearching = true;
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.getUserByEmail(activeUser.key, this.searchTerm)
           .subscribe(users => {
@@ -152,6 +158,9 @@ export class AddParticipantPage {
               });
             });
             this.foundUsers = users;
+            setTimeout(() => {
+             this.isSearching = false;
+            }, 200);
           }, error => {
             console.log("No users found for search term...");
           });

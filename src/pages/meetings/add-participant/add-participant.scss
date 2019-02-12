@@ -36,6 +36,12 @@ page-add-participant {
         font-size: 3.0rem !important;
       }
 
+      #search-loading-indicator {
+        @include vertical-center();
+        position: absolute !important;
+        right: 10px;
+      }
+
       input {
         height: 60px !important;
         margin: 0 !important;
