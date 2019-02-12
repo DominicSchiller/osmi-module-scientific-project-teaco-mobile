@@ -1,5 +1,5 @@
 import {Component, forwardRef, ViewChild, ViewChildren} from '@angular/core';
-import {IonicPage, ItemSliding, ModalController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, ItemSliding, ModalController, NavController, NavParams} from 'ionic-angular';
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
 import {Meeting} from "../../../../models/meeting";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
@@ -53,7 +53,8 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
       protected navParams: NavParams,
       private modalCtrl: ModalController,
       protected userSession: UserSessionProvider,
-      protected apiService: TeaCoApiProvider) {
+      protected apiService: TeaCoApiProvider,
+      private alertCtrl: AlertController) {
     this.meetings = [];
   }
 
@@ -73,10 +74,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
         if(meetings.length > 0) {
           this.startMeetingCardsUpdateInterval();
         }
-
-        setTimeout( () => {
-          this.loadingIndicator.hide();
-        }, 400);
+        this.hideLoadingIndicator();
       });
     });
   }
@@ -154,19 +152,57 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    * Delete a specific meeting.
    * @param meeting The selected meeting which to delete
    * @param index The selected meeting's index within the meetings list
+   * @param slidingItem The sliding item from the UI
    */
-  private deleteMeeting(meeting: Meeting, index: number) {
-    this.userSession.getActiveUser().then(activeUser => {
-      this.apiService.deleteMeeting(activeUser.key, meeting.id).subscribe(() => {
-        this.meetings.splice(index, 1);
-      }, error => {
-        console.error("Could not delete meeting: ", error);
-      });
+  private deleteMeeting(meeting: Meeting, index: number, slidingItem: ItemSliding) {
+    slidingItem.close();
+    const alert = this.alertCtrl.create({
+      "title": "Meeting wirklich löschen?",
+      "message": "<br />Du bist dabei das Meeting<br /><br /><b>» " + meeting.title + " «</b><br /><br />entgültig zu löschen? Willst du dieses Meeting wirklich löschen?",
+      buttons: [
+        {
+          "text": "Ja, Meeting löschen",
+          handler: () => {
+            this.loadingIndicator.show();
+            this.userSession.getActiveUser().then(activeUser => {
+              this.apiService.deleteMeeting(activeUser.key, meeting.id).subscribe(() => {
+                setTimeout(() => {
+                  this.hideLoadingIndicator();
+                  setTimeout(() => {
+                    this.meetings.splice(index, 1);
+                  }, 400);
+                }, 400);
+              }, error => {
+                console.error("Could not delete meeting: ", error);
+                this.hideLoadingIndicator();
+              });
+            });
+            alert.dismiss(true);
+            return false;
+          }
+        },
+        {
+          "text": "Abbruch",
+          handler: () => {
+            alert.dismiss(false);
+            return false;
+          }
+        }
+      ]
     });
+    alert.present();
+  }
+
+  /**
+   * Hide the currently visible loading indicator.
+   */
+  private hideLoadingIndicator() {
+    setTimeout( () => {
+      this.loadingIndicator.hide();
+    }, 400);
   }
 
   onMeetingCreated(meeting: Meeting) {
-    console.warn("Retrieved new meeting: ", meeting);
     this.meetings.push(meeting);
   }
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {OpenMeetingsOverviewPage} from "../open-meetings-overview/open-meetings-overview";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
@@ -27,8 +27,9 @@ export class ClosedMeetingsOverviewPage extends OpenMeetingsOverviewPage {
   constructor(navCtrl: NavController,
               navParams: NavParams,
               userSession: UserSessionProvider,
-              apiService: TeaCoApiProvider) {
-    super(navCtrl, navParams, undefined, userSession, apiService);
+              apiService: TeaCoApiProvider,
+              alertCtrl: AlertController) {
+    super(navCtrl, navParams, undefined, userSession, apiService, alertCtrl);
   }
 
   ngOnInit() {
