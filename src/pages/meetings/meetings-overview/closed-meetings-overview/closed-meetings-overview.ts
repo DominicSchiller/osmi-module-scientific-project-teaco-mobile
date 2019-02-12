@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams, Refresher} from 'ionic-angular';
 import {OpenMeetingsOverviewPage} from "../open-meetings-overview/open-meetings-overview";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
@@ -24,13 +24,15 @@ export class ClosedMeetingsOverviewPage extends OpenMeetingsOverviewPage {
    * @param userSession The app's user session service
    * @param apiService The app's TeaCo API service
    * @param alertCtrl The page's alert controller to create alert and confirmation dialogs
+   * @param zone The current template zone this controller refers to
    */
   constructor(navCtrl: NavController,
               navParams: NavParams,
               userSession: UserSessionProvider,
               apiService: TeaCoApiProvider,
-              alertCtrl: AlertController) {
-    super(navCtrl, navParams, undefined, userSession, apiService, alertCtrl);
+              alertCtrl: AlertController,
+              zone: NgZone) {
+    super(navCtrl, navParams, undefined, userSession, apiService, alertCtrl, zone);
   }
 
   ngOnInit() {

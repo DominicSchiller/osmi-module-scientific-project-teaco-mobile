@@ -40,7 +40,8 @@ export class MyApp {
 
       // Handle deep links
       this.deepLinks.routeWithNavController(this.nav, {
-        '/:userKey': 'RegisterUserPage'
+        '/:userKey': 'RegisterUserPage',
+        '/:userKey/meetings/:meetingId': 'MeetingDetailPage'
       }, {
         root: true
       }).subscribe( (match) => {

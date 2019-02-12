@@ -1,4 +1,4 @@
-import {Component, forwardRef, ViewChild, ViewChildren} from '@angular/core';
+import {Component, forwardRef, NgZone, ViewChild, ViewChildren} from '@angular/core';
 import {
   AlertController,
   IonicPage,
@@ -61,6 +61,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    * @param userSession The app's user session service
    * @param apiService The app's TeaCo API service
    * @param alertCtrl The page's alert controller to create alert and confirmation dialogs
+   * @param zone The current template zone this controller refers to
    */
   constructor(
       protected navCtrl: NavController,
@@ -68,7 +69,8 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
       private modalCtrl: ModalController,
       protected userSession: UserSessionProvider,
       protected apiService: TeaCoApiProvider,
-      private alertCtrl: AlertController) {
+      private alertCtrl: AlertController,
+      private zone: NgZone) {
     this.meetings = [];
   }
 
@@ -86,17 +88,19 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
     }
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.getAllMeetings(activeUser.key, meetingType).subscribe(meetings => {
-        this.meetings = meetings;
-        //this.meeting.id = meetings[0].id;
-        if(meetings.length > 0) {
-          this.startMeetingCardsUpdateInterval();
-        }
-        if(this.listRefresher) {
-          this.listRefresher.complete();
-          this.listRefresher = null;
-        } else {
-          this.hideLoadingIndicator();
-        }
+        this.zone.run(() => {
+          this.meetings = meetings;
+          //this.meeting.id = meetings[0].id;
+          if(meetings.length > 0) {
+            this.startMeetingCardsUpdateInterval();
+          }
+          if(this.listRefresher) {
+            this.listRefresher.complete();
+            this.listRefresher = null;
+          } else {
+            this.hideLoadingIndicator();
+          }
+        });
       });
     });
   }

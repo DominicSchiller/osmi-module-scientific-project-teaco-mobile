@@ -1,4 +1,4 @@
-import {Component, ElementRef, forwardRef, Renderer2, ViewChild} from '@angular/core';
+import {Component, ElementRef, forwardRef, NgZone, Renderer2, ViewChild} from '@angular/core';
 import {
   AlertController,
   IonicPage,
@@ -18,7 +18,6 @@ import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-sugges
 import {EditMeetingEventDelegate} from "../meetings-overview/open-meetings-overview/edit-meeting-event-delegate";
 import {MeetingUtils} from "../../../utils/meeting-utils";
 import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
-import {MeetingType} from "../../../models/MeetingType";
 
 /**
  * Page Controller for meeting details.
@@ -101,6 +100,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    * @param userSession The app's user session service
    * @param renderer The Angular UI renderer for changing HTML elements
    * @param alertCtrl The page's alert controller to create alert and confirmation dialogs
+   * @param zone The current template zone this controller refers to
    */
   constructor(
       private navCtrl: NavController,
@@ -108,7 +108,8 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       private apiService: TeaCoApiProvider,
       private userSession: UserSessionProvider,
       private renderer: Renderer2,
-      private alertCtrl: AlertController) {
+      private alertCtrl: AlertController,
+      private zone: NgZone) {
     this.pickedSuggestions = [];
     this.comment = "";
     this.location = "";
@@ -118,6 +119,8 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
     if(meeting !== undefined) {
       this.meeting = Observable.of(meeting)
     }
+
+    console.warn(this.meetingId);
   }
 
   ngOnInit() {
@@ -126,6 +129,13 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
 
   ionViewDidLoad() {
     let headerElement: HTMLElement = document.querySelector('#meeting-details-page-header');
+
+    if(!this.navCtrl.canGoBack()){
+      this.navCtrl.insert(0, 'MeetingsOverviewPage').then( () => {
+        this.navBar._elementRef.nativeElement.children[1].classList.add('show-back-button');
+      });
+    }
+
     headerElement.classList.add('no-bg-image');
     this.navBar.backButtonClick = (e:UIEvent)=>{
       // todo something
@@ -142,16 +152,18 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
     }
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.getMeeting(activeUser.key, this.meetingId).subscribe(meeting => {
-        meeting.numberOfParticipants = meeting.participants.length;
-        meeting.numberOfSuggestions = meeting.suggestions.length;
-        this.meeting = Observable.of(meeting);
-        if(this.listRefresher) {
-          this.listRefresher.complete();
-          this.listRefresher = null;
-        } else {
-          this.hideLoadingIndicator();
-        }
-        this.refreshPickedSuggestionsList();
+       this.zone.run(() => {
+         meeting.numberOfParticipants = meeting.participants.length;
+         meeting.numberOfSuggestions = meeting.suggestions.length;
+         this.meeting = Observable.of(meeting);
+         if(this.listRefresher) {
+           this.listRefresher.complete();
+           this.listRefresher = null;
+         } else {
+           this.hideLoadingIndicator();
+         }
+         this.refreshPickedSuggestionsList();
+       });
       });
     });
   }

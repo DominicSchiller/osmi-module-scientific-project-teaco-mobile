@@ -27,7 +27,9 @@ import {Calendar} from "@ionic-native/calendar";
     HttpClientModule,
     ComponentsModule,
     FirebaseModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      backButtonText: 'Zurück'
+    }),
     IonicStorageModule.forRoot(),
   ],
   bootstrap: [IonicApp],
