@@ -1,5 +1,5 @@
 import {Component, ElementRef, forwardRef, Renderer2, ViewChild} from '@angular/core';
-import {IonicPage, ItemSliding, Navbar, NavController, NavParams, Slides} from 'ionic-angular';
+import {AlertController, IonicPage, ItemSliding, Navbar, NavController, NavParams, Slides} from 'ionic-angular';
 import {Meeting} from "../../../models/meeting";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
@@ -85,13 +85,15 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    * @param apiService The TeaCo API Service to communicate with the TeaCo server
    * @param userSession The app's user session service
    * @param renderer The Angular UI renderer for changing HTML elements
+   * @param alertCtrl The page's alert controller to create alert and confirmation dialogs
    */
   constructor(
       private navCtrl: NavController,
       private navParams: NavParams,
       private apiService: TeaCoApiProvider,
       private userSession: UserSessionProvider,
-      private renderer: Renderer2) {
+      private renderer: Renderer2,
+      private alertCtrl: AlertController) {
     this.pickedSuggestions = [];
     this.comment = "";
     this.location = "";
@@ -110,11 +112,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
         meeting.numberOfParticipants = meeting.participants.length;
         meeting.numberOfSuggestions = meeting.suggestions.length;
         this.meeting = Observable.of(meeting);
-
-        setTimeout( () => {
-          this.loadingIndicator.hide();
-        }, 400);
-
+        this.hideLoadingIndicator();
         this.refreshPickedSuggestionsList();
       });
     });
@@ -156,6 +154,15 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
           }
       ).then();
     });
+  }
+
+  /**
+   * Hide the current visible loading indicator.
+   */
+  private hideLoadingIndicator() {
+    setTimeout( () => {
+      this.loadingIndicator.hide();
+    }, 400);
   }
 
   /**
@@ -236,9 +243,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
           this.location,
           this.comment)
           .subscribe(() => {
-            setTimeout( () => {
-              this.loadingIndicator.hide();
-            }, 400);
+            this.hideLoadingIndicator();
             console.log("Successfully finished meeting planning");
           });
     });
@@ -267,38 +272,54 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   /**
    * Delete a specific suggestion.
    * @param suggestion The suggestion which to delete
+   * @param index The suggestion's list index
+   * @param slidingItem The sliding item from the UI
    */
-  private deleteSuggestion(suggestion: Suggestion) {
-    this.meeting.subscribe(meeting => {
-      this.userSession.getActiveUser().then(activeUser => {
-        this.apiService.deleteSuggestion(
-            activeUser.key,
-            meeting.id,
-            suggestion.id
-        ).subscribe(() => {
-          // search suggestion in array and delete it from there using it's index
-          let deleteIndex = -1;
-          for(let index = 0; index < meeting.suggestions.length; index++) {
-            if(meeting.suggestions[index].id == suggestion.id) {
-              deleteIndex = index;
-              break;
-            }
+  private deleteSuggestion(suggestion: Suggestion, index: number, slidingItem: ItemSliding) {
+    slidingItem.close();
+    const alert = this.alertCtrl.create({
+      "title": "Teriminvorschlag wirklich löschen?",
+      "message": "<br />Du bist dabei diesen Terminvorschlag entgültig zu löschen? Willst du ihn wirklich löschen?",
+      buttons: [
+        {
+          "text": "Ja, Terminvorschlag löschen",
+          handler: () => {
+            this.loadingIndicator.show();
+            this.meeting.subscribe(meeting => {
+              this.userSession.getActiveUser().then(activeUser => {
+                this.apiService.deleteSuggestion(
+                    activeUser.key,
+                    meeting.id,
+                    suggestion.id
+                ).subscribe(() => {
+                  this.hideLoadingIndicator();
+                  meeting.suggestions.splice(index, 1);
+                  meeting.numberOfSuggestions -= 1;
+                  this.delegate.onSuggestionDeleted(this.meetingId, suggestion.id);
+                  console.log("suggestion has been successfully deleted");
+                  MeetingUtils.recalculateMeetingStatus(meeting);
+                  this.delegate.onMeetingProgressChanged(meeting.id, meeting.progress);
+                  this.meeting = new Observable(observer => {observer.next(meeting)})
+                }, (error) => {
+                  console.error(error);
+                  this.hideLoadingIndicator();
+                });
+              });
+            });
+            alert.dismiss(true);
+            return false;
           }
-          if(deleteIndex > -1) {
-            let suggestion = meeting.suggestions[deleteIndex];
-            meeting.suggestions.splice(deleteIndex, 1);
-            meeting.numberOfSuggestions -= 1;
-            this.delegate.onSuggestionDeleted(this.meetingId, suggestion.id);
-            console.log("suggestion has been successfully deleted");
+        },
+        {
+          "text": "Abbruch",
+          handler: () => {
+            alert.dismiss(false);
+            return false;
           }
-          MeetingUtils.recalculateMeetingStatus(meeting);
-          this.delegate.onMeetingProgressChanged(meeting.id, meeting.progress);
-          this.meeting = new Observable(observer => {observer.next(meeting)})
-        }, (error) => {
-          console.error(error);
-        });
-      });
+        }
+      ]
     });
+    alert.present();
   }
 
   onSuggestionCreated(suggestion: Suggestion) {

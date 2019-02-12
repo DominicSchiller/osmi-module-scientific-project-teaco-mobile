@@ -47,6 +47,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    * @param modalCtrl The Ionic's default modal controller
    * @param userSession The app's user session service
    * @param apiService The app's TeaCo API service
+   * @param alertCtrl The page's alert controller to create alert and confirmation dialogs
    */
   constructor(
       protected navCtrl: NavController,
@@ -234,7 +235,6 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
   }
 
   onMeetingProgressChanged(meetingId: number, progress: MeetingProgress) {
-    console.log("trieved updated progress", progress);
     this.meetings.forEach(meeting => {
       if(meeting.id == meetingId) {
         meeting.progress = progress;
