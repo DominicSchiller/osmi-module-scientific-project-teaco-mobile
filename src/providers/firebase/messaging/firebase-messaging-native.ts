@@ -37,8 +37,8 @@ export class FirebaseMessagingNativeProvider implements FirebaseMessagingProvide
             token = await this.firebaseNative.getToken();
         }
         if(this.platform.is('ios')) {
-            token = await this.firebaseNative.getToken();
             await this.firebaseNative.grantPermission();
+            token = await this.firebaseNative.getToken();
         }
         return token;
     }
