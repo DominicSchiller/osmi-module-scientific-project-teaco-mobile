@@ -22,10 +22,12 @@
     </ion-row>
     <ion-row class="statistics-row">
       <ion-col>
-        <ion-icon name="teaco-meeting-state-voting"></ion-icon>
+        <ion-icon name="{{(meeting | async)?.progress.pending === 1 ? 'teaco-meeting-state-pending' :
+          ((meeting | async)?.progress.completed === 1 ? 'teaco-meeting-state-voting-completed' : 'teaco-meeting-state-voting')}}"></ion-icon>
         <div class="stats-value light">
           <!--<span class="bold">Status</span><br />-->
-          in Planung
+          {{(meeting | async)?.progress.pending === 1 ? "in Planung" :
+                ((meeting | async)?.progress.completed === 1 ? "abgestimmt" : "in Abstimmung")}}
         </div>
       </ion-col>
       <ion-col>

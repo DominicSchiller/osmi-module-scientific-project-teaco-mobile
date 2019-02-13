@@ -114,7 +114,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
     this.comment = "";
     this.location = "";
     this.meetingId = Number(this.navParams.get('meetingId'));
-    let meeting = this.navParams.get('meeting');
+    let meeting:Meeting = this.navParams.get('meeting');
     this.delegate = this.navParams.get('delegate');
     if(meeting !== undefined) {
       this.meeting = Observable.of(meeting)
@@ -153,6 +153,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
        this.zone.run(() => {
          meeting.numberOfParticipants = meeting.participants.length;
          meeting.numberOfSuggestions = meeting.suggestions.length;
+         MeetingUtils.recalculateMeetingStatus(meeting);
          this.meeting = Observable.of(meeting);
          if(this.listRefresher) {
            this.listRefresher.complete();
@@ -374,6 +375,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
     console.log("Retrieved suggestion", suggestion);
     this.meeting.subscribe(meeting => {
       meeting.suggestions.push(suggestion);
+      MeetingUtils.recalculateMeetingStatus(meeting);
       this.meeting = new Observable(observer => {observer.next(meeting)});
     });
   }
