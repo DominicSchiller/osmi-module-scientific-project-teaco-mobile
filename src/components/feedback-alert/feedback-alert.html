@@ -1,0 +1,13 @@
+<div class="feedback-alert" [ngClass]="isVisible ? 'visible' : ''"  #feedbackAlert>
+  <div class="content">
+    <div class="message normalSize medium">
+      <ion-icon class="icon" name="{{iconName}}"></ion-icon>
+      <div class="title mediumSize bold">
+        {{title}}
+      </div>
+      {{message}}
+    </div>
+  </div>
+  <div class="bg">
+  </div>
+</div>
