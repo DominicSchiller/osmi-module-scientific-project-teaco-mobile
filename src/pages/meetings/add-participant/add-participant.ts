@@ -7,6 +7,7 @@ import {AddParticipantsEventDelegate} from "./add-participants-event-delegate";
 import {Meeting} from "../../../models/meeting";
 import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
 import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
+import {FeedbackAlertComponent} from "../../../components/feedback-alert/feedback-alert";
 
 /**
  * Page Controller for selecting and adding participants
@@ -22,16 +23,22 @@ export class AddParticipantPage {
    * The page's navigation bar UI element
    */
   @ViewChild(Navbar) navBar: Navbar;
-
   /**
    * loading indicator UI component
    */
   @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
-
+  /**
+   * feedback alert UI component for displaying succeeded or failed REST api calls
+   */
+  @ViewChild(forwardRef(() => FeedbackAlertComponent)) feedbackAlert: FeedbackAlertComponent;
+  /**
+   * The associated meeting
+   */
   private meeting: Meeting;
-
+  /**
+   * Status whether this page has been entered as modal dialog or not
+   */
   private readonly isModalDialog: boolean = false;
-
   /**
    * Status whether the app is searching for existing participants or not.
    */
@@ -64,9 +71,13 @@ export class AddParticipantPage {
    * to the corresponding meeting.
    */
   private queuedParticipants: User[];
-
+  /**
+   * The associated delegate to call in case of added participants
+   */
   private delegate: AddParticipantsEventDelegate;
-
+  /**
+   * The data sync mode (keep data local or sync with TeaCo immediately)
+   */
   private syncMode: TeaCoSyncMode;
 
   /**
@@ -95,6 +106,7 @@ export class AddParticipantPage {
     this.delegate = navParams.get('delegate');
     let syncMode = this.navParams.get('syncMode');
     this.syncMode = syncMode !== undefined ? syncMode : TeaCoSyncMode.syncData;
+    console.warn("Sync mode: ", this.syncMode);
   }
 
   ionViewDidLoad() {
@@ -135,7 +147,6 @@ export class AddParticipantPage {
     } else {
       this.foundUsers = [];
     }
-
     // check if qualified email address
     let atIndex = this.searchTerm.indexOf('@'); // index of @ sign
     let dotIndex = this.searchTerm.lastIndexOf('.');
@@ -242,6 +253,9 @@ export class AddParticipantPage {
     this.searchTerm = "";
   }
 
+  /**
+   * Finish adding participants.
+   */
   private finish() {
     switch(this.syncMode) {
       case TeaCoSyncMode.syncData:
@@ -255,9 +269,13 @@ export class AddParticipantPage {
                 }
                setTimeout(() => {
                  this.loadingIndicator.hide();
+                 this.feedbackAlert.presentWith(
+                     "Teilnehmer hinzugefügt",
+                     "Der Teilnehmer wurde erfolgreich zur Abstimmung hinzugefügt.",
+                     "teaco-user");
                  setTimeout(() => {
                    this.goBack();
-                 }, 500);
+                 }, 3200);
                }, 400);
               });
         });
