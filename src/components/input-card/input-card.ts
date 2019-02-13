@@ -1,7 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
-type InputCardCallbackFunction = (arg1: any) => void;
-
 /**
  * Custom UI component displaying a card which consists of an input field and an icon.
  */
@@ -36,14 +34,20 @@ export class InputCardComponent {
    */
   private minuteValuesFull: string = "0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55";
 
+  /**
+   * A time or duration inputs minute interval
+   */
   private minuteValuesDuration: string = "0, 30";
 
-  private minDate: string;
+  /**
+   * A date input's minimum time
+   */
+  private minTime: string;
 
   /**
-   * A date input's minimum date (here: fom now to somewhere in the future)
+   * A date input's maximum time
    */
-  private maxDate: string;
+  private maxTime: string;
 
   /**
    * The current input's value
@@ -57,16 +61,31 @@ export class InputCardComponent {
     this.value = "";
     let now = new Date();
     now.setHours(1, 0, 0, 1);
-    this.maxDate = now.toISOString();
+    this.maxTime = now.toISOString();
     now.setHours(2, 0, 0, 1);
-    this.minDate = now.toISOString();
+    this.minTime = now.toISOString();
   }
 
-  public setMaxDate(dateString: string) {
-    let timeParts = dateString.split(':');
+  /**
+   * Set the maximum time of a time or duration input.
+   * @param timeString The time string which to apply
+   */
+  public setMaxTime(timeString: string) {
+    let timeParts = timeString.split(':');
     let now = new Date();
     now.setHours(Number(timeParts[0]) + 1, Number(timeParts[1]), 0, 1);
-    this.maxDate = now.toISOString();
+    this.maxTime = now.toISOString();
+  }
+
+  /**
+   * Set the minimum date of a time or duration input.
+   * @param timeString The time string which to apply
+   */
+  public setMinTime(timeString: string) {
+    let timeParts = timeString.split(':');
+    let now = new Date();
+    now.setHours(Number(timeParts[0]) + 1, Number(timeParts[1]), 0, 1);
+    this.maxTime = now.toISOString();
   }
 
   /**

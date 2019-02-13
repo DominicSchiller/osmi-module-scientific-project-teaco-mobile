@@ -91,12 +91,13 @@ export class AddNewSuggestionPage {
 
   private onStartTimeEntered(event: EventEmitter<any>) {
     let startTime = event[0];
-    this.durationPicker.setMaxDate(
+    this.durationPicker.setMaxTime(
         DateTimeHelper.subtractTimeStrings(
             "24:00",
             startTime
         )
     );
+    this.durationPicker.setMinTime("0:00");
     if(this.endingTimePicker.value.length > 0) {
       this.durationPicker.value = DateTimeHelper.subtractTimeStrings(
           this.endingTimePicker.value,
@@ -155,23 +156,6 @@ export class AddNewSuggestionPage {
             DateTimeHelper.getHours(this.startTimePicker.value) >
             DateTimeHelper.getHours(this.endingTimePicker.value)
         )
-  }
-
-  /**
-   * Show Alert of Success created new Suggestion. 
-   * Navigate to the Meetings Page.
-   */
-  private showAlertInfo() {
-    // const alert = this.alertCtrl.create({
-    //   title: 'Terminvorschlag wurde angelegt!',
-    //   message: 'Dein Termin am ' + this.date + ' um ' + this.startTime + ' - ' + this.endTime + ' wurde eingetragen',
-    //   buttons: [
-    //     {
-    //       text: 'Okay!',
-    //     }
-    //   ]
-    // });
-    // alert.present();
   }
 
   /**
