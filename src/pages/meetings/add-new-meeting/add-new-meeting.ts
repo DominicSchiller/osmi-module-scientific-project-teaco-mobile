@@ -56,6 +56,7 @@ export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddPart
     this.navCtrl.push('AddParticipantPage',
         {
           'meeting': this.meeting,
+          'syncMode': TeaCoSyncMode.noDataSync,
           'delegate': this
         },
         {animate:true,animation:'transition',duration:500,direction:'forward'}).then();
@@ -64,6 +65,7 @@ export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddPart
   goToAddSuggestionPage() {
     this.navCtrl.push('AddNewSuggestionPage',
         {
+          'meeting': this.meeting,
           'syncMode': TeaCoSyncMode.noDataSync,
           'delegate': this
         },
