@@ -21,30 +21,30 @@ quick-vote {
       background-color: transparent;
 
       &.yes-voted {
-        border-color: color($colors, ok);
+        border-color: color($colors, yes);
         ion-icon {
-          color: color($colors, ok);
+          color: color($colors, yes);
         }
         &.selected {
-          background: color($colors, ok);
+          background: color($colors, yes);
         }
       }
       &.maybe-voted {
-        border-color: color($colors, pending);
+        border-color: color($colors, maybe);
         ion-icon {
-          color: color($colors, pending);
+          color: color($colors, maybe);
         }
         &.selected {
-          background: color($colors, pending);
+          background: color($colors, maybe);
         }
       }
       &.no-voted {
-        border-color: color($colors, danger);
+        border-color: color($colors, no);
         ion-icon {
-          color: color($colors, danger);
+          color: color($colors, no);
         }
         &.selected {
-          background: color($colors, danger);
+          background: color($colors, no);
         }
       }
 

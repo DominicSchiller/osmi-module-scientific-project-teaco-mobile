@@ -39,6 +39,7 @@ $colors: (
         secondary:        #00bae5,
         tertiary:         #b8b8b8,
         danger:           #cc0a2f,
+        ok:               #83bb20,
         light:            #ffffff,
         dark:             #222222,
         // background and border colors
@@ -50,9 +51,15 @@ $colors: (
         text-dark:        #222222,
         text-light:       #ffffff,
         text-disabled:    #818a8d,
+        // vote status
+        yes:              #83bb20,
+        maybe:            #FFA700,
+        no:               #cc0a2f,
+        dont-know:        #dedfdf,
         // progress colors
-        ok:               #83bb20,
-        pending:          #fca800,
+        pending:          #dedfdf,
+        voting:           #FF9775,
+        voted:            #00bae5
 );
 
 // App iOS Variables

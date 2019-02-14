@@ -57,19 +57,19 @@ suggestion-card {
 
       .dont-know-voted {
         height: 70% !important;
-        background-color: color($colors, gray-medium);
+        background-color: color($colors, dont-know);
       }
       .maybe-voted {
         height: 100% !important;
-        background-color: color($colors, pending);
+        background-color: color($colors, maybe);
       }
       .no-voted {
         height: 100% !important;
-        background-color: color($colors, danger);
+        background-color: color($colors, no);
       }
       .yes-voted {
         height: 100% !important;
-        background-color: color($colors, ok);
+        background-color: color($colors, yes);
       }
     }
   }

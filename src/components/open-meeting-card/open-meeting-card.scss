@@ -90,15 +90,15 @@ open-meeting-card {
 
         .pending {
           height: 100% !important;
-          background-color: color($colors, gray-medium);
+          background-color: color($colors, pending);
         }
         .in-progress {
           height: 100% !important;
-          background-color: color($colors, pending);
+          background-color: color($colors, voting); //#F67C1F; //#CC3E90;//#FF9578; //#CC3E90; //#FFA890;
         }
         .voted {
           height: 100% !important;
-          background-color: color($colors, ok);
+          background-color: color($colors, voted);
         }
       }
     }
