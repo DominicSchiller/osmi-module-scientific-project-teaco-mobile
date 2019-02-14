@@ -4,6 +4,7 @@ import {DateTimeHelper} from "../../utils/date-time-helper";
 import {Suggestion} from "../../models/suggestion";
 import {Calendar} from "@ionic-native/calendar";
 import {Platform} from "ionic-angular";
+import {MeetingUtils, SortOrder} from "../../utils/meeting-utils";
 
 /**
  * Custom UI component for displaying closed meeting cards.
@@ -21,8 +22,12 @@ export class ClosedMeetingCardComponent extends OpenMeetingCardComponent {
     super();
   }
 
+  ngOnInit() {
+    MeetingUtils.sortSuggestions(this.meeting, SortOrder.ascending);
+    super.ngOnInit();
+  }
+
   addSuggestionToCalendar(suggestion: Suggestion) {
-    console.warn(suggestion);
     if(this.platform.is('cordova')) {
       this.calendar.createEventInteractively(
           this.meeting.title,

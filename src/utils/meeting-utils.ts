@@ -1,6 +1,8 @@
 import {Meeting} from "../models/meeting";
 import {VoteDecision} from "../models/vote-decision";
 import {MeetingProgress} from "../models/meeting-progress";
+import {Suggestion} from "../models/suggestion";
+import {DateTimeHelper} from "./date-time-helper";
 
 /**
  * Utility class for working with meeting data.
@@ -40,4 +42,31 @@ export class MeetingUtils {
         progress.completed = suggestionsCount == 0 ? 0: completed / suggestionsCount;
         meeting.progress = progress;
     }
+
+    /**
+     * Sort suggestions in ascending order.
+     * @param meeting Meeting whose suggestions should be sorted
+     * @param sortOrder The sort order how to align all sorted suggestions (ascending | descending)
+     */
+    public static sortSuggestions(meeting: Meeting, sortOrder: SortOrder) {
+        meeting.suggestions.sort((suggestionA: Suggestion, suggestionB: Suggestion) => {
+            let dateA = DateTimeHelper.mergeDateAndTime(suggestionA.date, suggestionA.startTime);
+            let dateB = DateTimeHelper.mergeDateAndTime(suggestionB.date, suggestionB.startTime);
+            if(dateA > dateB) {
+                return sortOrder == SortOrder.ascending ? 1: -1;
+            }
+            if(dateA < dateB) {
+                return sortOrder == SortOrder.ascending ? -1: 1;
+            }
+            return 0;
+        });
+    }
+}
+
+/*
+ * Enumeration of sort orders.
+ */
+export enum SortOrder {
+    ascending,
+    descending
 }
