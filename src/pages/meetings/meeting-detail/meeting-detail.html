@@ -26,22 +26,22 @@
           ((meeting | async)?.progress.completed === 1 ? 'teaco-meeting-state-voting-completed' : 'teaco-meeting-state-voting')}}"></ion-icon>
         <div class="stats-value light">
           <!--<span class="bold">Status</span><br />-->
-          {{(meeting | async)?.progress.pending === 1 ? "in Planung" :
-                ((meeting | async)?.progress.completed === 1 ? "abgestimmt" : "in Abstimmung")}}
+          {{(meeting | async)?.progress.pending === 1 ? "noch nicht in Abstimmung" :
+                ((meeting | async)?.progress.completed === 1 ? "alle Termine abgestimmt" : "Termine in Abstimmung")}}
         </div>
       </ion-col>
       <ion-col>
         <ion-icon name="teaco-participants"></ion-icon>
         <div class="stats-value light">
           <!--<span class="bold">Teilnehmer</span><br />-->
-          {{(meeting | async)?.numberOfParticipants}}
+          {{(meeting | async)?.numberOfParticipants}}<br />Teilnehmer
         </div>
       </ion-col>
       <ion-col>
         <ion-icon name="teaco-suggestion"></ion-icon>
         <div class="stats-value light">
           <!--<span class="bold">Termine</span><br />-->
-          {{(meeting | async)?.numberOfSuggestions}}
+          {{(meeting | async)?.numberOfSuggestions}}<br />Termine
         </div>
       </ion-col>
     </ion-row>
@@ -88,7 +88,9 @@
   </button>
 
   <ion-fab bottom right id="createNewSuggestionButton">
-    <button ion-fab color="primary" (click)="goToNewSuggestionPage()">+</button>
+    <button ion-fab color="primary" (click)="goToNewSuggestionPage()">
+      <ion-icon name="md-add"></ion-icon>
+    </button>
   </ion-fab>
 </ion-content>
 
