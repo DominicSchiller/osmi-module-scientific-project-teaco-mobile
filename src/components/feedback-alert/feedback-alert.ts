@@ -44,11 +44,16 @@ export class FeedbackAlertComponent {
   /**
    * Present the alert to the screen.
    */
-  public present() {
-    this.isVisible = true;
-    setTimeout(() => {
-      this.isVisible = false;
-    }, 3000);
+  public present(): Promise<void> {
+    return new Promise<void>((onFinished) => {
+      this.isVisible = true;
+      setTimeout(() => {
+        this.isVisible = false;
+        setTimeout(() => {
+          onFinished();
+        }, 100);
+      }, 3000);
+    });
   }
 
   /**
@@ -57,11 +62,11 @@ export class FeedbackAlertComponent {
    * @param message The message which to display
    * @param iconName The icon name which to display
    */
-  public presentWith(title: string, message: string = "", iconName: string = "") {
+  public presentWith(title: string, message: string = "", iconName: string = ""): Promise<void> {
     this.title = title;
     this.message = message;
     this.iconName = iconName;
-    this.present();
+    return this.present();
   }
 
   /**

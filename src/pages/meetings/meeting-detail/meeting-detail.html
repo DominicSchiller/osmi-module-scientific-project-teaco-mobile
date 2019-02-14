@@ -49,6 +49,7 @@
 </ion-header>
 <ion-content class="no-scroll" id="meeting-details-content">
   <loading-indicator></loading-indicator>
+  <feedback-alert></feedback-alert>
 
   <ion-refresher (ionRefresh)="onRefreshMeeting($event)">
     <ion-refresher-content
@@ -121,7 +122,7 @@
     </div>
   </ion-slide>
   <ion-slide>
-    <input-card id="location-input" type="text-area" icon="teaco-location" placeholder="Gib eine Location an ..." (onChange)="onLocationEntered($event)"></input-card>
+    <input-card id="location-input" type="text-area" icon="teaco-location" placeholder="Gib eine Location an ..." (onChange)="onLocationEntered($event)" #locationInput></input-card>
     <input-card id="comment-input" type="text-area" icon="chatboxes" placeholder="Gib hier optional noch einen Kommentar ein ..." (onChange)="onCommentEntered($event)"></input-card>
     <div class="finish-section">
       <p class="normalSize medium">Alles soweit fertig?</p>

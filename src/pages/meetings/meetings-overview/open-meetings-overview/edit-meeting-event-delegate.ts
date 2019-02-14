@@ -22,4 +22,10 @@ export interface EditMeetingEventDelegate extends CreateMeetingEventDelegate, Cr
      * @param progress The new meeting progress
      */
     onMeetingProgressChanged(meetingId: number, progress: MeetingProgress);
+    /**
+     * Callback function which will be called in case of a meeting
+     * planning got finalized.
+     * @param meetingId The id of the meeting which got finalized
+     */
+    onMeetingFinalized(meetingId: number);
 }

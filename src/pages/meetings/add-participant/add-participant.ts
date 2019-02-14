@@ -272,10 +272,10 @@ export class AddParticipantPage {
                  this.feedbackAlert.presentWith(
                      "Teilnehmer hinzugefügt",
                      "Der Teilnehmer wurde erfolgreich zur Abstimmung hinzugefügt.",
-                     "teaco-user");
-                 setTimeout(() => {
-                   this.goBack();
-                 }, 3200);
+                     "teaco-user")
+                     .then(() => {
+                       this.goBack();
+                     });
                }, 400);
               });
         });
