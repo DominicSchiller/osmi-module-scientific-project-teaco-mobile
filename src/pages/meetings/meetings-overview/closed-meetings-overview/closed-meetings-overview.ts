@@ -1,9 +1,10 @@
 import {Component, NgZone} from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams, Refresher} from 'ionic-angular';
+import {AlertController, Events, IonicPage, ItemSliding, NavController, NavParams, Refresher} from 'ionic-angular';
 import {OpenMeetingsOverviewPage} from "../open-meetings-overview/open-meetings-overview";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
 import {MeetingType} from "../../../../models/MeetingType";
+import {Meeting} from "../../../../models/meeting";
 
 /**
  * Page Controller for listing all closed meetings.

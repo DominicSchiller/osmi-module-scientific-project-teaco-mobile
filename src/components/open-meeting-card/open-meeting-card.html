@@ -6,7 +6,7 @@
         <ion-icon
                 name="{{meeting.progress.pending === 1 ? 'teaco-meeting-state-pending' : (meeting.progress.completed === 1 ? 'teaco-meeting-state-voting-completed' : 'teaco-meeting-state-voting')}}"
                 class="status-icon"
-                color="{{meeting.progress.pending === 1 ? 'gray-dark' : (meeting.progress.completed === 1 ? 'secondary' : 'voting')}}">
+                color="{{meeting.progress.pending === 1 ? 'gray-dark' : (meeting.progress.completed === 1 ? 'voted' : 'voting')}}">
         </ion-icon>
       </ion-col>
       <!-- Meeting  Title and basic statistics -->

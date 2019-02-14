@@ -1,6 +1,6 @@
 import {Component, ElementRef, forwardRef, NgZone, Renderer2, ViewChild} from '@angular/core';
 import {
-  AlertController,
+  AlertController, Events,
   IonicPage,
   ItemSliding,
   Navbar,
@@ -18,6 +18,8 @@ import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-sugges
 import {EditMeetingEventDelegate} from "../meetings-overview/open-meetings-overview/edit-meeting-event-delegate";
 import {MeetingUtils} from "../../../utils/meeting-utils";
 import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
+import {FeedbackAlertComponent} from "../../../components/feedback-alert/feedback-alert";
+import {InputCardComponent} from "../../../components/input-card/input-card";
 
 /**
  * Page Controller for meeting details.
@@ -38,6 +40,10 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
 
   /**
+   * feedback alert UI component for displaying succeeded or failed REST api calls
+   */
+  @ViewChild(forwardRef(() => FeedbackAlertComponent)) feedbackAlert: FeedbackAlertComponent;
+  /**
    * The page's navigation bar UI element
    */
   @ViewChild(Navbar) navBar: Navbar;
@@ -45,6 +51,10 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    * The pages 'finish the meeting planning' action sheet UI element
    */
   @ViewChild('finishPlanningActionSheet') finishActionSheet: Slides;
+  /**
+   * The pages 'finish the meeting planning' action sheet UI element
+   */
+  @ViewChild('locationInput') locationInput: InputCardComponent;
   /**
    * The pages overlay UI element for i.e. indicating stuff in progress
    */
@@ -101,6 +111,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    * @param renderer The Angular UI renderer for changing HTML elements
    * @param alertCtrl The page's alert controller to create alert and confirmation dialogs
    * @param zone The current template zone this controller refers to
+   * @param events The app's global events system
    */
   constructor(
       private navCtrl: NavController,
@@ -109,7 +120,8 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       private userSession: UserSessionProvider,
       private renderer: Renderer2,
       private alertCtrl: AlertController,
-      private zone: NgZone) {
+      private zone: NgZone,
+      private events: Events) {
     this.pickedSuggestions = [];
     this.comment = "";
     this.location = "";
@@ -219,9 +231,12 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    * for finalizing the meeting planning.
    */
   private openFinishPlanningActionSheet() {
-    this.refreshPickedSuggestionsList();
-    this.renderer.addClass(this.actionOverlay.nativeElement, 'active');
-    this.renderer.addClass(this.finishActionSheet.getElementRef().nativeElement, 'active');
+   this.meeting.subscribe(meeting => {
+     this.locationInput.value = meeting.location;
+     this.refreshPickedSuggestionsList();
+     this.renderer.addClass(this.actionOverlay.nativeElement, 'active');
+     this.renderer.addClass(this.finishActionSheet.getElementRef().nativeElement, 'active');
+   });
   }
 
   /**
@@ -293,7 +308,16 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
           this.comment)
           .subscribe(() => {
             this.hideLoadingIndicator();
-            console.log("Successfully finished meeting planning");
+            setTimeout(() => {
+              this.feedbackAlert.presentWith(
+                  "Termin(e) versandt",
+                  "Planung erfolgreich abgeschlossen. Alle Teilnehmer wurden über die finalen Termine informiert.",
+                  "teaco-closed-meetings")
+                  .then(() => {
+                    this.events.publish('switchToTab', 0);
+                    this.goBack();
+                  });
+              }, 300);
           });
     });
   }

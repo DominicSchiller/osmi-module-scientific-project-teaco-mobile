@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {OpenMeetingCardComponent} from "../open-meeting-card/open-meeting-card";
 import {DateTimeHelper} from "../../utils/date-time-helper";
 import {Suggestion} from "../../models/suggestion";
+import {Calendar} from "@ionic-native/calendar";
+import {Platform} from "ionic-angular";
 
 /**
  * Custom UI component for displaying closed meeting cards.
@@ -15,8 +17,27 @@ export class ClosedMeetingCardComponent extends OpenMeetingCardComponent {
   /**
    * Default Constructor
    */
-  constructor() {
+  constructor(private platform: Platform, private calendar: Calendar) {
     super();
+  }
+
+  addSuggestionToCalendar(suggestion: Suggestion) {
+    console.warn(suggestion);
+    if(this.platform.is('cordova')) {
+      this.calendar.createEventInteractively(
+          this.meeting.title,
+          this.meeting.location,
+          "",
+          DateTimeHelper.mergeDateAndTime(suggestion.date, suggestion.startTime),
+          DateTimeHelper.mergeDateAndTime(suggestion.date, suggestion.endTime)
+      ).then(data => {
+        this.calendar.openCalendar(suggestion.date).then(data2 => {
+          console.log(data2);
+        });
+      });
+    } else {
+      console.error("Can't open calendar on web browser");
+    }
   }
 
   /**
@@ -47,7 +68,7 @@ export class ClosedMeetingCardComponent extends OpenMeetingCardComponent {
    * @return the suggestion's day
    */
   private getDay(suggestion: Suggestion): number {
-    return suggestion.date.getDay() - 1;
+    return suggestion.date.getDate();
   }
 
   /**

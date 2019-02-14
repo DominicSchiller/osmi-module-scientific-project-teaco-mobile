@@ -26,7 +26,7 @@
           <div class="horizontal-line"></div>
           <ion-scroll scrollX="true" [ngClass]="meeting.isCancelled ? 'hidden' : ''">
             <ion-row nowrap class="final-dates-list">
-              <div class="date-item" *ngFor="let suggestion of meeting.suggestions">
+              <div class="date-item" *ngFor="let suggestion of meeting.suggestions" (click)="addSuggestionToCalendar(suggestion)">
                 <div class="month medium">{{getMonth(suggestion)}} '{{getYear(suggestion)}}</div>
                 <div class="day heavy">{{getDay(suggestion)}}</div>
                 <div class="day-name">{{getWeekday(suggestion)}}</div>

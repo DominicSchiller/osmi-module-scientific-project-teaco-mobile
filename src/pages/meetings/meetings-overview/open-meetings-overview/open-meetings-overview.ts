@@ -1,6 +1,6 @@
 import {Component, forwardRef, NgZone, ViewChild, ViewChildren} from '@angular/core';
 import {
-  AlertController,
+  AlertController, Events,
   IonicPage,
   ItemSliding,
   ModalController,
@@ -19,6 +19,7 @@ import {EditMeetingEventDelegate} from "./edit-meeting-event-delegate";
 import {User} from "../../../../models/user";
 import {MeetingProgress} from "../../../../models/meeting-progress";
 import {LoadingIndicatorComponent} from "../../../../components/loading-indicator/loading-indicator";
+import {FeedbackAlertComponent} from "../../../../components/feedback-alert/feedback-alert";
 
 /**
  * Page Controller for listing all open meetings.
@@ -37,7 +38,10 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    * loading indicator UI component
    */
   @ViewChild(forwardRef(() => LoadingIndicatorComponent)) loadingIndicator: LoadingIndicatorComponent;
-
+  /**
+   * feedback alert UI component for displaying succeeded or failed REST api calls
+   */
+  @ViewChild(forwardRef(() => FeedbackAlertComponent)) feedbackAlert: FeedbackAlertComponent;
   /**
    * Currently active refresher UI component
    */
@@ -189,7 +193,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    * @param index The selected meeting's index within the meetings list
    * @param slidingItem The sliding item from the UI
    */
-  private deleteMeeting(meeting: Meeting, index: number, slidingItem: ItemSliding) {
+  protected deleteMeeting(meeting: Meeting, index: number, slidingItem: ItemSliding) {
     slidingItem.close();
     const alert = this.alertCtrl.create({
       "title": "Meeting wirklich löschen?",
@@ -205,6 +209,11 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
                   this.hideLoadingIndicator();
                   setTimeout(() => {
                     this.meetings.splice(index, 1);
+                    this.feedbackAlert.presentWith(
+                        "Meeting gelöscht",
+                        "Das Meeting wurde erfolgreich gelöscht.",
+                        "md-trash"
+                    )
                   }, 400);
                 }, 400);
               }, error => {
@@ -275,5 +284,16 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
         return;
       }
     });
+  }
+
+  onMeetingFinalized(meetingId: number) {
+    for(let i=0; i<this.meetings.length; i++) {
+      if(this.meetings[i].id == meetingId) {
+        this.meetings.splice(i, 1);
+        break;
+      }
+    }
+
+
   }
 }

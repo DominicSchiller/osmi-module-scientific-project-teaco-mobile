@@ -7,6 +7,7 @@
 
 <ion-content>
   <loading-indicator></loading-indicator>
+  <feedback-alert></feedback-alert>
 
   <ion-refresher (ionRefresh)="onRefreshMeetings($event)">
     <ion-refresher-content
@@ -18,7 +19,7 @@
   </ion-refresher>
 
   <ion-list no-lines>
-    <ion-item-sliding *ngFor="let meeting of meetings">
+    <ion-item-sliding *ngFor="let meeting of meetings; let i=index" #meetingSlidingItem>
       <ion-item>
         <closed-meeting-card [meeting]="meeting">
         </closed-meeting-card>
@@ -27,7 +28,7 @@
         <button ion-button color="secondary">
           <ion-icon name="md-folder"></ion-icon>
         </button>
-        <button ion-button color="primary">
+        <button ion-button color="primary" (click)="deleteMeeting(meeting, i, meetingSlidingItem)">
           <ion-icon name="md-trash"></ion-icon>
         </button>
       </ion-item-options>
