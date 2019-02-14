@@ -80,13 +80,19 @@ export class Suggestion {
         suggestion.startTime = new Date(data.start);
         suggestion.endTime = new Date(data.end);
 
+        // adjust time zone offset
+        let timeZoneOffset = suggestion.date.getTimezoneOffset()/60;
+        if(suggestion.startTime.getTimezoneOffset()/60 < 0) {
+            suggestion.startTime.setHours(suggestion.startTime.getHours() + timeZoneOffset);
+            suggestion.endTime.setHours(suggestion.endTime.getHours() + timeZoneOffset);
+        }
+
         // parse votes
         if(data.votes != undefined) {
             data.votes.forEach(voteData => {
                 suggestion.votes.push(new Vote(voteData))
             });
         }
-
         return suggestion;
     }
 }
