@@ -6,13 +6,13 @@ export class DateTimeHelper {
      * Map of week day index and their corresponding weekday names
      */
     private static weekdayMap: { [dayNumber: number]: string; } = {
-        0: 'Montag',
-        1: 'Dienstag',
-        2: 'Mittwoch',
-        3: 'Donnerstag',
-        4: 'Freitag',
-        5: 'Samstag',
-        6: 'Sonntag'
+        0: 'Sonntag',
+        1: 'Montag',
+        2: 'Dienstag',
+        3: 'Mittwoch',
+        4: 'Donnerstag',
+        5: 'Freitag',
+        6: 'Samstag',
     };
 
     /**
@@ -48,7 +48,7 @@ export class DateTimeHelper {
      * @return the determined weekday
      */
     public static getWeekday(date: Date): string {
-        return DateTimeHelper.weekdayMap[date.getDay() - 1];
+        return DateTimeHelper.weekdayMap[date.getDay()];
     }
 
     /**
@@ -100,6 +100,17 @@ export class DateTimeHelper {
             Number(timeParts[1]),
             0, 0
         );
+    }
+
+    public static mergeDateAndTime(date: Date, time: Date) {
+        return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDay() - 1,
+            time.getHours(),
+            time.getMinutes(),
+            0, 0
+        )
     }
 
     /**
