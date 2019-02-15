@@ -46,13 +46,13 @@ export class QuickVoteComponent {
     if(this.vote !== undefined) {
       switch(this.vote.decision) {
         case VoteDecision.yes:
-          this.voteYes();
+          this.voteYes(null);
           break;
         case VoteDecision.maybe:
-          this.voteMaybe();
+          this.voteMaybe(null);
           break;
         case VoteDecision.no:
-          this.voteNo();
+          this.voteNo(null);
           break;
       }
     }
@@ -69,7 +69,11 @@ export class QuickVoteComponent {
   /**
    * Vote as 'yes'
    */
-  public voteYes() {
+  public voteYes(event) {
+    // don't let the click event fired further on parent component
+    if(event) {
+      event.stopPropagation();
+    }
     QuickVoteComponent.activateVoteButton(this.yesVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.maybeVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.noVoteButton);
@@ -79,7 +83,11 @@ export class QuickVoteComponent {
   /**
    * Vote as 'maybe'.
    */
-  public voteMaybe() {
+  public voteMaybe(event) {
+    // don't let the click event fired further on parent component
+    if(event) {
+      event.stopPropagation();
+    }
     QuickVoteComponent.activateVoteButton(this.maybeVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.yesVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.noVoteButton);
@@ -89,7 +97,11 @@ export class QuickVoteComponent {
   /**
    * Vote as 'no'
    */
-  public voteNo() {
+  public voteNo(event) {
+    // don't let the click event fired further on parent component
+    if(event) {
+      event.stopPropagation();
+    }
     QuickVoteComponent.activateVoteButton(this.noVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.yesVoteButton);
     QuickVoteComponent.deactivateVoteButton(this.maybeVoteButton);

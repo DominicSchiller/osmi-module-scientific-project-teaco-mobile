@@ -217,13 +217,23 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
     });
   }
 
-  /**
-   * Hide the current visible loading indicator.
-   */
-  private hideLoadingIndicator() {
-    setTimeout( () => {
-      this.loadingIndicator.hide();
-    }, 400);
+  private showSuggestionDetails(suggestion: Suggestion, index: number) {
+    this.meeting.subscribe(meeting => {
+      this.userSession.getActiveUser().then(activeUser => {
+        this.navCtrl.push(
+            'SuggestionDetailsPage',
+            {
+              activeUserId: activeUser.id,
+              meeting: meeting,
+              meetingId: this.meetingId,
+              suggestionId: suggestion.id,
+              suggestion: suggestion,
+              suggestionIndex: index
+            },
+            {animate:true,animation:'transition',duration:500,direction:'forward'}
+        ).then();
+      })
+    });
   }
 
   /**
@@ -336,6 +346,11 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       this.meeting = new Observable(observer => {observer.next(meeting)});
       this.userSession.getActiveUser().then(activeUser => {
         this.apiService.updateSuggestion(activeUser.key, suggestion).subscribe(() => {
+          this.feedbackAlert.presentWith(
+              suggestion.isPicked ? "Als final markiert" : "Markierung aufgehoben",
+              suggestion.isPicked ? "Der Termin wurde erfolgreich als final markiert." : "Die Markierung als entgültiger Terminvorschlag wurde aufgehoben",
+              suggestion.isPicked ? "teaco-picked-suggestion" : "teaco-unpicked-suggestion"
+          ).then();
         });
       });
       this.refreshPickedSuggestionsList();
@@ -368,11 +383,17 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
                   this.hideLoadingIndicator();
                   meeting.suggestions.splice(index, 1);
                   meeting.numberOfSuggestions -= 1;
-                  this.delegate.onSuggestionDeleted(this.meetingId, suggestion.id);
                   console.log("suggestion has been successfully deleted");
                   MeetingUtils.recalculateMeetingStatus(meeting);
-                  this.delegate.onMeetingProgressChanged(meeting.id, meeting.progress);
-                  this.meeting = new Observable(observer => {observer.next(meeting)})
+                  this.meeting = new Observable(observer => {observer.next(meeting)});
+                  if(this.delegate) {
+                    this.delegate.onSuggestionDeleted(this.meetingId, suggestion.id);
+                    this.delegate.onMeetingProgressChanged(meeting.id, meeting.progress);
+                  }
+                  this.feedbackAlert.presentWith(
+                      "Terminvorschlag gelöscht.",
+                      "Der Terminvorschlag wurde erfolgreich für alle Teilnehmer entfernt.",
+                      "md-trash").then();
                 }, (error) => {
                   console.error(error);
                   this.hideLoadingIndicator();
@@ -402,5 +423,14 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       MeetingUtils.recalculateMeetingStatus(meeting);
       this.meeting = new Observable(observer => {observer.next(meeting)});
     });
+  }
+
+  /**
+   * Hide the current visible loading indicator.
+   */
+  private hideLoadingIndicator() {
+    setTimeout( () => {
+      this.loadingIndicator.hide();
+    }, 400);
   }
 }

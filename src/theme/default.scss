@@ -134,8 +134,16 @@ ion-icon {
     mask-image: url("../assets/svg/meetings/add-suggestion.svg");
   }
 
+  &[class*="teaco-suggestion"] {
+    mask-image: url("../assets/svg/suggestions/suggestion.svg");
+  }
+
   &[class*="teaco-picked-suggestion"] {
     mask-image: url("../assets/svg/suggestions/picked_suggestion.svg");
+  }
+
+  &[class*="teaco-unpicked-suggestion"] {
+    mask-image: url("../assets/svg/suggestions/unpicked_suggestion.svg");
   }
 
   &[class*="teaco-voted-yes"] {

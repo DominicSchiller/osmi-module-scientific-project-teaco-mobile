@@ -1,11 +1,11 @@
 <section class="quick-vote-section">
-  <button ion-fab class="yes-voted" (click)="voteYes()" #yesVoteButton>
+  <button ion-fab class="yes-voted" (click)="voteYes($event)" #yesVoteButton>
     <ion-icon name="teaco-voted-yes"></ion-icon>
   </button>
-  <button ion-fab class="maybe-voted" (click)="voteMaybe()" #maybeVoteButton>
+  <button ion-fab class="maybe-voted" (click)="voteMaybe($event)" #maybeVoteButton>
     <ion-icon name="teaco-voted-maybe"></ion-icon>
   </button>
-  <button ion-fab class="no-voted" (click)="voteNo()" #noVoteButton>
+  <button ion-fab class="no-voted" (click)="voteNo($event)" #noVoteButton>
     <ion-icon name="teaco-voted-no"></ion-icon>
   </button>
 </section>
