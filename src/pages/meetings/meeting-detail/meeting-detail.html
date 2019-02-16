@@ -20,26 +20,26 @@
     </ion-row>
     <ion-row class="statistics-row">
       <ion-col (click)="showMeetingDetailsSlide(0)">
-        <ion-icon name="{{(meeting | async)?.progress.pending === 1 ? 'teaco-meeting-state-pending' :
-          ((meeting | async)?.progress.completed === 1 ? 'teaco-meeting-state-voting-completed' : 'teaco-meeting-state-voting')}}"></ion-icon>
+        <ion-icon name="teaco-suggestion"></ion-icon>
         <div class="stats-value light">
-          <!--<span class="bold">Status</span><br />-->
-          {{(meeting | async)?.progress.pending === 1 ? "noch nicht in Abstimmung" :
-                ((meeting | async)?.progress.completed === 1 ? "alle Termine abgestimmt" : "Termine in Abstimmung")}}
+          <!--<span class="bold">Termine</span><br />-->
+          {{(meeting | async)?.numberOfSuggestions}}<br />Termine
         </div>
       </ion-col>
-      <ion-col>
+      <ion-col (click)="showMeetingDetailsSlide(1)">
         <ion-icon name="teaco-participants"></ion-icon>
         <div class="stats-value light">
           <!--<span class="bold">Teilnehmer</span><br />-->
           {{(meeting | async)?.numberOfParticipants}}<br />Teilnehmer
         </div>
       </ion-col>
-      <ion-col (click)="showMeetingDetailsSlide(1)">
-        <ion-icon name="teaco-suggestion"></ion-icon>
+      <ion-col (click)="showMeetingDetailsSlide(2)">
+        <ion-icon name="{{(meeting | async)?.progress.pending === 1 ? 'teaco-meeting-state-pending' :
+          ((meeting | async)?.progress.completed === 1 ? 'teaco-meeting-state-voting-completed' : 'teaco-meeting-state-voting')}}"></ion-icon>
         <div class="stats-value light">
-          <!--<span class="bold">Termine</span><br />-->
-          {{(meeting | async)?.numberOfSuggestions}}<br />Termine
+          <!--<span class="bold">Status</span><br />-->
+          {{(meeting | async)?.progress.pending === 1 ? "noch nicht in Abstimmung" :
+                ((meeting | async)?.progress.completed === 1 ? "alle Termine abgestimmt" : "Termine in Abstimmung")}}
         </div>
       </ion-col>
     </ion-row>
@@ -51,6 +51,48 @@
 
   <div class="action-overlay" #actionOverlay (click)="closeFinishPlanningActionSheet()"></div>
   <ion-slides pager="false" id="meetingDetailsSlides" #meetingDetailsSlider>
+    <ion-slide class="swiper-no-swiping">
+      <!--<ion-refresher (ionRefresh)="onRefreshMeeting($event)">-->
+      <!--<ion-refresher-content-->
+      <!--pullingIcon="arrow-round-down"-->
+      <!--pullingText="Terminvorschläge aktualisieren"-->
+      <!--refreshingSpinner="crescent"-->
+      <!--refreshingText="Aktualisiere Terminvorschläge ...">-->
+      <!--</ion-refresher-content>-->
+      <!--</ion-refresher>-->
+      <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
+        <ion-list no-lines>
+          <ion-item-sliding *ngFor="let suggestion of (meeting | async)?.suggestions; let i = index" #suggestionSlidingItem>
+            <ion-item >
+              <suggestion-card [suggestion]="suggestion" (click)="showSuggestionDetails(suggestion, i)"></suggestion-card>
+            </ion-item>
+            <ion-item-options side="right">
+              <button ion-button color="secondary" (click)="pickSuggestion(suggestion, i, suggestionSlidingItem)" text-wrap>
+                <ion-icon name="{{suggestion.isPicked ? 'teaco-unpicked-suggestion' : 'teaco-picked-suggestion'}}"></ion-icon>
+              </button>
+              <button ion-button color="primary" (click)="deleteSuggestion(suggestion, i, suggestionSlidingItem)">
+                <ion-icon name="md-trash"></ion-icon>
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </ion-scroll>
+      <button ion-button full
+              id="finishPlanningButton" class="normalSize medium" color="primary"
+              (click)="openFinishPlanningActionSheet()"
+              [hidden]="(meeting | async)?.suggestionsCount == 0"
+              [disabled]="pickedSuggestions.length == 0">
+        Planung Abschließen
+      </button>
+      <ion-fab bottom right id="createNewSuggestionButton">
+        <button ion-fab color="primary" (click)="goToNewSuggestionPage()">
+          <ion-icon name="md-add"></ion-icon>
+        </button>
+      </ion-fab>
+    </ion-slide>
+    <ion-slide>
+      Participamts page ...
+    </ion-slide>
     <ion-slide class="swiper-no-swiping">
       <ion-scroll scrollX="false" scrollY="true" id="planning-status-list">
         <ion-grid>
@@ -110,45 +152,7 @@
         </ion-grid>
       </ion-scroll>
     </ion-slide>
-    <ion-slide class="swiper-no-swiping">
-      <!--<ion-refresher (ionRefresh)="onRefreshMeeting($event)">-->
-        <!--<ion-refresher-content-->
-                <!--pullingIcon="arrow-round-down"-->
-                <!--pullingText="Terminvorschläge aktualisieren"-->
-                <!--refreshingSpinner="crescent"-->
-                <!--refreshingText="Aktualisiere Terminvorschläge ...">-->
-        <!--</ion-refresher-content>-->
-      <!--</ion-refresher>-->
-      <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
-        <ion-list no-lines>
-          <ion-item-sliding *ngFor="let suggestion of (meeting | async)?.suggestions; let i = index" #suggestionSlidingItem>
-            <ion-item >
-              <suggestion-card [suggestion]="suggestion" (click)="showSuggestionDetails(suggestion, i)"></suggestion-card>
-            </ion-item>
-            <ion-item-options side="right">
-              <button ion-button color="secondary" (click)="pickSuggestion(suggestion, i, suggestionSlidingItem)" text-wrap>
-                <ion-icon name="{{suggestion.isPicked ? 'teaco-unpicked-suggestion' : 'teaco-picked-suggestion'}}"></ion-icon>
-              </button>
-              <button ion-button color="primary" (click)="deleteSuggestion(suggestion, i, suggestionSlidingItem)">
-                <ion-icon name="md-trash"></ion-icon>
-              </button>
-            </ion-item-options>
-          </ion-item-sliding>
-        </ion-list>
-      </ion-scroll>
-      <button ion-button full
-              id="finishPlanningButton" class="normalSize medium" color="primary"
-              (click)="openFinishPlanningActionSheet()"
-              [hidden]="(meeting | async)?.suggestionsCount == 0"
-              [disabled]="pickedSuggestions.length == 0">
-        Planung Abschließen
-      </button>
-      <ion-fab bottom right id="createNewSuggestionButton">
-        <button ion-fab color="primary" (click)="goToNewSuggestionPage()">
-          <ion-icon name="md-add"></ion-icon>
-        </button>
-      </ion-fab>
-    </ion-slide>
+
   </ion-slides>
 
 
