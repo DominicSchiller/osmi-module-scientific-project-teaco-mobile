@@ -1,0 +1,176 @@
+@import '../../../theme/default';
+
+participants-manager {
+  @include box(100%, 100%);
+  display: flex !important;
+  flex-direction: column !important;
+
+  .scroll-content {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #search-bar {
+    @include box(100%, auto);
+    height: auto !important;
+    position: relative !important;
+
+    #search-input {
+      @include box(100%, 60px);
+      position: relative;
+      padding-left: 50px;
+      border: 1px solid color($colors, gray-medium) !important;
+
+      #search-icon {
+        @include vertical-center();
+        position: absolute !important;
+        left: 10px;
+        font-size: 3.0rem !important;
+      }
+
+      #search-loading-indicator {
+        @include vertical-center();
+        position: absolute !important;
+        right: 10px;
+      }
+
+      input {
+        height: 60px !important;
+        margin: 0 !important;
+      }
+    }
+
+    #search-results-list {
+      @include box(100%, 0);
+      position: relative;
+      overflow: hidden;
+      -webkit-transition: all 0.25s ease-in-out;
+      transition: all 0.25s ease-in-out;
+
+      &.results-available {
+        height: auto !important;
+      }
+
+      ion-scroll {
+        @include box(100%, 210px);
+        background: color($colors, gray-light);
+        border: 1px solid color($colors, gray-medium) !important;
+
+        .results-title {
+          @include box(100%);
+          margin-top: 0 !important;
+          text-align: center;
+        }
+
+        .search-result {
+          @include box(100%, auto);
+          margin-bottom: 20px;
+          background: white;
+          border-radius: 25px;
+          box-shadow: 0 0 15px 0 rgba(0,0,0,.1);
+
+          .item-inner {
+            border-bottom: none !important;
+          }
+
+          .user-information {
+            margin-left: 35px;
+            width: calc(100% - 30px) !important;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            p {
+              color: color($colors, text-dark);
+            }
+          }
+
+          .user-icon {
+            @include vertical-center();
+            position: absolute !important;
+            font-size: 2.2rem !important;
+            color: color($colors, text-dark);
+            z-index: 900;
+          }
+        }
+      }
+    }
+
+    #queue-user-button {
+      @include box(100%, 50px);
+      position: relative;
+      margin: 0 !important;
+      //border-radius: 0 0 25px 25px !important;
+    }
+  }
+
+  #participants-queue {
+    @include box(100%);
+    margin-top: 20px !important;
+    flex: 1 !important;
+
+    ion-scroll {
+      @include box(100%, 100%);
+
+      .scroll-content {
+        padding: 0 !important;
+        padding-bottom: 40px !important;
+      }
+
+      .participant-item {
+        @include box(100%, auto);
+        padding: 0 !important;
+        margin: -1px 0 0 0;
+        border-top: 1px solid color($colors, gray-dark);
+        border-bottom: 1px solid color($colors, gray-dark);
+
+        &:first-of-type {
+          border-top: none !important;
+        }
+
+
+        .item-inner {
+          border-bottom: none !important;
+
+          ion-label {
+            margin-right: 0 !important;
+          }
+        }
+
+        .user-icon {
+          @include box(50px, 50px);
+          position: relative;
+          border: 1px solid color($colors, gray-dark);
+          border-radius: 50%;
+
+          ion-icon {
+            @include center();
+            font-size: 2.4rem;
+          }
+        }
+
+        .user-information {
+          @include vertical-center();
+          padding-left: 10px !important;
+          word-break: break-all !important;
+          overflow: hidden;
+
+          p {
+            //color: color($colors, text-dark) !important;
+            word-break: break-all !important;
+            white-space:normal !important;
+          }
+        }
+
+        .actions-column {
+          padding: 0 !important;
+
+          .remove-from-queue-button {
+            @include box(32px, 32px);
+            @include vertical-center();
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+}

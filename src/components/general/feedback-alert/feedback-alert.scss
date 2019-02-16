@@ -1,0 +1,51 @@
+@import '../../../theme/default';
+
+feedback-alert {
+  .feedback-alert {
+    @include center();
+    position: absolute !important;
+    z-index: 999;
+    width: 60%;
+    height: 250px;
+    border-radius: 25px;
+    overflow: hidden;
+    opacity: 0;
+    transition-property: opacity;
+    transition: 0.5s ease-in-out;
+    pointer-events: none !important;
+
+    &.visible {
+      opacity: 1.0;
+      backdrop-filter: blur(7px) !important;
+    }
+
+    .bg {
+      @include box(100%, 100%);
+      position: absolute;
+      background: color($colors, gray-medium);
+      opacity: 0.4;
+    }
+
+    .content {
+      @include box(100%, 100%);
+      position: absolute;
+      z-index: 999;
+
+      .message {
+        @include center();
+        padding: 5px 15px;
+        color: color($colors, gray-extra-dark);
+        text-align: center;
+
+        .icon {
+          font-size: 6rem;
+          margin-bottom: 10px;
+        }
+
+        .title {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
-import {CreateMeetingEventDelegate} from "../../add-new-meeting/create-meeting-event-delegate";
-import {CreateSuggestionEventDelegate} from "../../add-new-suggestion/create-suggestion-event-delegate";
-import {ParticipantsManagerDelegate} from "../../../../components/participants-manager/participants-manager-delegate";
+import {CreateMeetingEventDelegate} from "../../create-new-meeting/create-meeting-event-delegate";
+import {CreateSuggestionEventDelegate} from "../../../suggestions/create-new-suggestion/create-suggestion-event-delegate";
+import {ParticipantsManagerDelegate} from "../../../../components/participants/participants-manager/participants-manager-delegate";
 import {MeetingProgress} from "../../../../models/meeting-progress";
 
 /**

@@ -1,0 +1,40 @@
+@import '../../../theme/default';
+
+page-create-new-suggestion {
+
+    ion-navbar {
+        ion-buttons {
+            button {
+                font-size: 2.4rem !important;
+            }
+        }
+        ion-icon {
+            color: color($colors, light) !important;
+        }
+    }
+
+    ion-content{
+        background-color: color($colors, gray-light) !important;
+
+        ion-icon{
+            color: color($colors, primary) !important;
+            font-size: 2.4rem;
+            margin-top: 20px !important;
+            margin-left: 10px;
+        }
+
+        .datetime-ios {
+            padding: 0 !important;
+        }
+
+        #createNewSuggestionButton {
+            @include box(100%, 55px);
+            position: absolute;
+            bottom: 0;
+        }
+
+        ion-fab[bottom] {
+            bottom: 7rem;
+        }
+    }
+}

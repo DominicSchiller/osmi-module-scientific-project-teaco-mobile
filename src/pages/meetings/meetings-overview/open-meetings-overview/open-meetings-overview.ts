@@ -11,15 +11,15 @@ import {
 import {TeaCoApiProvider} from "../../../../providers/teaco-api/teaco-api-provider";
 import {Meeting} from "../../../../models/meeting";
 import {UserSessionProvider} from "../../../../providers/user-session/user-session";
-import {OpenMeetingCardComponent} from "../../../../components/open-meeting-card/open-meeting-card";
+import {OpenMeetingCardComponent} from "../../../../components/meetings/open-meeting-card/open-meeting-card";
 import {MeetingType} from "../../../../models/MeetingType";
 import {TeaCoSyncMode} from "../../../../models/teaco-sync-mode";
 import {Suggestion} from "../../../../models/suggestion";
 import {EditMeetingEventDelegate} from "./edit-meeting-event-delegate";
 import {User} from "../../../../models/user";
 import {MeetingProgress} from "../../../../models/meeting-progress";
-import {LoadingIndicatorComponent} from "../../../../components/loading-indicator/loading-indicator";
-import {FeedbackAlertComponent} from "../../../../components/feedback-alert/feedback-alert";
+import {LoadingIndicatorComponent} from "../../../../components/general/loading-indicator/loading-indicator";
+import {FeedbackAlertComponent} from "../../../../components/general/feedback-alert/feedback-alert";
 
 /**
  * Page Controller for listing all open meetings.
@@ -146,7 +146,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    */
   private goToNewMeetingPage(){
     this.modalCtrl.create(
-        'AddNewMeetingPage',
+        'CreateNewMeetingPage',
         {
           'delegate': this
         }
@@ -161,7 +161,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
   private goToNewSuggestionPage(meeting: Meeting, slidingItem: ItemSliding){
     slidingItem.close();
     this.modalCtrl.create(
-        'AddNewSuggestionPage',
+        'CreateNewSuggestionPage',
         {
           'meeting': meeting,
           'delegate': this,

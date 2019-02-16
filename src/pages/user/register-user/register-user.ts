@@ -1,7 +1,7 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import { TeaCoApiProvider } from "../../../providers/teaco-api/teaco-api-provider";
-import { LoadingIndicatorComponent } from "../../../components/loading-indicator/loading-indicator";
+import { LoadingIndicatorComponent } from "../../../components/general/loading-indicator/loading-indicator";
 import { MeetingsOverviewPage } from "../../meetings/meetings-overview/meetings-overview";
 import { UserSessionProvider } from "../../../providers/user-session/user-session";
 import { forwardRef } from '@angular/core';

@@ -15,12 +15,12 @@ import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider"
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {Suggestion} from "../../../models/suggestion";
 import {Observable} from "rxjs";
-import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
+import {CreateSuggestionEventDelegate} from "../../suggestions/create-new-suggestion/create-suggestion-event-delegate";
 import {EditMeetingEventDelegate} from "../meetings-overview/open-meetings-overview/edit-meeting-event-delegate";
 import {MeetingUtils, SortOrder} from "../../../utils/meeting-utils";
-import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
-import {FeedbackAlertComponent} from "../../../components/feedback-alert/feedback-alert";
-import {InputCardComponent} from "../../../components/input-card/input-card";
+import {LoadingIndicatorComponent} from "../../../components/general/loading-indicator/loading-indicator";
+import {FeedbackAlertComponent} from "../../../components/general/feedback-alert/feedback-alert";
+import {InputCardComponent} from "../../../components/general/input-card/input-card";
 import {VoteDecision} from "../../../models/vote-decision";
 import {DateTimeHelper} from "../../../utils/date-time-helper";
 
@@ -269,7 +269,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   private goToNewSuggestionPage(){
     this.meeting.subscribe(meeting => {
       this.navCtrl.push(
-          'AddNewSuggestionPage',
+          'CreateNewSuggestionPage',
           {
             'meeting': meeting ,
             'delegate': this,
