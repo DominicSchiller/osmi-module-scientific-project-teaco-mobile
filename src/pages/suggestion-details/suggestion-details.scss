@@ -86,7 +86,7 @@ page-suggestion-details {
 
           &.self-user-row {
             .user-icon {
-              border-color: color($colors, secondary);
+              border-color: color($colors, secondary) !important;
               ion-icon {
                 color: color($colors, secondary);
               }
@@ -120,6 +120,7 @@ page-suggestion-details {
           .name-label {
             @include vertical-center();
             position: absolute !important;
+            font-size: 1.5rem;
 
           }
         }

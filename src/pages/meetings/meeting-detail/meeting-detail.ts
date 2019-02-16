@@ -1,6 +1,7 @@
 import {Component, ElementRef, forwardRef, NgZone, Renderer2, ViewChild} from '@angular/core';
 import {
-  AlertController, Events,
+  AlertController,
+  Events,
   IonicPage,
   ItemSliding,
   Navbar,
@@ -20,6 +21,8 @@ import {MeetingUtils} from "../../../utils/meeting-utils";
 import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
 import {FeedbackAlertComponent} from "../../../components/feedback-alert/feedback-alert";
 import {InputCardComponent} from "../../../components/input-card/input-card";
+import {VoteDecision} from "../../../models/vote-decision";
+import {DateTimeHelper} from "../../../utils/date-time-helper";
 
 /**
  * Page Controller for meeting details.
@@ -47,6 +50,8 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    * The page's navigation bar UI element
    */
   @ViewChild(Navbar) navBar: Navbar;
+
+  @ViewChild('meetingDetailsSlider') meetingDetailsSlider: Slides;
   /**
    * The pages 'finish the meeting planning' action sheet UI element
    */
@@ -64,6 +69,9 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
    * Currently active refresher UI component
    */
   protected listRefresher: Refresher;
+
+  private activeUserId: number;
+  private voteDecisions: Map<number, Object>;
 
   /**
    * The selected meeting's unique TeaCo id
@@ -122,6 +130,10 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       private alertCtrl: AlertController,
       private zone: NgZone,
       private events: Events) {
+    this.userSession.getActiveUser().then(activeUser => {
+      this.activeUserId = activeUser.id;
+    });
+    this.voteDecisions = new Map<number, Object>();
     this.pickedSuggestions = [];
     this.comment = "";
     this.location = "";
@@ -131,6 +143,40 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
     if(meeting !== undefined) {
       this.meeting = Observable.of(meeting)
     }
+
+    this.events.subscribe('voted', () => {
+      this.determineVoteDecisions();
+    });
+  }
+
+  private determineVoteDecisions() {
+    this.meeting.subscribe(meeting => {
+      meeting.participants.forEach(participant => {
+        let suggestionVote = {};
+        meeting.suggestions.forEach(suggestion => {
+          suggestion.votes.forEach(vote => {
+            if (vote.voterId == participant.id) {
+              switch(vote.decision) {
+                case VoteDecision.yes:
+                  suggestionVote[suggestion.id] = 'teaco-voted-yes';
+                  break;
+                case VoteDecision.no:
+                  suggestionVote[suggestion.id] =  'teaco-voted-no';
+                  break;
+                case VoteDecision.maybe:
+                  suggestionVote[suggestion.id] = 'teaco-voted-maybe';
+                  break;
+                default:
+                  suggestionVote[suggestion.id] =  'teaco-voted-dont-know';
+                  break;
+              }
+              return;
+            }
+          });
+        });
+        this.voteDecisions[participant.id] = suggestionVote;
+      });
+    });
   }
 
   ngOnInit() {
@@ -151,6 +197,19 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       // todo something
       this.goBack();
     };
+
+    // disable switching slides via swipe gesture
+    // this.meetingDetailsSlider.lockSwipes(true);
+  }
+
+  ionViewWillEnter() {
+
+  }
+
+  private showMeetingDetailsSlide(index: number) {
+    this.meetingDetailsSlider.lockSwipes(false);
+    this.meetingDetailsSlider.slideTo(index);
+    this.meetingDetailsSlider.lockSwipes(true);
   }
 
   /**
@@ -167,6 +226,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
          meeting.numberOfSuggestions = meeting.suggestions.length;
          MeetingUtils.recalculateMeetingStatus(meeting);
          this.meeting = Observable.of(meeting);
+         this.determineVoteDecisions();
          if(this.listRefresher) {
            this.listRefresher.complete();
            this.listRefresher = null;
@@ -432,5 +492,29 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
     setTimeout( () => {
       this.loadingIndicator.hide();
     }, 400);
+  }
+
+  /**
+   * Get the suggestion's year.
+   * @return the suggestion's year
+   */
+  private getYear(suggestion: Suggestion): string {
+    return suggestion.date.getFullYear().toString().substr(2, 2);
+  }
+
+  /**
+   * Get the suggestion's month.
+   * @return the suggestion's month
+   */
+  private getMonth(suggestion: Suggestion): string {
+    return DateTimeHelper.getMonthName(suggestion.date).substr(0, 3);
+  }
+
+  /**
+   * Get the suggestion's full time span from start to end time.
+   * @return The suggestion's full time span
+   */
+  private getTime(date: Date): string {
+    return DateTimeHelper.getTimeString(date);
   }
 }

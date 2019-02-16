@@ -1,6 +1,6 @@
 import {Component, Input, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
 import {Vote} from "../../models/vote";
-import {FabButton} from "ionic-angular";
+import {Events, FabButton} from "ionic-angular";
 import {VoteDecision} from "../../models/vote-decision";
 import {UserSessionProvider} from "../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../providers/teaco-api/teaco-api-provider";
@@ -40,7 +40,7 @@ export class QuickVoteComponent {
   /**
    * Default Constructor
    */
-  constructor(private userSession: UserSessionProvider, private apiService: TeaCoApiProvider) {}
+  constructor(private userSession: UserSessionProvider, private apiService: TeaCoApiProvider, private events: Events) {}
 
   ngOnInit() {
     if(this.vote !== undefined) {
@@ -140,6 +140,7 @@ export class QuickVoteComponent {
             this.vote
         ).subscribe(() => {
           console.log('successfully updated vote on TeaCo');
+          this.events.publish('voted');
         }, error => {
           console.error(error.toString());
           this.vote.decision = oldDecision;
@@ -148,7 +149,6 @@ export class QuickVoteComponent {
         });
       });
     }
-
   }
 
 }
