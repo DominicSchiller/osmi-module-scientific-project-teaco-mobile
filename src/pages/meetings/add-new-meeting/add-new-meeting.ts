@@ -5,7 +5,6 @@ import {User} from "../../../models/user";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {Suggestion} from "../../../models/suggestion";
-import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
 import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
 import {ParticipantsManagerDelegate} from "../../../components/participants-manager/participants-manager-delegate";
 import {CreateMeetingEventDelegate} from "./create-meeting-event-delegate";
@@ -52,36 +51,12 @@ export class AddNewMeetingPage implements CreateSuggestionEventDelegate, Partici
     this.navCtrl.pop().then();
   }
 
-  goToAddParticipantPage() {
-    this.navCtrl.push('AddParticipantPage',
-        {
-          'meeting': this.meeting,
-          'syncMode': TeaCoSyncMode.noDataSync,
-          'delegate': this
-        },
-        {animate:true,animation:'transition',duration:500,direction:'forward'}).then();
-  }
-
-  goToAddSuggestionPage() {
-    this.navCtrl.push('AddNewSuggestionPage',
-        {
-          'meeting': this.meeting,
-          'syncMode': TeaCoSyncMode.noDataSync,
-          'delegate': this
-        },
-        {animate:true,animation:'transition',duration:500,direction:'forward'}).then();
-  }
-
   private onTitleEntered(event: EventEmitter<any>) {
     this.meeting.title = event[0];
   }
 
   private onLocationEntered(event: EventEmitter<any>) {
     this.meeting.location = event[0];
-  }
-
-  private onCommentEntered(event: EventEmitter<any>) {
-    this.comment = event[0];
   }
 
   private createMeeting() {
