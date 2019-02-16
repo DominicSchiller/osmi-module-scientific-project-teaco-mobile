@@ -212,7 +212,6 @@ export class TeaCoApiProvider {
               responseData.forEach(userData => {
                  users.push(User.of(userData));
               });
-              console.log(users);
               return users;
           });
   }

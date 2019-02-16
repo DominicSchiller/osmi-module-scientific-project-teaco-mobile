@@ -5,7 +5,6 @@ import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider"
 import {User} from "../../../models/user";
 import {ParticipantsManagerDelegate} from "../../../components/participants-manager/participants-manager-delegate";
 import {Meeting} from "../../../models/meeting";
-import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
 import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
 import {FeedbackAlertComponent} from "../../../components/feedback-alert/feedback-alert";
 import {ParticipantsManager} from "../../../components/participants-manager/participants-manager";
@@ -109,22 +108,21 @@ export class AddParticipantPage implements ParticipantsManagerDelegate{
    */
   private finish() {
     this.loadingIndicator.show();
-    console.log(this.participants, this.meeting);
-    // this.userSession.getActiveUser().then(activeUser => {
-    //   this.apiService.addParticipants(activeUser.key, this.meeting.id, this.participants)
-    //       .subscribe(() => {
-    //         setTimeout(() => {
-    //           this.loadingIndicator.hide();
-    //           this.feedbackAlert.presentWith(
-    //               "Teilnehmer hinzugefügt",
-    //               "Der Teilnehmer wurde erfolgreich zur Abstimmung hinzugefügt.",
-    //               "teaco-user")
-    //               .then(() => {
-    //                 this.goBack();
-    //               });
-    //         }, 400);
-    //       });
-    // });
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.addParticipants(activeUser.key, this.meeting.id, this.participants)
+          .subscribe(() => {
+            setTimeout(() => {
+              this.loadingIndicator.hide();
+              this.feedbackAlert.presentWith(
+                  "Teilnehmer hinzugefügt",
+                  "Der Teilnehmer wurde erfolgreich zur Abstimmung hinzugefügt.",
+                  "teaco-user")
+                  .then(() => {
+                    this.goBack();
+                  });
+            }, 400);
+          });
+    });
   }
 
   onParticipantsUpdated(participants: User[]) {

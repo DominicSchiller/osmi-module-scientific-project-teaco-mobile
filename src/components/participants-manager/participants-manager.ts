@@ -5,10 +5,10 @@ import {UserSessionProvider} from "../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../providers/teaco-api/teaco-api-provider";
 
 /**
- * Generated class for the ParticipantsManager component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
+ * Custom component dedicated to manage participants associated to
+ * a meeting. It includes a search field as well as a list showing all
+ * already invited participants and offers capabilities for adding or removing
+ * those.
  */
 @Component({
   selector: 'participants-manager',
