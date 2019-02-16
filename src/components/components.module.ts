@@ -10,6 +10,7 @@ import { InputCardComponent } from './input-card/input-card';
 import { ParticipantsListCardComponent } from './participants-list-card/participants-list-card';
 import { SuggestionsListCardComponent } from './suggestions-list-card/suggestions-list-card';
 import { FeedbackAlertComponent } from './feedback-alert/feedback-alert';
+import { ParticipantsManager } from './participants-manager/participants-manager';
 @NgModule({
 	declarations: [
 	    LoadingIndicatorComponent,
@@ -21,6 +22,7 @@ import { FeedbackAlertComponent } from './feedback-alert/feedback-alert';
         ParticipantsListCardComponent,
         SuggestionsListCardComponent,
         FeedbackAlertComponent,
+        ParticipantsManager,
     ],
 	imports: [
         IonicModule
@@ -36,7 +38,8 @@ import { FeedbackAlertComponent } from './feedback-alert/feedback-alert';
         InputCardComponent,
         ParticipantsListCardComponent,
         SuggestionsListCardComponent,
-    FeedbackAlertComponent
+    FeedbackAlertComponent,
+    ParticipantsManager
     ]
 })
 export class ComponentsModule {}

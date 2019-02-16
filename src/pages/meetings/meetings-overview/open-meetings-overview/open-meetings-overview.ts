@@ -268,12 +268,12 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
     });
   }
 
-  onParticipantsAdded(meetingId: number, participants: User[]) {
+  onParticipantsUpdated(participants: User[]) {
     this.meetings.forEach(meeting => {
-      if(meeting.id == meetingId) {
-        meeting.numberOfParticipants += participants.length;
-        return;
-      }
+      // if(meeting.id == meetingId) {
+      //   meeting.numberOfParticipants += participants.length;
+      //   return;
+      // }
     });
   }
 

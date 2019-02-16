@@ -1,13 +1,13 @@
 import {CreateMeetingEventDelegate} from "../../add-new-meeting/create-meeting-event-delegate";
 import {CreateSuggestionEventDelegate} from "../../add-new-suggestion/create-suggestion-event-delegate";
-import {AddParticipantsEventDelegate} from "../../add-participant/add-participants-event-delegate";
+import {ParticipantsManagerDelegate} from "../../../../components/participants-manager/participants-manager-delegate";
 import {MeetingProgress} from "../../../../models/meeting-progress";
 
 /**
  * Delegate interface which defines callback functions
  * for editing meetings.
  */
-export interface EditMeetingEventDelegate extends CreateMeetingEventDelegate, CreateSuggestionEventDelegate, AddParticipantsEventDelegate {
+export interface EditMeetingEventDelegate extends CreateMeetingEventDelegate, CreateSuggestionEventDelegate, ParticipantsManagerDelegate {
     /**
      * Callback function which will be called in case of
      * a suggestion has been deleted from a meeting.

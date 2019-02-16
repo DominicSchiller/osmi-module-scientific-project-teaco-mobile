@@ -3,11 +3,12 @@ import {IonicPage, Navbar, NavController, NavParams} from 'ionic-angular';
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {User} from "../../../models/user";
-import {AddParticipantsEventDelegate} from "./add-participants-event-delegate";
+import {ParticipantsManagerDelegate} from "../../../components/participants-manager/participants-manager-delegate";
 import {Meeting} from "../../../models/meeting";
 import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
 import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
 import {FeedbackAlertComponent} from "../../../components/feedback-alert/feedback-alert";
+import {ParticipantsManager} from "../../../components/participants-manager/participants-manager";
 
 /**
  * Page Controller for selecting and adding participants
@@ -18,7 +19,7 @@ import {FeedbackAlertComponent} from "../../../components/feedback-alert/feedbac
   selector: 'page-add-participant',
   templateUrl: 'add-participant.html',
 })
-export class AddParticipantPage {
+export class AddParticipantPage implements ParticipantsManagerDelegate{
   /**
    * The page's navigation bar UI element
    */
@@ -31,54 +32,20 @@ export class AddParticipantPage {
    * feedback alert UI component for displaying succeeded or failed REST api calls
    */
   @ViewChild(forwardRef(() => FeedbackAlertComponent)) feedbackAlert: FeedbackAlertComponent;
+
+  @ViewChild(ParticipantsManager) participantsManager: ParticipantsManager;
   /**
    * The associated meeting
    */
   private meeting: Meeting;
+
+  private participants: User[];
+
   /**
    * Status whether this page has been entered as modal dialog or not
    */
   private readonly isModalDialog: boolean = false;
-  /**
-   * Status whether the app is searching for existing participants or not.
-   */
-  private isSearching: boolean;
-  /**
-   * The current entered search term
-   */
-  protected searchTerm: string;
-  /**
-   * Status whether the currently entered search term
-   * represents a qualified email address or not.
-   */
-  private isSearchTermQualifiedEmail: boolean = false;
-  /**
-   * timeout task's ID which will trigger a
-   * fetch-request for getting suitable users from TeaCo.
-   */
-  private waitTimeoutID: number;
-  /**
-   * List of found users based on the entered search term
-   */
-  private foundUsers: User[];
-  /**
-   * Status if any user from the found users
-   * is selected or not.
-   */
-  private isUserSelected: boolean = false;
-  /**
-   * List of queued users which will be potentially added as participants
-   * to the corresponding meeting.
-   */
-  private queuedParticipants: User[];
-  /**
-   * The associated delegate to call in case of added participants
-   */
-  private delegate: AddParticipantsEventDelegate;
-  /**
-   * The data sync mode (keep data local or sync with TeaCo immediately)
-   */
-  private syncMode: TeaCoSyncMode;
+
 
   /**
    * Constructor
@@ -91,22 +58,13 @@ export class AddParticipantPage {
               public navParams: NavParams,
               private userSession: UserSessionProvider,
               private apiService: TeaCoApiProvider) {
+    this.meeting = this.navParams.get('meeting');
     // check if page is launched as modal dialog
     if(this.navCtrl.getActive() !== undefined) {
       this.isModalDialog = this.navCtrl.getActive().component.name !== 'AddNewMeetingPage';
     } else {
       this.isModalDialog = true;
     }
-    this.isSearching = false;
-    this.searchTerm = "";
-    this.waitTimeoutID = -1;
-    this.foundUsers = [];
-    this.queuedParticipants = [];
-    this.meeting = navParams.get('meeting');
-    this.delegate = navParams.get('delegate');
-    let syncMode = this.navParams.get('syncMode');
-    this.syncMode = syncMode !== undefined ? syncMode : TeaCoSyncMode.syncData;
-    console.warn("Sync mode: ", this.syncMode);
   }
 
   ionViewDidLoad() {
@@ -115,6 +73,20 @@ export class AddParticipantPage {
       // todo something
       this.goBack();
     };
+
+    // init user list
+    if(this.meeting && this.meeting.id > -1 && this.meeting.participants.length == 0) {
+      this.loadingIndicator.show();
+      this.userSession.getActiveUser().then(activeUser => {
+        this.apiService.getAllParticipants(activeUser.key, this.meeting.id)
+            .subscribe(participants => {
+              this.participants = participants;
+              setTimeout(() => {
+                this.loadingIndicator.hide();
+              }, 400);
+            });
+      });
+    }
   }
 
   /**
@@ -133,159 +105,29 @@ export class AddParticipantPage {
   }
 
   /**
-   * Callback which handles each search inputs'
-   * keypress event.
-   */
-  private onSearchWordTyped() {
-    if(this.waitTimeoutID > -1) {
-      clearTimeout(this.waitTimeoutID);
-    }
-    if(this.searchTerm.length >= 3) {
-      this.waitTimeoutID = setTimeout(() => {
-        this.performSearch();
-      }, 800);
-    } else {
-      this.foundUsers = [];
-    }
-    // check if qualified email address
-    let atIndex = this.searchTerm.indexOf('@'); // index of @ sign
-    let dotIndex = this.searchTerm.lastIndexOf('.');
-    let domain = this.searchTerm.substring(atIndex+1, dotIndex);
-    let countryCode = this.searchTerm.substr(dotIndex+1);
-    this.isSearchTermQualifiedEmail =
-        atIndex > 0 &&
-        dotIndex > 0 &&
-        atIndex < dotIndex &&
-        domain.length >=3 &&
-        countryCode.length >= 2;
-  }
-
-  /**
-   * Performs a users lookup on TeaCo.
-   */
-  private performSearch() {
-    this.isSearching = true;
-    this.userSession.getActiveUser().then(activeUser => {
-      this.apiService.getUserByEmail(activeUser.key, this.searchTerm)
-          .subscribe(users => {
-            // init selected property
-            users.forEach(user => {
-              (<any>user).selected = false;
-            });
-            this.queuedParticipants.forEach(queuedParticipant => {
-              users.forEach(user => {
-                if(queuedParticipant.id == user.id) {
-                  (<any>user).selected = true;
-                }
-              });
-            });
-            this.foundUsers = users;
-            setTimeout(() => {
-             this.isSearching = false;
-            }, 200);
-          }, error => {
-            console.log("No users found for search term...");
-          });
-    });
-  }
-
-  /**
-   * Verifies if any user from the search results got
-   * selected by the user or not.
-   */
-  private verifySelectedUsers(index: number) {
-    (<any>this.foundUsers[index]).selected = !(<any>this.foundUsers[index]).selected;
-    this.isUserSelected = this.foundUsers.length > 0 &&
-        this.getSelectedUsers().length > 0;
-  }
-
-  /**
-   * Get all selected user's from the search results.
-   */
-  private getSelectedUsers(): User[] {
-    let checkedResults: User[] = [];
-    this.foundUsers.forEach(result => {
-      if((<any>result).selected) {
-        checkedResults.push(result);
-      }
-    });
-    return checkedResults;
-  }
-
-  /**
-   * Action callback which removes a certain
-   * users from the participants queue.
-   * @param index The user's index within the queue
-   */
-  private onRemoveParticipantFromQueue(index: number) {
-    this.queuedParticipants.splice(index, 1);
-  }
-
-  /**
-   * Add selected users from the search results to the
-   * participants queue. If there's no user selected but
-   * the email-address is qualified, a new Users with the
-   * entered email-address will be added.
-   */
-  private onAddParticipantsToQueue() {
-    let checkedResults = this.getSelectedUsers();
-    if(checkedResults.length > 0) {
-      checkedResults.forEach(checkedResult => {
-        let isContained = false;
-        this.queuedParticipants.forEach(queuedUser => {
-          if(checkedResult.id == queuedUser.id) {
-            isContained = true;
-            return;
-          }
-        });
-        if(!isContained) {
-          this.queuedParticipants.push(checkedResult);
-        }
-      });
-      this.foundUsers = [];
-      this.isUserSelected = false;
-    } else {
-      // take the search term and create a user from it
-      let user = new User();
-      user.email = this.searchTerm;
-      this.queuedParticipants.push(user);
-    }
-    this.searchTerm = "";
-  }
-
-  /**
    * Finish adding participants.
    */
   private finish() {
-    switch(this.syncMode) {
-      case TeaCoSyncMode.syncData:
-        this.loadingIndicator.show();
-        this.userSession.getActiveUser().then(activeUser => {
-          this.apiService.addParticipants(activeUser.key, this.meeting.id, this.queuedParticipants)
-              .subscribe(() => {
-                console.log("Successfully added participant to meeting on TeaCo");
-                if(this.delegate !== undefined) {
-                  this.delegate.onParticipantsAdded(this.meeting.id, this.queuedParticipants);
-                }
-               setTimeout(() => {
-                 this.loadingIndicator.hide();
-                 this.feedbackAlert.presentWith(
-                     "Teilnehmer hinzugefügt",
-                     "Der Teilnehmer wurde erfolgreich zur Abstimmung hinzugefügt.",
-                     "teaco-user")
-                     .then(() => {
-                       this.goBack();
-                     });
-               }, 400);
-              });
-        });
-        break;
-      case TeaCoSyncMode.noDataSync:
-        if(this.delegate !== undefined) {
-          this.delegate.onParticipantsAdded(this.meeting.id, this.queuedParticipants);
-        }
-        this.goBack();
-        break;
-    }
+    this.loadingIndicator.show();
+    console.log(this.participants, this.meeting);
+    // this.userSession.getActiveUser().then(activeUser => {
+    //   this.apiService.addParticipants(activeUser.key, this.meeting.id, this.participants)
+    //       .subscribe(() => {
+    //         setTimeout(() => {
+    //           this.loadingIndicator.hide();
+    //           this.feedbackAlert.presentWith(
+    //               "Teilnehmer hinzugefügt",
+    //               "Der Teilnehmer wurde erfolgreich zur Abstimmung hinzugefügt.",
+    //               "teaco-user")
+    //               .then(() => {
+    //                 this.goBack();
+    //               });
+    //         }, 400);
+    //       });
+    // });
+  }
+
+  onParticipantsUpdated(participants: User[]) {
+    this.participants = participants;
   }
 }

@@ -46,6 +46,10 @@ export class TeaCoApiProvider {
    */
   private readonly finishMeetingAPIEndpint = "/finish";
   /**
+   * The API endpoint to get all participants e.g. from a meeting
+   */
+  private readonly getAllParticipantsAPIEndpoint = '/participants';
+  /**
    * The API endpoint to add participants to an existing meeting
    */
   private readonly addParticipantAPIEndpoint = "/add_participant";
@@ -188,6 +192,28 @@ export class TeaCoApiProvider {
       return this.http.post<Meeting>(url, postData, requestOptions)
           .map(data => {
               return Meeting.of(data);
+          });
+  }
+
+  /**
+   * Get all participants from an existing meeting.
+   * @param userKey The registered user's unique key
+   * @param meetingID The meeting instance to which to add the selected participants to
+   */
+  getAllParticipants(userKey: string, meetingID: number): Observable<User[]> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl + this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.getAllParticipantsAPIEndpoint;
+      return this.http.get<User[]>(url, requestOptions)
+          .map(responseData => {
+              if(responseData === null) {
+                  throw new Error("No user found for this key");
+              }
+              let users: User[] = [];
+              responseData.forEach(userData => {
+                 users.push(User.of(userData));
+              });
+              console.log(users);
+              return users;
           });
   }
 

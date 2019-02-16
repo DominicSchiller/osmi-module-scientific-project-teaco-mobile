@@ -7,7 +7,7 @@ import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider"
 import {Suggestion} from "../../../models/suggestion";
 import {TeaCoSyncMode} from "../../../models/teaco-sync-mode";
 import {CreateSuggestionEventDelegate} from "../add-new-suggestion/create-suggestion-event-delegate";
-import {AddParticipantsEventDelegate} from "../add-participant/add-participants-event-delegate";
+import {ParticipantsManagerDelegate} from "../../../components/participants-manager/participants-manager-delegate";
 import {CreateMeetingEventDelegate} from "./create-meeting-event-delegate";
 import {LoadingIndicatorComponent} from "../../../components/loading-indicator/loading-indicator";
 
@@ -22,7 +22,7 @@ import {LoadingIndicatorComponent} from "../../../components/loading-indicator/l
   selector: 'page-add-new-meeting',
   templateUrl: 'add-new-meeting.html',
 })
-export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddParticipantsEventDelegate {
+export class AddNewMeetingPage implements CreateSuggestionEventDelegate, ParticipantsManagerDelegate {
 
   /**
    * loading indicator UI component
@@ -100,7 +100,7 @@ export class AddNewMeetingPage implements CreateSuggestionEventDelegate, AddPart
     });
   }
 
-  onParticipantsAdded(meetingId:number, participants: User[]) {
+  onParticipantsUpdated(participants: User[]) {
     this.meeting.participants = participants;
   }
 
