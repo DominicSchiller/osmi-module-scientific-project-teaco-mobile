@@ -125,7 +125,9 @@ export class AddParticipantPage implements ParticipantsManagerDelegate{
     });
   }
 
-  onParticipantsUpdated(participants: User[]) {
-    this.participants = participants;
+  onParticipantAdded(participant: User) {
+  }
+
+  onParticipantRemoved(participant: User) {
   }
 }

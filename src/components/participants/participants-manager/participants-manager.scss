@@ -150,7 +150,7 @@ participants-manager {
 
         .user-information {
           @include vertical-center();
-          padding-left: 10px !important;
+          padding: 0 5px 0 10px !important;
           word-break: break-all !important;
           overflow: hidden;
 
@@ -167,10 +167,30 @@ participants-manager {
           .remove-from-queue-button {
             @include box(32px, 32px);
             @include vertical-center();
-            border-radius: 50%;
+            border-radius: 50% !important;
+            background-color: color($colors, gray-medium) !important;
+
+            ion-icon {
+              color: color($colors, gray-extra-dark);
+            }
+
+            &.active {
+              background-color: color($colors, primary) !important;
+              ion-icon {
+                color: white;
+              }
+            }
           }
         }
       }
     }
+  }
+
+  #add-participants-button, #remove-participants-button {
+    @include box(100%, 55px);
+    position: absolute;
+    left: 0;
+    bottom: -4px !important;
+    z-index: 900;
   }
 }

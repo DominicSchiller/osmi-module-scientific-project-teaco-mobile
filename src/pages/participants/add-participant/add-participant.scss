@@ -15,12 +15,5 @@ page-add-participant {
   }
 
   ion-content {
-    #add-participants-button {
-      @include box(100%, 55px);
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      z-index: 900;
-    }
   }
 }

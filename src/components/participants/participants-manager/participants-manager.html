@@ -1,7 +1,7 @@
 <form id="search-bar" #f="ngForm" (ngSubmit)="onAddParticipantsToQueue()">
   <div id="search-input">
     <ion-icon id="search-icon" name="teaco-email" color="primary"></ion-icon>
-    <ion-input type="email" autofocus="true"
+    <ion-input type="email"
                placeholder="E-Mail des Teilnehmers ..."
                [(ngModel)]="searchTerm"
                (keyup)="onSearchWordTyped()" email name="search-term-input">
@@ -52,8 +52,8 @@
         </ion-col>
         <ion-col col-auto class="actions-column">
           <button ion-button class="remove-from-queue-button"
-                  color="primary"
-                  (click)="onRemoveParticipantFromQueue(i)">
+                  [ngClass]="isContainedInRemoveQueue(participant) ? 'active': ''"
+                  (click)="onRemoveSelected(i)">
             <ion-icon name="close" class="bold"></ion-icon>
           </button>
         </ion-col>
@@ -61,3 +61,15 @@
     </ion-item>
   </ion-scroll>
 </section>
+<button id="add-participants-button" ion-button full
+        class="mediumSize medium"
+        [hidden]="queuedParticipantsToInvite.length == 0"
+        (click)="finish()">
+  Teilnehmer einladen
+</button>
+<button id="remove-participants-button" ion-button full
+        class="mediumSize medium"
+        [hidden]="queuedParticipantsToRemove.length == 0"
+        (click)="finish()">
+  Teilnehmer ausladen
+</button>

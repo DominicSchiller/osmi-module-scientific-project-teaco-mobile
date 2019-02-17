@@ -53,14 +53,18 @@ export class ParticipantsManager {
    */
   @Input('participants') participants: User[];
 
+  private queuedParticipantsToInvite: User[];
+
+  private queuedParticipantsToRemove: User[];
+
   constructor(private userSession: UserSessionProvider, private apiService: TeaCoApiProvider) {
     this.isSearching = false;
     this.searchTerm = "";
     this.waitTimeoutID = -1;
     this.foundUsers = [];
     this.participants = [];
-    // this.meeting = navParams.get('meeting');
-    // this.delegate = navParams.get('delegate');
+    this.queuedParticipantsToInvite = [];
+    this.queuedParticipantsToRemove = [];
   }
 
   /**
@@ -148,9 +152,38 @@ export class ParticipantsManager {
    * users from the participants queue.
    * @param index The user's index within the queue
    */
-  private onRemoveParticipantFromQueue(index: number) {
-    this.participants.splice(index, 1);
-    this.delegate.onParticipantsUpdated(this.participants);
+  private onRemoveSelected(index: number) {
+    let participant = this.participants[index];
+
+    for(let i=0; i<this.queuedParticipantsToRemove.length; i++) {
+      if(this.queuedParticipantsToRemove[i].id === participant.id) {
+        this.queuedParticipantsToRemove.splice(i, 1);
+        return;
+      }
+    }
+
+    // this.participants.splice(index, 1);
+    let ignore = false;
+    for(let i=0; i<this.queuedParticipantsToInvite.length; i++) {
+      if(this.queuedParticipantsToInvite[i].id === participant.id) {
+        ignore = true;
+        this.queuedParticipantsToInvite.splice(i, 1);
+        this.participants.splice(index, 1);
+        break;
+      }
+    }
+    if(!ignore) {
+      this.queuedParticipantsToRemove.push(participant);
+    }
+  }
+
+  private isContainedInRemoveQueue(participant: User): boolean {
+    for(let i=0; i<this.queuedParticipantsToRemove.length; i++) {
+      if(this.queuedParticipantsToRemove[i].id === participant.id) {
+       return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -172,17 +205,18 @@ export class ParticipantsManager {
         });
         if(!isContained) {
           this.participants.push(checkedResult);
+          this.queuedParticipantsToInvite.push(checkedResult);
         }
       });
       this.foundUsers = [];
       this.isUserSelected = false;
     } else {
       // take the search term and create a user from it
-      let user = new User();
-      user.email = this.searchTerm;
-      this.participants.push(user);
+      let participant = new User();
+      participant.email = this.searchTerm;
+      this.participants.push(participant);
+      this.queuedParticipantsToInvite.push(participant);
     }
     this.searchTerm = "";
-    this.delegate.onParticipantsUpdated(this.participants);
   }
 }

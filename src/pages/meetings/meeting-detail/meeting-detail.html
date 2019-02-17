@@ -78,11 +78,17 @@
         </ion-list>
       </ion-scroll>
       <button ion-button full
-              id="finishPlanningButton" class="normalSize medium" color="primary"
+              class="action-button normalSize medium" color="primary"
               (click)="openFinishPlanningActionSheet()"
-              [hidden]="(meeting | async)?.suggestionsCount == 0"
+              [hidden]="(meeting | async)?.numberOfParticipants == 1"
               [disabled]="pickedSuggestions.length == 0">
         Planung Abschließen
+      </button>
+      <button ion-button full
+              class="action-button normalSize medium" color="primary"
+              (click)="showMeetingDetailsSlide(1)"
+              [hidden]="(meeting | async)?.numberOfParticipants !== 1">
+        Weiter
       </button>
       <ion-fab bottom right id="createNewSuggestionButton">
         <button ion-fab color="primary" (click)="goToNewSuggestionPage()">
@@ -90,8 +96,10 @@
         </button>
       </ion-fab>
     </ion-slide>
-    <ion-slide>
-      Participamts page ...
+    <ion-slide class="swiper-no-swiping">
+      <div id="participants-manager-section">
+        <participants-manager [participants]="(meeting | async)?.participants"></participants-manager>
+      </div>
     </ion-slide>
     <ion-slide class="swiper-no-swiping">
       <ion-scroll scrollX="false" scrollY="true" id="planning-status-list">
@@ -152,7 +160,6 @@
         </ion-grid>
       </ion-scroll>
     </ion-slide>
-
   </ion-slides>
 
 

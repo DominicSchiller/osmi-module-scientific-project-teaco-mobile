@@ -71,6 +71,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   protected listRefresher: Refresher;
 
   private activeUserId: number;
+
   private voteDecisions: Map<number, Object>;
 
   /**
@@ -197,13 +198,10 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
       // todo something
       this.goBack();
     };
-
-    // disable switching slides via swipe gesture
-    // this.meetingDetailsSlider.lockSwipes(true);
   }
 
   ionViewWillEnter() {
-
+    this.showMeetingDetailsSlide(0);
   }
 
   private showMeetingDetailsSlide(index: number) {

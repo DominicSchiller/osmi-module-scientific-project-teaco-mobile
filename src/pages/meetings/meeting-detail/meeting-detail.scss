@@ -2,11 +2,11 @@
 
 page-meeting-detail {
 
-  #finishPlanningButton {
+  .action-button {
     @include box(100%, 55px);
     box-shadow: none;
     position: absolute !important;
-    bottom: 0;
+    bottom: -4px !important;
     z-index: 200;
   }
 
@@ -87,8 +87,56 @@ page-meeting-detail {
       }
     }
 
-    .fab {
-      bottom: 58px !important;
+    #suggestions-list {
+      width: 100% !important;
+      height: calc(100% - 55px) !important;
+
+      ion-item-sliding {
+        background-color: color($colors, gray-light) !important;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        ion-item {
+          background-color: color($colors, gray-light);
+
+          &, ion-label, .item-inner {
+            padding: 0 !important;
+            margin: 0 !important;
+            background-color: color($colors, gray-light);
+          }
+        }
+
+        &:last-of-type {
+          margin-bottom: 50px !important;
+        }
+
+        ion-item-options {
+          height: calc(100% - 15px) !important;
+          -webkit-box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+          box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+          background-color: #ffffff;
+
+          button {
+            width: 75px !important;
+            text-transform: none !important;
+
+            ion-icon {
+              font-size: 3.5rem !important;
+
+              &[class*="teaco"] {
+                margin-bottom: 5px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #participants-manager-section{
+      background-color: white !important;
+      @include box(100%, 100%);
+      padding: 15px !important;
+      position: relative !important;
     }
 
     #planning-status-list {
@@ -260,51 +308,6 @@ page-meeting-detail {
       }
     }
 
-    #suggestions-list {
-      width: 100% !important;
-      height: calc(100% - 55px) !important;
-
-      ion-item-sliding {
-        background-color: color($colors, gray-light) !important;
-        margin: 0 !important;
-        padding: 0 !important;
-
-        ion-item {
-          background-color: color($colors, gray-light);
-
-          &, ion-label, .item-inner {
-            padding: 0 !important;
-            margin: 0 !important;
-            background-color: color($colors, gray-light);
-          }
-        }
-
-        &:last-of-type {
-          margin-bottom: 50px !important;
-        }
-
-        ion-item-options {
-          height: calc(100% - 15px) !important;
-          -webkit-box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
-          box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
-          background-color: #ffffff;
-
-          button {
-            width: 75px !important;
-            text-transform: none !important;
-
-            ion-icon {
-              font-size: 3.5rem !important;
-
-              &[class*="teaco"] {
-                margin-bottom: 5px;
-              }
-            }
-          }
-        }
-      }
-    }
-
     #createNewSuggestionButton {
       button {
         font-size: 3.0rem !important;
@@ -334,6 +337,10 @@ page-meeting-detail {
         -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
       }
+    }
+
+    .fab {
+      bottom: 58px !important;
     }
   }
 }

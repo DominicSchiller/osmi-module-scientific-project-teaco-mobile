@@ -8,7 +8,9 @@ export interface ParticipantsManagerDelegate {
     /**
      * Callback function which will be called in case of
      * a list of participants must be added.
-     * @param participants The list of participants which to add
+     * @param participant The list of participants which to add
      */
-    onParticipantsUpdated(participants: User[]);
+    onParticipantAdded(participant: User);
+
+    onParticipantRemoved(participant: User);
 }
