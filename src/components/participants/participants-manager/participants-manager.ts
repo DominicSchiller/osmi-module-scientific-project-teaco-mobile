@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, ElementRef, Input, Renderer2, ViewChild} from '@angular/core';
 import {User} from "../../../models/user";
 import {ParticipantsManagerDelegate} from "./participants-manager-delegate";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
@@ -20,6 +20,12 @@ export class ParticipantsManager {
    * The associated delegate to call in case of added participants
    */
   @Input('delegate') delegate: ParticipantsManagerDelegate;
+
+  @ViewChild('inviteParticipantsActionSheet') inviteActionSheet: ElementRef;
+  /**
+   * The pages overlay UI element for i.e. indicating stuff in progress
+   */
+  @ViewChild('actionOverlay') actionOverlay: ElementRef;
 
   /**
    * Status whether the app is searching for existing participants or not.
@@ -64,7 +70,12 @@ export class ParticipantsManager {
 
   private activeUserId: number = -1;
 
-  constructor(private userSession: UserSessionProvider, private apiService: TeaCoApiProvider) {
+  private invitationComment: string;
+
+  constructor(
+      private renderer: Renderer2,
+      private userSession: UserSessionProvider,
+      private apiService: TeaCoApiProvider) {
     this.isSearching = false;
     this.searchTerm = "";
     this.waitTimeoutID = -1;
@@ -73,6 +84,7 @@ export class ParticipantsManager {
     this.managedParticipants = [];
     this.queuedParticipantsToInvite = [];
     this.queuedParticipantsToRemove = [];
+    this.invitationComment = "";
 
     this.userSession.getActiveUser().then(activerUser => {
       this.activeUserId = activerUser.id;
@@ -247,12 +259,18 @@ export class ParticipantsManager {
    * Invite all queued participants to invite.
    */
   private inviteParticipants() {
+    this.closeInviteParticipantsActionSheet();
     if(this.delegate) {
       this.delegate.onSendParticipantsUpdate();
     }
     this.userSession.getActiveUser().then(activeUser => {
-      this.apiService.addParticipants(activeUser.key, this.meetingId, this.queuedParticipantsToInvite)
+      this.apiService.addParticipants(
+          activeUser.key,
+          this.meetingId,
+          this.queuedParticipantsToInvite,
+          this.invitationComment)
           .subscribe(() => {
+            this.invitationComment = "";
             if(this.delegate) {
               this.delegate.onParticipantsInvited(this.queuedParticipantsToInvite);
               this.queuedParticipantsToInvite = [];
@@ -285,5 +303,19 @@ export class ParticipantsManager {
             }
           });
     });
+  }
+
+  private openInviteParticipantsActionSheet() {
+    this.renderer.addClass(this.actionOverlay.nativeElement, 'active');
+    this.renderer.addClass(this.inviteActionSheet.nativeElement, 'active');
+  }
+
+  private closeInviteParticipantsActionSheet() {
+    this.renderer.removeClass(this.inviteActionSheet.nativeElement, 'active');
+    this.renderer.removeClass(this.actionOverlay.nativeElement, 'active');
+  }
+
+  onCommentEntered(event) {
+    this.invitationComment = event[0];
   }
 }

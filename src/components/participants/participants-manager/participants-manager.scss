@@ -5,6 +5,32 @@ participants-manager {
   display: flex !important;
   flex-direction: column !important;
 
+  .action-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 900;
+    @include box(100%, 100%);
+    background-color: #1e2126;
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition-property: all;
+    transition-property: all;
+    -webkit-transition-duration: 0.1s;
+    transition-duration: 0.1s;
+    -webkit-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
+
+    &.active {
+      visibility: visible;
+      opacity: 0.2;
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+  }
+
   .scroll-content {
     display: flex !important;
     flex-direction: column !important;
@@ -215,5 +241,57 @@ participants-manager {
     left: 0;
     bottom: -4px !important;
     z-index: 900;
+  }
+
+  #invite-participants-action-sheet {
+    @include box(100%, 260px);
+    top: 100%;
+    left: 0;
+    padding: 15px;
+    position: absolute;
+    z-index: 1000 !important;
+    background-color: white;
+    -webkit-transition-property: top;
+    transition-property: top;
+    -webkit-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -webkit-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+
+    &.active {
+      top: calc(100% - 260px) !important;
+    }
+
+    .card {
+      box-shadow: none !important;
+    }
+
+    #comment-input {
+      overflow: hidden;
+      .card, ion-textarea {
+        height: 150px !important;
+        max-height: 150px !important;
+        overflow-y: hidden;
+
+        textarea {
+          height: 150px !important;
+          max-height: 150px !important;
+          overflow-y: auto !important;
+        }
+      }
+      ion-icon {
+        margin-left: 6px !important;
+        margin-right: -1px !important;
+      }
+    }
+
+    #send-button {
+      @include box(100%, 55px);
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      background-color: color($colors, primary);
+      color: color($colors, light);
+    }
   }
 }

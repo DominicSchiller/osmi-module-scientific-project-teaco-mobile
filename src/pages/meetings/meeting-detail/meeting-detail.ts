@@ -38,7 +38,6 @@ import {User} from "../../../models/user";
   templateUrl: 'meeting-detail.html',
 })
 export class MeetingDetailPage implements CreateSuggestionEventDelegate, ParticipantsManagerDelegate {
-
   /**
    * loading indicator UI component
    */

@@ -442,7 +442,7 @@ page-meeting-detail {
   }
 }
 
-#finish_planning_section {
+#finish-planning-action-sheet {
   @include box(100%, 463px);
   top: 100%;
   position: absolute;
@@ -463,10 +463,19 @@ page-meeting-detail {
     @include box(100%, 15px);
     margin: 15px 0;
     text-align: center;
+    padding: 10px !important;
+  }
+
+  p {
+    padding: 10px !important;
   }
 
   .swiper-pagination-bullet-active {
     background-color: color($colors, primary) !important;
+  }
+
+  .swiper-slide {
+    align-items: flex-start;
   }
 
   .slide-zoom {
@@ -476,7 +485,8 @@ page-meeting-detail {
 
   .footer {
     @include box(100%, 75px);
-    position: relative;
+    position: absolute;
+    bottom: 0;
     background-color: color($colors, gray-light);
     border-top: 1px solid color($colors, gray-dark);
 
@@ -570,6 +580,17 @@ page-meeting-detail {
       margin: 0 10px;
       @include box(48px, 48px);
 
+    }
+  }
+}
+
+/* iPhone 5 Retina regardless of IOS version */
+@media (device-height : 568px) and (device-width : 320px) and (-webkit-min-device-pixel-ratio: 2) {
+  #finish-planning-action-sheet {
+    @include box(100%, 100%);
+
+    &.active {
+      top: calc(100% - 100%) !important;
     }
   }
 }

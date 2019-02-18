@@ -1,3 +1,5 @@
+<div class="action-overlay" #actionOverlay (click)="closeInviteParticipantsActionSheet()"></div>
+
 <form id="search-bar" #f="ngForm" (ngSubmit)="onAddParticipantsToQueue()">
   <div id="search-input">
     <ion-icon id="search-icon" name="teaco-email" color="primary"></ion-icon>
@@ -79,7 +81,7 @@
 <button id="add-participants-button" ion-button full
         class="mediumSize medium"
         [hidden]="queuedParticipantsToInvite.length == 0"
-        (click)="inviteParticipants()">
+        (click)="openInviteParticipantsActionSheet()">
   Teilnehmer einladen
 </button>
 <button id="remove-participants-button" ion-button full
@@ -88,3 +90,12 @@
         (click)="unInviteParticipants()">
   Teilnehmer ausladen
 </button>
+
+<div id="invite-participants-action-sheet" #inviteParticipantsActionSheet>
+  <input-card id="comment-input" type="text-area" icon="chatboxes" placeholder="Gib hier optional noch einen Kommentar ein ..."
+              (onChange)="onCommentEntered($event)"></input-card>
+  <button ion-button full id="send-button" class="normalSize medium"
+          (click)="inviteParticipants()">
+    Jetzt absenden
+  </button>
+</div>

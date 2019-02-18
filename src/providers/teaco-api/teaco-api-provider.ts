@@ -225,12 +225,14 @@ export class TeaCoApiProvider {
      * @param userKey The registered user's unique key
      * @param meetingID The meeting instance to which to add the selected participants to
      * @param participants List of participants which to add
+     * @param comment The invitation comment
      */
-  addParticipants(userKey: string, meetingID: number, participants: User[]): Observable<void> {
+  addParticipants(userKey: string, meetingID: number, participants: User[], comment: string): Observable<void> {
       const requestOptions = TeaCoApiProvider.getRequestOptions();
       const url = this.baseUrl + this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.addParticipantAPIEndpoint;
       let putData = {
-          "participant_ids": this.convertToIdList(participants)
+          "participant_ids": this.convertToIdList(participants),
+          "comment": comment
       };
       return this.http.put<void>(url, putData, requestOptions);
   }
