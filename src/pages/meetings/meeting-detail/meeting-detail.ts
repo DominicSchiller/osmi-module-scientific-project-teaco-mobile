@@ -66,6 +66,10 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
    * The pages overlay UI element for i.e. indicating stuff in progress
    */
   @ViewChild('actionOverlay') actionOverlay: ElementRef;
+  /**
+   * The pages overlay UI element for i.e. indicating stuff in progress
+   */
+  @ViewChild('tabSlider') tabSlider: ElementRef;
 
   /**
    * Currently active refresher UI component
@@ -210,6 +214,21 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
     this.meetingDetailsSlider.lockSwipes(false);
     this.meetingDetailsSlider.slideTo(index);
     this.meetingDetailsSlider.lockSwipes(true);
+
+    switch(index) {
+      case 0:
+        this.renderer.removeClass(this.tabSlider.nativeElement, 'right');
+        this.renderer.removeClass(this.tabSlider.nativeElement, 'middle');
+        break;
+      case 1:
+        this.renderer.removeClass(this.tabSlider.nativeElement, 'right');
+        this.renderer.addClass(this.tabSlider.nativeElement, 'middle');
+        break;
+      case 2:
+        this.renderer.removeClass(this.tabSlider.nativeElement, 'middle');
+        this.renderer.addClass(this.tabSlider.nativeElement, 'right');
+        break;
+    }
   }
 
   /**
@@ -409,7 +428,9 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
   private pickSuggestion(suggestion: Suggestion, index: number, slidingItem: ItemSliding) {
     this.meeting.subscribe(meeting => {
       suggestion.isPicked = !suggestion.isPicked; // set the opposite picked status
-      slidingItem.close();
+      if(slidingItem) {
+        slidingItem.close();
+      }
       meeting.suggestions[index] = suggestion;
       this.meeting = new Observable(observer => {observer.next(meeting)});
       this.userSession.getActiveUser().then(activeUser => {
@@ -454,6 +475,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
                   console.log("suggestion has been successfully deleted");
                   MeetingUtils.recalculateMeetingStatus(meeting);
                   this.meeting = new Observable(observer => {observer.next(meeting)});
+                  this.determineVoteDecisions();
                   if(this.delegate) {
                     this.delegate.onSuggestionDeleted(this.meetingId, suggestion.id);
                     this.delegate.onMeetingProgressChanged(meeting.id, meeting.progress);
@@ -488,8 +510,9 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
     this.meeting.subscribe(meeting => {
       meeting.suggestions.push(suggestion);
       meeting.numberOfSuggestions += 1;
-      MeetingUtils.recalculateMeetingStatus(meeting);
       this.meeting = new Observable(observer => {observer.next(meeting)});
+      MeetingUtils.recalculateMeetingStatus(meeting);
+      this.determineVoteDecisions();
       if(this.delegate) {
         this.delegate.onSuggestionCreated(suggestion);
         this.delegate.onMeetingProgressChanged(meeting.id, meeting.progress);

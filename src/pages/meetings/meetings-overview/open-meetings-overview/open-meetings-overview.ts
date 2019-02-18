@@ -118,18 +118,6 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
     this.loadMeetings(MeetingType.open);
   }
 
-  private showMeetingDetail(meeting: Meeting) {
-    this.navCtrl.push(
-        'MeetingDetailPage',
-        {
-          meeting: meeting,
-          'delegate': this,
-          meetingId: meeting.id
-        },
-        {animate:true,animation:'transition',duration:500,direction:'forward'}
-        ).then();
-  } 
-
   /**
    * Start repeating interval for updating each card's date label
    */
@@ -244,6 +232,18 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
     setTimeout( () => {
       this.loadingIndicator.hide();
     }, 400);
+  }
+
+  onShowMeetingDetail(meeting: Meeting) {
+    this.navCtrl.push(
+        'MeetingDetailPage',
+        {
+          meeting: meeting,
+          'delegate': this,
+          meetingId: meeting.id
+        },
+        {animate:true,animation:'transition',duration:500,direction:'forward'}
+    ).then();
   }
 
   onMeetingCreated(meeting: Meeting) {

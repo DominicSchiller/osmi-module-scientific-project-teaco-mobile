@@ -19,7 +19,7 @@ import {LoadingIndicatorComponent} from "../../../components/general/loading-ind
   selector: 'page-create-new-meeting',
   templateUrl: 'create-new-meeting.html',
 })
-export class CreateNewMeetingPage implements CreateSuggestionEventDelegate {
+export class CreateNewMeetingPage {
 
   /**
    * loading indicator UI component
@@ -31,7 +31,6 @@ export class CreateNewMeetingPage implements CreateSuggestionEventDelegate {
 
   private meeting: Meeting;
   private location: string;
-  private comment: string;
 
   constructor(
     public navCtrl: NavController,
@@ -67,15 +66,13 @@ export class CreateNewMeetingPage implements CreateSuggestionEventDelegate {
               if(this.delegate !== undefined) {
                 this.delegate.onMeetingCreated(meeting);
               }
-              this.closeModal();
+              this.navCtrl.pop().then(() => {
+                if(this.delegate) {
+                  this.delegate.onShowMeetingDetail(meeting);
+                }
+              });
             }, 400);
           });
     });
-  }
-
-  onSuggestionCreated(suggestion: Suggestion) {
-    console.log("Retrieved suggestion", suggestion);
-    this.meeting.suggestions.push(suggestion);
-    console.warn(this.meeting);
   }
 }

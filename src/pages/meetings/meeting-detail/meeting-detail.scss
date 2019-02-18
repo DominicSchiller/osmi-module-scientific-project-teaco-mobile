@@ -15,7 +15,7 @@ page-meeting-detail {
       background-color: color($colors, primary);
       border-bottom: 1px solid color($colors, light);
       @include box(100%, auto);
-      padding: 0 15px 10px 15px;
+      padding: 0 15px 18px 15px;
 
       &, * {
         color: #ffffff !important;
@@ -52,11 +52,33 @@ page-meeting-detail {
       .statistics-row {
         position: relative;
 
-        ion-icon {
-          text-align: center;
-          font-size: 2.5rem;
-          margin-bottom: 3px;
-          @include horizontal-center();
+        button {
+          @include box(100%, 100%);
+          margin: 0 !important;
+          overflow: hidden !important;
+          white-space: normal !important;
+          word-wrap: break-word !important;
+          text-align: center !important;
+          position: relative;
+
+          ion-icon {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3px;
+            @include horizontal-center();
+            position: absolute !important;
+            top: 0 !important;
+          }
+
+          .stats-value {
+            text-align: center;
+            margin-bottom: 0px;
+            margin-top: 30px;
+
+            &.active {
+              font-weight: 600;
+            }
+          }
         }
 
         ion-col {
@@ -68,10 +90,23 @@ page-meeting-detail {
             border-right: 1px solid #fff;
           }
         }
+      }
 
-        .stats-value {
-          left: 4.0rem;
-          text-align: center;
+      .tab-slider {
+        @include box(calc((100% / 3) - 16px), 0px);
+        border: 2px solid white;
+        border-radius: 25px;
+        position: absolute;
+        bottom: -12px;
+        left: 8px;
+        -webkit-transition: left .25s ease-in-out;
+        transition: left .25s ease-in-out;
+
+        &.middle {
+          left: calc(((100% / 3) * 1) + 8px);
+        }
+        &.right {
+          left: calc(((100% / 3) * 2) + 8px);
         }
       }
     }
@@ -80,241 +115,299 @@ page-meeting-detail {
   ion-content {
     background-color: color($colors, gray-light) !important;
 
+    .col-1-suggestion-space {
+      min-width: calc(100% - 64px) !important;
+    }
+
+    .col-2-suggestion-space {
+      min-width: calc(100% - 118px) !important;
+    }
+
+    .col-3-suggestion-space {
+      min-width: calc(100% - 172px) !important;
+    }
+
+    .empty-hint {
+      @include box(200px, 200px);
+      @include center();
+      top: calc(50% - 30px) !important;
+      position: absolute !important;
+
+      .message {
+        margin-top: 15px;
+        color: color($colors, gray-dark);
+      }
+      ion-icon {
+        color: color($colors, gray-dark);
+        font-size: 10rem;
+      }
+    }
+
     #meetingDetailsSlides {
       .slide-zoom {
         @include box(100%, 100%);
         padding-bottom: 0 !important;
       }
-    }
 
-    #suggestions-list {
-      width: 100% !important;
-      height: calc(100% - 55px) !important;
+      #suggestions-slide {
+        #suggestions-list {
+          width: 100% !important;
+          height: calc(100% - 55px) !important;
 
-      ion-item-sliding {
-        background-color: color($colors, gray-light) !important;
-        margin: 0 !important;
-        padding: 0 !important;
-
-        ion-item {
-          background-color: color($colors, gray-light);
-
-          &, ion-label, .item-inner {
-            padding: 0 !important;
+          ion-item-sliding {
+            background-color: color($colors, gray-light) !important;
             margin: 0 !important;
-            background-color: color($colors, gray-light);
-          }
-        }
+            padding: 0 !important;
 
-        &:last-of-type {
-          margin-bottom: 50px !important;
-        }
+            ion-item {
+              background-color: color($colors, gray-light);
 
-        ion-item-options {
-          height: calc(100% - 15px) !important;
-          -webkit-box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
-          box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
-          background-color: #ffffff;
-
-          button {
-            width: 75px !important;
-            text-transform: none !important;
-
-            ion-icon {
-              font-size: 3.5rem !important;
-
-              &[class*="teaco"] {
-                margin-bottom: 5px;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    #participants-manager-section{
-      background-color: white !important;
-      @include box(100%, 100%);
-      padding: 15px !important;
-      position: relative !important;
-
-      .scroll-zoom-wrapper {
-        padding: 0 15px !important;
-      }
-    }
-
-    #planning-status-list {
-      @include box(100%, 100%);
-      background-color: white;
-
-      .scroll-content {
-        padding: 0 !important;
-      }
-
-      ion-grid {
-        padding: 0 !important;
-
-        ion-row {
-          &.participants-row, &.suggestions-row {
-            margin-bottom: 4px !important;
-          }
-
-          &.self-user-row {
-            .user-icon {
-              border-color: color($colors, secondary) !important;
-              ion-icon {
-                color: color($colors, secondary);
-              }
-            }
-            .name-label {
-              font-weight: 500;
-              color: color($colors, secondary);
-            }
-          }
-        }
-
-        .col {
-          padding: 0 !important;
-          position: relative;
-
-          .vertical-line {
-            margin: 0 0 0 5px !important;
-          }
-
-          .user-icon-column {
-            border-top: 0.5px solid color($colors, gray-medium);
-            width: 50px !important;
-
-            .user-icon {
-              @include box(36px, 36px);
-              position: relative;
-              border: 1px solid color($colors, gray-dark);
-              border-radius: 50%;
-              @include center();
-
-              ion-icon {
-                @include vertical-center();
-                font-size: 1.8rem;
-              }
-            }
-          }
-
-          .header-placeholder-column {
-            @include box(100%, 75px);
-          }
-
-          .participant-name-column {
-            @include box(100%, 50px);
-            border-top: 0.5px solid color($colors, gray-medium);
-            text-align: left;
-            overflow: hidden;
-            padding: 0 5px !important;
-            .name-label {
-              @include vertical-center();
-              font-size: 1.4rem;
-            }
-          }
-
-          #suggestions-scroll {
-            @include box(100%, 100%);
-            white-space: nowrap;
-
-            .header-row {
-              width: 100% !important;
-            }
-
-            .suggestion-info-column {
-              @include box(50px, 75px);
-              margin-left: 4px;
-              float:left;
-              position: relative;
-              min-width: 50px;
-
-              .day {
-                color: color($colors, primary);
-                margin-bottom: 2px;
-              }
-
-              .binder {
-                margin: -5px 0;
-              }
-            }
-
-            .vote-column {
-              @include box(50px, 50px);
-              margin-left: 4px;
-              border-top: 1px solid white;
-              //border-bottom: 1px solid color($colors, gray-medium);
-
-              &.teaco-voted-yes {
-                background-color: lighten(color($colors, yes), 50%);
-                color: color($colors, yes) !important;
-                border: 1px solid color($colors, yes);
-              }
-              &.teaco-voted-no {
-                background-color: lighten(color($colors, no), 50%);
-                color: color($colors, no) !important;
-                border: 1px solid color($colors, no);
-              }
-              &.teaco-voted-maybe {
-                background-color: lighten(color($colors, maybe), 40%);
-                color: color($colors, maybe) !important;
-                border: 1px solid color($colors, maybe);
-              }
-              &.teaco-voted-dont-know {
+              &, ion-label, .item-inner {
+                padding: 0 !important;
+                margin: 0 !important;
                 background-color: color($colors, gray-light);
-                color: color($colors, gray-light);
-                border: 1px solid color($colors, gray-medium);
               }
+            }
 
-              ion-icon {
-                @include vertical-center();
+            &:last-of-type {
+              margin-bottom: 50px !important;
+            }
+
+            ion-item-options {
+              height: calc(100% - 15px) !important;
+              -webkit-box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+              box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+              background-color: #ffffff;
+
+              button {
+                width: 75px !important;
+                text-transform: none !important;
+
+                ion-icon {
+                  font-size: 3.5rem !important;
+
+                  &[class*="teaco"] {
+                    margin-bottom: 5px;
+                  }
+                }
               }
             }
           }
         }
-      }
 
-      ion-item {
-        &, .item-inner {
-          border: none !important;
-          padding: 0 !important;
-          height: 60px !important;
-          margin-bottom: 4px !important;
-
-          .label {
-            margin: 13px 0 13px 0 !important;
+        #createNewSuggestionButton {
+          button {
+            font-size: 3.0rem !important;
           }
         }
+      }
 
-        ion-row {
-          ion-col {
+      #participants-slide {
+        #participants-manager-section{
+          background-color: white !important;
+          @include box(100%, 100%);
+          padding: 15px !important;
+          position: relative !important;
+
+          .scroll-zoom-wrapper {
+            padding: 0 15px !important;
+          }
+        }
+      }
+
+      #voting-board-slide {
+        #planning-status-list {
+          @include box(100%, 100%);
+          background-color: white;
+
+          .scroll-content {
             padding: 0 !important;
           }
 
-          //&:first-of-type {
-          //  margin-top: 0 !important;
-          //}
+          ion-grid {
+            padding: 0 !important;
 
-          &.self-user-row {
-            .user-icon {
-              border-color: color($colors, secondary);
-              ion-icon {
-                color: color($colors, secondary);
+            ion-row {
+              &.participants-row, &.suggestions-row {
+                margin-bottom: 4px !important;
+              }
+
+              &.self-user-row {
+                .user-icon {
+                  border-color: color($colors, secondary) !important;
+                  ion-icon {
+                    color: color($colors, secondary);
+                  }
+                }
+                .name-label {
+                  font-weight: 500;
+                  color: color($colors, secondary);
+                }
               }
             }
-            .name-label {
-              font-weight: 500;
-              color: color($colors, secondary);
+
+            .col {
+              padding: 0 !important;
+              position: relative;
+
+              .vertical-line {
+                margin: 0 0 0 5px !important;
+              }
+
+              .user-icon-column {
+                border-top: 0.5px solid color($colors, gray-medium);
+                width: 50px !important;
+
+                .user-icon {
+                  @include box(36px, 36px);
+                  position: relative;
+                  border: 1px solid color($colors, gray-dark);
+                  border-radius: 50%;
+                  @include center();
+
+                  ion-icon {
+                    @include vertical-center();
+                    font-size: 1.8rem;
+                  }
+                }
+              }
+
+              .header-placeholder-column {
+                @include box(100%, 100px);
+              }
+
+              .participant-name-column {
+                @include box(100%, 50px);
+                border-top: 0.5px solid color($colors, gray-medium);
+                text-align: left;
+                overflow: hidden;
+                padding: 0 5px !important;
+                .name-label {
+                  @include vertical-center();
+                  font-size: 1.4rem;
+                }
+              }
+
+              #suggestions-scroll {
+                @include box(100%, 100%);
+                white-space: nowrap;
+
+                .header-row {
+                  width: 100% !important;
+                }
+
+                .suggestion-info-column {
+                  @include box(50px, 100px);
+                  margin-left: 4px;
+                  float:left;
+                  position: relative;
+                  min-width: 50px;
+
+                  .day {
+                    color: color($colors, primary);
+                    margin-bottom: 2px;
+                  }
+
+                  .binder {
+                    margin: -5px 0;
+                  }
+
+                  .pick-status {
+                    text-align: center;
+                    margin-top: 3px;
+                    color: color($colors, gray-medium);
+                    &.picked {
+                      color: color($colors, secondary);
+                    }
+                  }
+                }
+
+                .vote-column {
+                  @include box(50px, 50px);
+                  margin-left: 4px;
+                  border-top: 1px solid white;
+                  //border-bottom: 1px solid color($colors, gray-medium);
+
+                  &.teaco-voted-yes {
+                    background-color: lighten(color($colors, yes), 50%);
+                    color: color($colors, yes) !important;
+                    border: 1px solid color($colors, yes);
+                  }
+                  &.teaco-voted-no {
+                    background-color: lighten(color($colors, no), 50%);
+                    color: color($colors, no) !important;
+                    border: 1px solid color($colors, no);
+                  }
+                  &.teaco-voted-maybe {
+                    background-color: lighten(color($colors, maybe), 40%);
+                    color: color($colors, maybe) !important;
+                    border: 1px solid color($colors, maybe);
+                  }
+                  &.teaco-voted-dont-know {
+                    background-color: color($colors, gray-light);
+                    color: color($colors, gray-light);
+                    border: 1px solid color($colors, gray-medium);
+                  }
+
+                  ion-icon {
+                    @include vertical-center();
+                  }
+                }
+              }
+            }
+          }
+
+          ion-item {
+            &, .item-inner {
+              border: none !important;
+              padding: 0 !important;
+              height: 60px !important;
+              margin-bottom: 4px !important;
+
+              .label {
+                margin: 13px 0 13px 0 !important;
+              }
+            }
+
+            ion-row {
+              ion-col {
+                padding: 0 !important;
+              }
+
+              //&:first-of-type {
+              //  margin-top: 0 !important;
+              //}
+
+              &.self-user-row {
+                .user-icon {
+                  border-color: color($colors, secondary);
+                  ion-icon {
+                    color: color($colors, secondary);
+                  }
+                }
+                .name-label {
+                  font-weight: 500;
+                  color: color($colors, secondary);
+                }
+              }
             }
           }
         }
-      }
-    }
 
-    #createNewSuggestionButton {
-      button {
-        font-size: 3.0rem !important;
+        .empty-hint {
+          top: calc(50% - 60px) !important;
+          width: 260px !important;
+
+          .message {
+            width: 200px !important;
+            @include horizontal-center();
+          }
+
+          .sub-message {
+            color: color($colors, gray-dark);
+            margin-top: 10px !important;
+          }
+        }
       }
     }
 

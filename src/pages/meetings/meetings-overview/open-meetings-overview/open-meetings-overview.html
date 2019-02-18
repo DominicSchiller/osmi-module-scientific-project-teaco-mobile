@@ -8,6 +8,13 @@
   <loading-indicator></loading-indicator>
   <feedback-alert></feedback-alert>
 
+  <div class="empty-hint" *ngIf="meetings.length == 0">
+    <ion-icon name="teaco-open-meetings"></ion-icon>
+    <div class="message mediumSize bold">
+      Keine Terminplanungen vorhanden
+    </div>
+  </div>
+
   <ion-refresher (ionRefresh)="onRefreshMeetings($event)">
     <ion-refresher-content
             pullingIcon="arrow-round-down"
@@ -20,7 +27,7 @@
   <ion-list no-lines>
     <ion-item-sliding *ngFor="let meeting of meetings; let i=index" #meetingSlidingItem>
       <ion-item>
-        <open-meeting-card [meeting]="meeting" (click)="showMeetingDetail(meeting)">
+        <open-meeting-card [meeting]="meeting" (click)="onShowMeetingDetail(meeting)">
         </open-meeting-card>
       </ion-item>
       <ion-item-options side="right">

@@ -11,4 +11,11 @@ export interface CreateMeetingEventDelegate {
      * @param meeting The created meeting
      */
     onMeetingCreated(meeting: Meeting);
+
+    /**
+     * Callback function to request showing the meeting details
+     * page for the new created meeting.
+     * @param meeting The created meeting
+     */
+    onShowMeetingDetail(meeting: Meeting);
 }
