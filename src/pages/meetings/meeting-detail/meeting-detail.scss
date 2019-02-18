@@ -137,6 +137,10 @@ page-meeting-detail {
       @include box(100%, 100%);
       padding: 15px !important;
       position: relative !important;
+
+      .scroll-zoom-wrapper {
+        padding: 0 15px !important;
+      }
     }
 
     #planning-status-list {

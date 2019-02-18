@@ -54,6 +54,10 @@ export class TeaCoApiProvider {
    */
   private readonly addParticipantAPIEndpoint = "/add_participant";
   /**
+   * The API endpoint to remove participants to an existing meeting
+   */
+  private readonly removeParticipantAPIEndpoint = "/remove_participant";
+  /**
    * The API endpoint for Meeting CRUD operations
    */
   private readonly suggestionsAPIEndpoint = "/suggestions/";
@@ -225,12 +229,23 @@ export class TeaCoApiProvider {
   addParticipants(userKey: string, meetingID: number, participants: User[]): Observable<void> {
       const requestOptions = TeaCoApiProvider.getRequestOptions();
       const url = this.baseUrl + this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.addParticipantAPIEndpoint;
-      let participant_ids: number[] = [];
-      participants.forEach(participant => {
-         participant_ids.push(participant.id);
-      });
       let putData = {
-          "participant_ids": participant_ids
+          "participant_ids": this.convertToIdList(participants)
+      };
+      return this.http.put<void>(url, putData, requestOptions);
+  }
+
+  /**
+   * Remove new participants to an existing meeting.
+   * @param userKey The registered user's unique key
+   * @param meetingID The meeting instance to which to add the selected participants to
+   * @param participants List of participants which to add
+   */
+  removeParticipants(userKey: string, meetingID: number, participants: User[]): Observable<void> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl + this.usersAPIEndpoint + userKey + this.meetingsAPIEndpoint + meetingID + this.removeParticipantAPIEndpoint;
+      let putData = {
+          "participant_ids": this.convertToIdList(participants)
       };
       return this.http.put<void>(url, putData, requestOptions);
   }
@@ -319,6 +334,20 @@ export class TeaCoApiProvider {
       const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.votesAPIEndpoint;
       const updateData = JSON.stringify(vote);
       return this.http.put<void>(url, updateData, requestOptions);
+  }
+
+  /**
+   * Convert a list of TeaCo models to a list of their
+   * unique IDs.
+   * @param models The models list which to convert
+   * @return the resulted IDs list
+   */
+  private convertToIdList(models: any[]): number[] {
+    let idList: number[] = [];
+    models.forEach(model => {
+        idList.push(model.id);
+    });
+    return idList;
   }
 
   /**

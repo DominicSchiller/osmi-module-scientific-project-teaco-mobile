@@ -44,11 +44,11 @@ participants-manager {
       @include box(100%, 0);
       position: relative;
       overflow: hidden;
-      -webkit-transition: all 0.25s ease-in-out;
-      transition: all 0.25s ease-in-out;
+      -webkit-transition: height .15s ease-in-out;
+      transition: height .15s ease-in-out;
 
       &.results-available {
-        height: auto !important;
+        height: 210px !important;
       }
 
       ion-scroll {
@@ -82,6 +82,12 @@ participants-manager {
             p {
               color: color($colors, text-dark);
             }
+
+            .active-user {
+              p:first-of-type {
+                color: color($colors, secondary) !important;
+              }
+            }
           }
 
           .user-icon {
@@ -90,6 +96,10 @@ participants-manager {
             font-size: 2.2rem !important;
             color: color($colors, text-dark);
             z-index: 900;
+
+            &.active-user {
+              color: color($colors, secondary);
+            }
           }
         }
       }
@@ -142,6 +152,15 @@ participants-manager {
           border: 1px solid color($colors, gray-dark);
           border-radius: 50%;
 
+          &.active-user {
+            color: color($colors, secondary) !important;
+            border-color: color($colors, secondary);
+
+            ion-icon {
+              color: color($colors, secondary) !important;
+            }
+          }
+
           ion-icon {
             @include center();
             font-size: 2.4rem;
@@ -158,6 +177,10 @@ participants-manager {
             //color: color($colors, text-dark) !important;
             word-break: break-all !important;
             white-space:normal !important;
+          }
+
+          .active-user {
+            color: color($colors, secondary);
           }
         }
 

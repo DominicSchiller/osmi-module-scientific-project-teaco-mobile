@@ -13,5 +13,6 @@
   <loading-indicator></loading-indicator>
   <feedback-alert></feedback-alert>
 
-  <participants-manager [delegate]="this" [participants]="participants"></participants-manager>
+  <participants-manager [meetingId]="meeting.id" [delegate]="this" [participants]="participants">
+  </participants-manager>
 </ion-content>

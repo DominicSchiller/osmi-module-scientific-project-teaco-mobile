@@ -7,7 +7,7 @@ import {MeetingProgress} from "../../../../models/meeting-progress";
  * Delegate interface which defines callback functions
  * for editing meetings.
  */
-export interface EditMeetingEventDelegate extends CreateMeetingEventDelegate, CreateSuggestionEventDelegate, ParticipantsManagerDelegate {
+export interface EditMeetingEventDelegate extends CreateMeetingEventDelegate, CreateSuggestionEventDelegate {
     /**
      * Callback function which will be called in case of
      * a suggestion has been deleted from a meeting.
@@ -15,6 +15,13 @@ export interface EditMeetingEventDelegate extends CreateMeetingEventDelegate, Cr
      * @param suggestionId The deleted suggestions's id
      */
     onSuggestionDeleted(meetingId: number, suggestionId: number);
+    /**
+     * Callback function which will be called in case of the number
+     * of participants has been updated.
+     * @param meetingId The associated meeting's id
+     * @param numberOfParticipants The updated participants count
+     */
+    onParticipantsUpdated(meetingId: number, numberOfParticipants: number);
     /**
      * Callback function which will be called in case of
      * a meeting's overall progress has been changed.

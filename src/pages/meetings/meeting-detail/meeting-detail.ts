@@ -23,6 +23,8 @@ import {FeedbackAlertComponent} from "../../../components/general/feedback-alert
 import {InputCardComponent} from "../../../components/general/input-card/input-card";
 import {VoteDecision} from "../../../models/vote-decision";
 import {DateTimeHelper} from "../../../utils/date-time-helper";
+import {ParticipantsManagerDelegate} from "../../../components/participants/participants-manager/participants-manager-delegate";
+import {User} from "../../../models/user";
 
 /**
  * Page Controller for meeting details.
@@ -35,7 +37,7 @@ import {DateTimeHelper} from "../../../utils/date-time-helper";
   selector: 'page-meeting-detail',
   templateUrl: 'meeting-detail.html',
 })
-export class MeetingDetailPage implements CreateSuggestionEventDelegate {
+export class MeetingDetailPage implements CreateSuggestionEventDelegate, ParticipantsManagerDelegate {
 
   /**
    * loading indicator UI component
@@ -213,27 +215,34 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   /**
    * Load meeting details.
    */
-  private loadMeetingDetails() {
-    if(!this.listRefresher) {
-      this.loadingIndicator.show();
-    }
-    this.userSession.getActiveUser().then(activeUser => {
-      this.apiService.getMeeting(activeUser.key, this.meetingId).subscribe(meeting => {
-       this.zone.run(() => {
-         meeting.numberOfParticipants = meeting.participants.length;
-         meeting.numberOfSuggestions = meeting.suggestions.length;
-         MeetingUtils.sortSuggestions(meeting, SortOrder.descending);
-         MeetingUtils.recalculateMeetingStatus(meeting);
-         this.meeting = Observable.of(meeting);
-         this.determineVoteDecisions();
-         if(this.listRefresher) {
-           this.listRefresher.complete();
-           this.listRefresher = null;
-         } else {
-           this.hideLoadingIndicator();
-         }
-         this.refreshPickedSuggestionsList();
-       });
+  private loadMeetingDetails(): Promise<void> {
+    return new Promise((onFinished) => {
+      if(!this.listRefresher) {
+        this.loadingIndicator.show();
+      }
+      this.userSession.getActiveUser().then(activeUser => {
+        this.apiService.getMeeting(activeUser.key, this.meetingId).subscribe(meeting => {
+          this.zone.run(() => {
+            meeting.numberOfParticipants = meeting.participants.length;
+            meeting.numberOfSuggestions = meeting.suggestions.length;
+            MeetingUtils.sortSuggestions(meeting, SortOrder.descending);
+            MeetingUtils.recalculateMeetingStatus(meeting);
+            if(this.delegate) {
+              this.delegate.onMeetingProgressChanged(meeting.id, meeting.progress);
+              this.delegate.onParticipantsUpdated(meeting.id, meeting.numberOfParticipants);
+            }
+            this.meeting = Observable.of(meeting);
+            this.determineVoteDecisions();
+            if(this.listRefresher) {
+              this.listRefresher.complete();
+              this.listRefresher = null;
+            } else {
+              this.hideLoadingIndicator();
+            }
+            this.refreshPickedSuggestionsList();
+            onFinished();
+          });
+        });
       });
     });
   }
@@ -476,12 +485,44 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate {
   }
 
   onSuggestionCreated(suggestion: Suggestion) {
-    console.log("Retrieved suggestion", suggestion);
     this.meeting.subscribe(meeting => {
       meeting.suggestions.push(suggestion);
+      meeting.numberOfSuggestions += 1;
       MeetingUtils.recalculateMeetingStatus(meeting);
       this.meeting = new Observable(observer => {observer.next(meeting)});
+      if(this.delegate) {
+        this.delegate.onSuggestionCreated(suggestion);
+        this.delegate.onMeetingProgressChanged(meeting.id, meeting.progress);
+      }
     });
+  }
+
+  onParticipantsInvited(participants: User[]) {
+    this.loadMeetingDetails().then(() => {
+      setTimeout(() => {
+        this.feedbackAlert.presentWith(
+            "Teilnehmer eingeladen",
+            "Alle Teilnehmer wurden erfolgreich zur Abstimmung eingeladen.",
+            "teaco-user"
+        );
+      }, 300);
+    });
+  }
+
+  onParticipantsUninvited(participants: User[]) {
+    this.loadMeetingDetails().then(() => {
+      setTimeout(() => {
+        this.feedbackAlert.presentWith(
+            "Teilnehmer ausgeladen",
+            "Alle Teilnehmer wurden erfolgreich ausgeladen.",
+            "teaco-user"
+        );
+      }, 300);
+    });
+  }
+
+  onSendParticipantsUpdate() {
+    this.loadingIndicator.show();
   }
 
   /**

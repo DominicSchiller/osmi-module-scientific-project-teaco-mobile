@@ -34,11 +34,11 @@
         </div>
       </ion-col>
       <ion-col (click)="showMeetingDetailsSlide(2)">
-        <ion-icon name="{{(meeting | async)?.progress.pending === 1 ? 'teaco-meeting-state-pending' :
+        <ion-icon name="{{(meeting | async)?.progress.pending === 1 || (meeting | async)?.participants.length <= 1 ? 'teaco-meeting-state-pending' :
           ((meeting | async)?.progress.completed === 1 ? 'teaco-meeting-state-voting-completed' : 'teaco-meeting-state-voting')}}"></ion-icon>
         <div class="stats-value light">
           <!--<span class="bold">Status</span><br />-->
-          {{(meeting | async)?.progress.pending === 1 ? "noch nicht in Abstimmung" :
+          {{(meeting | async)?.progress.pending === 1 || (meeting | async)?.participants.length <= 1 ? "noch nicht in Abstimmung" :
                 ((meeting | async)?.progress.completed === 1 ? "alle Termine abgestimmt" : "Termine in Abstimmung")}}
         </div>
       </ion-col>
@@ -87,6 +87,7 @@
       <button ion-button full
               class="action-button normalSize medium" color="primary"
               (click)="showMeetingDetailsSlide(1)"
+              [disabled]="(meeting | async)?.suggestions.length == 0"
               [hidden]="(meeting | async)?.numberOfParticipants !== 1">
         Weiter
       </button>
@@ -98,7 +99,10 @@
     </ion-slide>
     <ion-slide class="swiper-no-swiping">
       <div id="participants-manager-section">
-        <participants-manager [participants]="(meeting | async)?.participants"></participants-manager>
+        <participants-manager [meetingId]="(meeting | async)?.id"
+                              [participants]="(meeting | async)?.participants"
+        [delegate]="this">
+        </participants-manager>
       </div>
     </ion-slide>
     <ion-slide class="swiper-no-swiping">

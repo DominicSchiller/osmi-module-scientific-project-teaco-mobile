@@ -3,6 +3,7 @@ import {User} from "../../../models/user";
 import {ParticipantsManagerDelegate} from "./participants-manager-delegate";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
+import {Meeting} from "../../../models/meeting";
 
 /**
  * Custom component dedicated to manage participants associated to
@@ -53,9 +54,15 @@ export class ParticipantsManager {
    */
   @Input('participants') participants: User[];
 
+  @Input('meetingId') meetingId: number;
+
+  private managedParticipants: User[];
+
   private queuedParticipantsToInvite: User[];
 
   private queuedParticipantsToRemove: User[];
+
+  private activeUserId: number = -1;
 
   constructor(private userSession: UserSessionProvider, private apiService: TeaCoApiProvider) {
     this.isSearching = false;
@@ -63,8 +70,19 @@ export class ParticipantsManager {
     this.waitTimeoutID = -1;
     this.foundUsers = [];
     this.participants = [];
+    this.managedParticipants = [];
     this.queuedParticipantsToInvite = [];
     this.queuedParticipantsToRemove = [];
+
+    this.userSession.getActiveUser().then(activerUser => {
+      this.activeUserId = activerUser.id;
+    });
+  }
+
+  ngOnChanges() {
+    if(this.participants) {
+      this.managedParticipants = this.participants.map(p => Object.assign({}, p));
+    }
   }
 
   /**
@@ -102,19 +120,20 @@ export class ParticipantsManager {
     this.isSearching = true;
     this.userSession.getActiveUser().then(activeUser => {
       this.apiService.getUserByEmail(activeUser.key, this.searchTerm)
-          .subscribe(users => {
+          .subscribe(foundUsers => {
             // init selected property
-            users.forEach(user => {
+            foundUsers.forEach(user => {
               (<any>user).selected = false;
             });
-            this.participants.forEach(queuedParticipant => {
-              users.forEach(user => {
-                if(queuedParticipant.id == user.id) {
-                  (<any>user).selected = true;
+            this.participants.forEach(existingParticipant => {
+              foundUsers.forEach(foundUser => {
+                if(existingParticipant.id == foundUser.id) {
+                  (<any>foundUser).selected = true;
+                  (<any>foundUser).alreadyInvited = true;
                 }
               });
             });
-            this.foundUsers = users;
+            this.foundUsers = foundUsers;
             setTimeout(() => {
               this.isSearching = false;
             }, 200);
@@ -140,7 +159,7 @@ export class ParticipantsManager {
   private getSelectedUsers(): User[] {
     let checkedResults: User[] = [];
     this.foundUsers.forEach(result => {
-      if((<any>result).selected) {
+      if((<any>result).selected && !(<any>result).alreadyInvited) {
         checkedResults.push(result);
       }
     });
@@ -153,7 +172,7 @@ export class ParticipantsManager {
    * @param index The user's index within the queue
    */
   private onRemoveSelected(index: number) {
-    let participant = this.participants[index];
+    let participant = this.managedParticipants[index];
 
     for(let i=0; i<this.queuedParticipantsToRemove.length; i++) {
       if(this.queuedParticipantsToRemove[i].id === participant.id) {
@@ -161,14 +180,13 @@ export class ParticipantsManager {
         return;
       }
     }
-
     // this.participants.splice(index, 1);
     let ignore = false;
     for(let i=0; i<this.queuedParticipantsToInvite.length; i++) {
       if(this.queuedParticipantsToInvite[i].id === participant.id) {
         ignore = true;
         this.queuedParticipantsToInvite.splice(i, 1);
-        this.participants.splice(index, 1);
+        this.managedParticipants.splice(index, 1);
         break;
       }
     }
@@ -177,9 +195,14 @@ export class ParticipantsManager {
     }
   }
 
-  private isContainedInRemoveQueue(participant: User): boolean {
-    for(let i=0; i<this.queuedParticipantsToRemove.length; i++) {
-      if(this.queuedParticipantsToRemove[i].id === participant.id) {
+  /**
+   * Check if a participant is contained in the given list
+   * @param list The list to check
+   * @param participant The participant to look for
+   */
+  private isContainedIn(list: User[], participant: User): boolean {
+    for(let i=0; i<list.length; i++) {
+      if(list[i].id === participant.id) {
        return true;
       }
     }
@@ -197,14 +220,14 @@ export class ParticipantsManager {
     if(checkedResults.length > 0) {
       checkedResults.forEach(checkedResult => {
         let isContained = false;
-        this.participants.forEach(queuedUser => {
+        this.managedParticipants.forEach(queuedUser => {
           if(checkedResult.id == queuedUser.id) {
             isContained = true;
             return;
           }
         });
         if(!isContained) {
-          this.participants.push(checkedResult);
+          this.managedParticipants.push(checkedResult);
           this.queuedParticipantsToInvite.push(checkedResult);
         }
       });
@@ -214,9 +237,53 @@ export class ParticipantsManager {
       // take the search term and create a user from it
       let participant = new User();
       participant.email = this.searchTerm;
-      this.participants.push(participant);
+      this.managedParticipants.push(participant);
       this.queuedParticipantsToInvite.push(participant);
     }
     this.searchTerm = "";
+  }
+
+  /**
+   * Invite all queued participants to invite.
+   */
+  private inviteParticipants() {
+    if(this.delegate) {
+      this.delegate.onSendParticipantsUpdate();
+    }
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.addParticipants(activeUser.key, this.meetingId, this.queuedParticipantsToInvite)
+          .subscribe(() => {
+            if(this.delegate) {
+              this.delegate.onParticipantsInvited(this.queuedParticipantsToInvite);
+              this.queuedParticipantsToInvite = [];
+            }
+          });
+    });
+  }
+
+  /**
+   * Uninvite all queued participants for removal.
+   */
+  private unInviteParticipants() {
+    if(this.delegate) {
+      this.delegate.onSendParticipantsUpdate();
+    }
+    this.userSession.getActiveUser().then(activeUser => {
+      this.apiService.removeParticipants(activeUser.key, this.meetingId, this.queuedParticipantsToRemove)
+          .subscribe(() => {
+            if(this.delegate) {
+              this.queuedParticipantsToRemove.forEach(participant => {
+                for(let i=0; i<this.managedParticipants.length; i++) {
+                  if(this.managedParticipants[i].id === participant.id) {
+                    this.managedParticipants.splice(i, 1);
+                    break;
+                  }
+                }
+              });
+              this.delegate.onParticipantsUninvited(this.queuedParticipantsToRemove);
+              this.queuedParticipantsToRemove = [];
+            }
+          });
+    });
   }
 }

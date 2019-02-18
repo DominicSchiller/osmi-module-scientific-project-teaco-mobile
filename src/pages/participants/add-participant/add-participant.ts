@@ -18,7 +18,7 @@ import {ParticipantsManager} from "../../../components/participants/participants
   selector: 'page-add-participant',
   templateUrl: 'add-participant.html',
 })
-export class AddParticipantPage implements ParticipantsManagerDelegate{
+export class AddParticipantPage implements ParticipantsManagerDelegate {
   /**
    * The page's navigation bar UI element
    */
@@ -125,9 +125,21 @@ export class AddParticipantPage implements ParticipantsManagerDelegate{
     });
   }
 
-  onParticipantAdded(participant: User) {
+  onParticipantsInvited(participants: User[]) {
+    setTimeout(() => {
+      this.loadingIndicator.hide();
+    });
+    this.meeting.numberOfParticipants += participants.length;
   }
 
-  onParticipantRemoved(participant: User) {
+  onParticipantsUninvited(participants: User[]) {
+    setTimeout(() => {
+      this.loadingIndicator.hide();
+    });
+    this.meeting.numberOfParticipants -= participants.length;
+  }
+
+  onSendParticipantsUpdate() {
+    this.loadingIndicator.show();
   }
 }

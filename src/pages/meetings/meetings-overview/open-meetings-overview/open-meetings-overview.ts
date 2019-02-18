@@ -264,16 +264,17 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
     this.meetings.forEach(meeting => {
       if(meeting.id == meetingId) {
         meeting.numberOfSuggestions -= 1;
+        return;
       }
     });
   }
 
-  onParticipantsUpdated(participants: User[]) {
+  onParticipantsUpdated(meetingId: number, numberOfParticipants: number) {
     this.meetings.forEach(meeting => {
-      // if(meeting.id == meetingId) {
-      //   meeting.numberOfParticipants += participants.length;
-      //   return;
-      // }
+      if(meeting.id == meetingId) {
+        meeting.numberOfParticipants = numberOfParticipants;
+        return;
+      }
     });
   }
 
@@ -293,7 +294,5 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
         break;
       }
     }
-
-
   }
 }

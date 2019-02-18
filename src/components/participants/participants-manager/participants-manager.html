@@ -13,15 +13,24 @@
       <p class="results-title mediumSize medium">Meinen Sie ...</p>
       <ion-item class="search-result" *ngFor="let result of foundUsers; let i=index">
         <ion-label>
-          <ion-icon class="user-icon" name="teaco-user"></ion-icon>
+          <ion-icon class="user-icon" name="teaco-user"
+                    [ngClass]="result.id === activeUserId ? 'active-user' : ''"></ion-icon>
           <div class="user-information">
-            <p class="normalSize medium">{{result.name}}</p>
-            <p class="smallSize light">{{result.email}}</p>
+            <div [hidden]="result.id === activeUserId">
+              <p class="normalSize medium">{{result.name}}</p>
+              <p class="smallSize light">{{result.email}}</p>
+            </div>
+            <div class="active-user"
+                 [hidden]="result.id !== activeUserId">
+              <p class="normalSize medium">Du</p>
+              <p class="smallSize light">{{result.email}}</p>
+            </div>
           </div>
         </ion-label>
         <ion-checkbox item-right
                       (ionChange)="verifySelectedUsers(i)"
                       name="user-result-checkbox"
+                      [disabled]="isContainedIn(participants, result)"
                       [checked]="result.selected"></ion-checkbox>
       </ion-item>
     </ion-scroll>
@@ -33,26 +42,32 @@
 </form>
 <section id="participants-queue">
   <ion-scroll scrollY="true">
-    <ion-item class="participant-item" *ngFor="let participant of participants; let i=index">
+    <ion-item class="participant-item" *ngFor="let participant of managedParticipants; let i=index">
       <ion-row>
         <ion-col col-auto>
-          <div class="user-icon">
+          <div class="user-icon" [ngClass]="participant.id == activeUserId ? 'active-user' : ''">
             <ion-icon name="teaco-user" color="gray-dark"></ion-icon>
           </div>
         </ion-col>
         <ion-col>
           <div class="user-information">
-            <p class="normalSize medium">
-              {{participant.name}}
-            </p>
-            <p class="normalSize light">
-              {{participant.email}}
-            </p>
+            <div [hidden]="participant.id == activeUserId">
+              <p class="normalSize medium">
+                {{participant.name}}
+              </p>
+              <p class="normalSize light">
+                {{participant.email}}
+              </p>
+            </div>
+            <div class="active-user medium"
+                    [hidden]="participant.id !== activeUserId" >
+              Du
+            </div>
           </div>
         </ion-col>
-        <ion-col col-auto class="actions-column">
+        <ion-col col-auto class="actions-column" [hidden]="participant.id === activeUserId">
           <button ion-button class="remove-from-queue-button"
-                  [ngClass]="isContainedInRemoveQueue(participant) ? 'active': ''"
+                  [ngClass]="isContainedIn(queuedParticipantsToRemove, participant) ? 'active': ''"
                   (click)="onRemoveSelected(i)">
             <ion-icon name="close" class="bold"></ion-icon>
           </button>
@@ -64,12 +79,12 @@
 <button id="add-participants-button" ion-button full
         class="mediumSize medium"
         [hidden]="queuedParticipantsToInvite.length == 0"
-        (click)="finish()">
+        (click)="inviteParticipants()">
   Teilnehmer einladen
 </button>
 <button id="remove-participants-button" ion-button full
         class="mediumSize medium"
         [hidden]="queuedParticipantsToRemove.length == 0"
-        (click)="finish()">
+        (click)="unInviteParticipants()">
   Teilnehmer ausladen
 </button>
