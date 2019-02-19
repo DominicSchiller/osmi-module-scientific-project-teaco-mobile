@@ -260,6 +260,9 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
             this.refreshPickedSuggestionsList();
             onFinished();
           });
+        }, error => {
+          alert('Beim Laden des Meetings kam es zu einem unerwarteten Fehler. Bitte stell sicher, dass du Internetzugang hast.');
+
         });
       });
     });
@@ -414,6 +417,8 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
                     this.goBack();
                   });
               }, 300);
+          }, error => {
+            alert('Es kam bei der Datenübermittlung zu einem unerwarteten Fehler. Bitte stell sicher, dass du Internetzugang hast.');
           });
     });
   }

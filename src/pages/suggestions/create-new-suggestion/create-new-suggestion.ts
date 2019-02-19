@@ -182,6 +182,9 @@ export class CreateNewSuggestionPage {
                     this.triggerDelegateAndClose(suggestion);
                   }, 400);
                 }, 400);
+              }, error => {
+                this.loadingIndicator.hide();
+                alert('Es kam bei der Datenübermittlung zu einem unerwarteten Fehler. Bitte stell sicher, dass du Internetzugang hast.');
               });
         });
         break;

@@ -83,6 +83,8 @@ export class AddParticipantPage implements ParticipantsManagerDelegate {
               setTimeout(() => {
                 this.loadingIndicator.hide();
               }, 400);
+            }, error => {
+              console.error(error);
             });
       });
     }

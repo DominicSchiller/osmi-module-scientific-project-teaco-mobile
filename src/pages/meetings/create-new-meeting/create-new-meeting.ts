@@ -72,6 +72,8 @@ export class CreateNewMeetingPage {
                 }
               });
             }, 400);
+          }, error => {
+            alert('Es kam bei der Datenübermittlung zu einem unerwarteten Fehler. Bitte stell sicher, dass du Internetzugang hast.');
           });
     });
   }

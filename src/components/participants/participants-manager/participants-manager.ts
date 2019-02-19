@@ -278,6 +278,9 @@ export class ParticipantsManager {
               this.delegate.onParticipantsInvited(this.queuedParticipantsToInvite);
               this.queuedParticipantsToInvite = [];
             }
+          }, error => {
+            alert('Es kam bei der Datenübermittlung zu einem unerwarteten Fehler. Bitte stell sicher, dass du Internetzugang hast.');
+
           });
     });
   }
@@ -304,6 +307,8 @@ export class ParticipantsManager {
               this.delegate.onParticipantsUninvited(this.queuedParticipantsToRemove);
               this.queuedParticipantsToRemove = [];
             }
+          }, error => {
+            alert('Es kam bei der Datenübermittlung zu einem unerwarteten Fehler. Bitte stell sicher, dass du Internetzugang hast.');
           });
     });
   }

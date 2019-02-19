@@ -200,6 +200,8 @@ export class SuggestionDetailsPage {
         setTimeout(() => {
           this.suggestion.isPicked = !this.suggestion.isPicked; // set the opposite picked status
         }, 200);
+      }, error => {
+        alert('Es kam bei der Datenübermittlung zu einem unerwarteten Fehler. Bitte stell sicher, dass du Internetzugang hast.');
       });
     });
   }
