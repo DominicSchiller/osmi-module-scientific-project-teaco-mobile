@@ -47,6 +47,10 @@ export class Suggestion {
      */
     votes: Vote[];
 
+    private isTimeZoneNormalized: boolean;
+
+    private timeZoneOffset: number;
+
     /**
      * Constructor
      */
@@ -60,6 +64,8 @@ export class Suggestion {
         this.startTime = undefined;
         this.endTime = undefined;
         this.votes = [];
+        this.isTimeZoneNormalized = false;
+        this.timeZoneOffset = 0;
     }
 
     /**
@@ -80,12 +86,8 @@ export class Suggestion {
         suggestion.startTime = new Date(data.start);
         suggestion.endTime = new Date(data.end);
 
-        // adjust time zone offset
-        let timeZoneOffset = suggestion.date.getTimezoneOffset()/60;
-        if(suggestion.startTime.getTimezoneOffset()/60 < 0) {
-            suggestion.startTime.setHours(suggestion.startTime.getHours() + timeZoneOffset);
-            suggestion.endTime.setHours(suggestion.endTime.getHours() + timeZoneOffset);
-        }
+        // normalize time zone
+        suggestion.normalizeTimeZoneOffset();
 
         // parse votes
         if(data.votes != undefined) {
@@ -94,5 +96,24 @@ export class Suggestion {
             });
         }
         return suggestion;
+    }
+
+    public normalizeTimeZoneOffset() {
+        let timeZoneOffset = this.date.getTimezoneOffset()/60;
+        if(this.startTime.getTimezoneOffset()/60 < 0) {
+            this.startTime.setHours(this.startTime.getHours() + timeZoneOffset);
+            this.endTime.setHours(this.endTime.getHours() + timeZoneOffset);
+            this.isTimeZoneNormalized = true;
+            this.timeZoneOffset = timeZoneOffset;
+        }
+    }
+
+    public denormalizeTimeZoneOffset() {
+        if(this.isTimeZoneNormalized) {
+            this.startTime.setHours(this.startTime.getHours() - this.timeZoneOffset);
+            this.endTime.setHours(this.endTime.getHours() - this.timeZoneOffset);
+            this.isTimeZoneNormalized = false;
+            this.timeZoneOffset = 0;
+        }
     }
 }

@@ -67,7 +67,7 @@ export class FirebaseProvider {
         this.apiService.updatePushToken(activeUser.key, token).subscribe(() => {
           console.log("Successfully updated push token");
         }, error => {
-          console.error("Could not update the CM push token on TeaCo");
+          console.error("Could not update the FCM push token on TeaCo");
         });
       }
     });

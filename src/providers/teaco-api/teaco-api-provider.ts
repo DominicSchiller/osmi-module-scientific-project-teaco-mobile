@@ -327,9 +327,14 @@ export class TeaCoApiProvider {
    * @param suggestion The suggestion which to update it's data
    */
   updateSuggestion(userKey: string, suggestion: Suggestion): Observable<void> {
+      // denormalize time zone offset to match the dates received from TeaCo
+      suggestion.denormalizeTimeZoneOffset();
       const requestOptions = TeaCoApiProvider.getRequestOptions();
       const url = this.baseUrl+ this.usersAPIEndpoint + userKey + this.suggestionsAPIEndpoint;
       let putData = JSON.stringify(suggestion);
+      // reset time zone normalization
+      suggestion.normalizeTimeZoneOffset();
+
       return this.http.put<void>(url, putData, requestOptions);
   }
   

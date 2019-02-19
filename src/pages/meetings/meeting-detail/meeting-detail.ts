@@ -586,4 +586,21 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
   private getTime(date: Date): string {
     return DateTimeHelper.getTimeString(date);
   }
+
+  /**
+   * Parse a date to it's text representation.
+   * @param date The date object with to parse
+   */
+  private getDateString(date: Date) {
+    return DateTimeHelper.getDateString(date);
+  }
+
+  /**
+   * Get the time span as text from a given suggestion.
+   * @param suggestion The suggestion which to parse
+   */
+  private getTimeSpan(suggestion: Suggestion) {
+    return DateTimeHelper.getTimeString(suggestion.startTime) + " - " +
+        DateTimeHelper.getTimeString(suggestion.endTime);
+  }
 }

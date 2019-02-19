@@ -230,8 +230,8 @@
               <ion-icon class="suggestion-icon" name="teaco-meeting"></ion-icon>
             </ion-col>
             <ion-col class="date-info">
-              <div class="normalSize medium">12.02.2019</div>
-              <div class="normalSize light">10:00 - 18:00 Uhr</div>
+              <div class="normalSize medium">{{getDateString(suggestion.date)}}</div>
+              <div class="normalSize light">{{getTimeSpan(suggestion)}} Uhr</div>
             </ion-col>
            </ion-row>
         </ion-label>
