@@ -109,6 +109,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
           }
         });
       }, error => {
+        this.loadingIndicator.hide();
         alert('Beim Laden von Meetings kam es zu einem unerwarteten Fehler. Bitte stell sicher, dass du Internetzugang hast.');
       });
     });

@@ -85,6 +85,7 @@ export class AddParticipantPage implements ParticipantsManagerDelegate {
               }, 400);
             }, error => {
               console.error(error);
+              this.loadingIndicator.hide();
             });
       });
     }
