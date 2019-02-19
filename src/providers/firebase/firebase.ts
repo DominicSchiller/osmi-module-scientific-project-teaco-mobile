@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {Platform} from "ionic-angular";
+import {Events, Platform} from "ionic-angular";
 import {FirebaseMessagingProvider} from "./messaging/firebase-messaging.interface";
 import {FirebaseMessagingWebProvider} from "./messaging/firebase-messaging-web";
 import {Firebase} from "@ionic-native/firebase";
@@ -29,12 +29,13 @@ export class FirebaseProvider {
    */
   constructor(
       private platform: Platform,
+      private events: Events,
       firebaseNative: Firebase,
       private apiService: TeaCoApiProvider,
       private userSession: UserSessionProvider) {
     // progressive web app
     this.fcm = !this.platform.is('cordova') ?
-        new FirebaseMessagingWebProvider() : new FirebaseMessagingNativeProvider(platform, firebaseNative);
+        new FirebaseMessagingWebProvider() : new FirebaseMessagingNativeProvider(platform, firebaseNative, events);
   }
 
   /**

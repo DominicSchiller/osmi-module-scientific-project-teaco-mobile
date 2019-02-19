@@ -1,7 +1,7 @@
 import {FirebaseMessagingProvider} from "./firebase-messaging.interface";
 import {Injectable} from "@angular/core";
 import {Firebase} from "@ionic-native/firebase";
-import {Platform} from "ionic-angular";
+import {Events, Platform} from "ionic-angular";
 import {tap} from 'rxjs/operators'
 
 /**
@@ -21,7 +21,8 @@ export class FirebaseMessagingNativeProvider implements FirebaseMessagingProvide
      * @param platform The platform where the app is currently running
      * @param firebaseNative Instance of native firebase plugin
      */
-    constructor(private platform: Platform, private firebaseNative: Firebase) {
+    constructor(private platform: Platform, private firebaseNative: Firebase,
+                private events: Events) {
         // TODO: Check for internet connection!!!
 
         this._loadingPromise = new Promise((resolve) => {
@@ -48,8 +49,26 @@ export class FirebaseMessagingNativeProvider implements FirebaseMessagingProvide
             tap(message => {
                 console.warn("Notification message received: ", message);
                 //TODO: implement message handling and routing here ...
+                if(message.tap) {
+                    let data = JSON.parse(message["gcm.notification.data"]);
+                    let page = '';
+                    switch(data.messageCode) {
+                        // meeting invitation notification received
+                        case 1:
+                            page = 'MeetingDetailPage';
+                            break;
+                        // finalized meeting notification received
+                        case 2:
+                            page = 'MeetingsOverviewPage';
+                            break;
+                    }
+                    this.events.publish('routeToPage', {
+                        'page': page,
+                        'data': data
+                    });
+                }
             })
-        )
+        ).subscribe();
     }
 
     ready(): Promise<void> {

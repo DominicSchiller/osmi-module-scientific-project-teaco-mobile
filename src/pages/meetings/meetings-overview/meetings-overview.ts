@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Events, IonicPage, Tabs} from 'ionic-angular';
+import {Events, IonicPage, NavParams, Tabs} from 'ionic-angular';
 import {ClosedMeetingsOverviewPage} from './closed-meetings-overview/closed-meetings-overview';
 import {OpenMeetingsOverviewPage} from "./open-meetings-overview/open-meetings-overview";
 
@@ -28,11 +28,17 @@ export class MeetingsOverviewPage {
    */
   tab2Root = 'OpenMeetingsOverviewPage';
 
+  private defaultIndex: number = 1;
+
   /**
    * Constructor
    * @param events The app's global events system
    */
-  constructor(private events: Events) {
+  constructor(private navParams: NavParams, private events: Events) {
+    if(this.navParams.get('meetingId') > -1) {
+      this.defaultIndex = 0;
+    }
+
     this.events.subscribe('switchToTab', (tabIndex: number) => {
       this.tabRef.select(tabIndex).then();
     });

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
-import {Platform, Nav } from 'ionic-angular';
+import {Platform, Nav, Events} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -17,10 +17,34 @@ import {FirebaseProvider} from "../providers/firebase/firebase";
   templateUrl: 'app.html'
 })
 export class MyApp {
+  /**
+   * The app's root page at launch
+   */
   rootPage: string;
-  isAppOpenedByDeepLink = false;
+  /**
+   * Status whether the app got launched via external deep link or not
+   */
+  isAppLaunchedByDeepLink = false;
+  /**
+   * Status whether the app got launched via push notification or not
+   */
+  isAppLaunchedByPushNotification = false;
+  /**
+   * The app's global navigation component
+   */
   @ViewChild(Nav) nav:Nav;
 
+  /**
+   * Constructor
+   * @param platform
+   * @param statusBar
+   * @param splashScreen
+   * @param deepLinks
+   * @param userSession
+   * @param firebaseService
+   * @param location
+   * @param events The app's global events system
+   */
   constructor(
       platform: Platform,
       statusBar: StatusBar,
@@ -28,7 +52,8 @@ export class MyApp {
       private deepLinks: Deeplinks,
       private readonly userSession: UserSessionProvider,
       private readonly firebaseService: FirebaseProvider,
-      public location: Location) {
+      public location: Location,
+      private events: Events) {
 
     platform.ready().then(() => {
       console.warn("Running in " + ENV.mode);
@@ -45,8 +70,13 @@ export class MyApp {
       }, {
         root: true
       }).subscribe( (match) => {
-        this.isAppOpenedByDeepLink = true;
+        this.isAppLaunchedByDeepLink = true;
       }, (noMatch) => {
+      });
+
+      this.events.subscribe('routeToPage', (navData) => {
+        this.isAppLaunchedByPushNotification = true;
+        this.nav.setRoot(navData.page, navData.data);
       });
 
       // starting the Firebase Service
@@ -56,7 +86,7 @@ export class MyApp {
       if(this.location.path(true) === "") {
         setTimeout( () => {
           this.userSession.ready().then(activeUser => {
-            if(!this.isAppOpenedByDeepLink) {
+            if(!this.isAppLaunchedByDeepLink && !this.isAppLaunchedByPushNotification) {
               this.rootPage = activeUser ? 'MeetingsOverviewPage' : 'NoUserFoundPage';
             }
           });

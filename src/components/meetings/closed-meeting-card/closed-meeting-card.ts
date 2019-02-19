@@ -16,7 +16,7 @@ import {MeetingUtils, SortOrder} from "../../../utils/meeting-utils";
 export class ClosedMeetingCardComponent extends OpenMeetingCardComponent {
 
   /**
-   * Default Constructor
+   * Constructor
    */
   constructor(private platform: Platform, private calendar: Calendar) {
     super();

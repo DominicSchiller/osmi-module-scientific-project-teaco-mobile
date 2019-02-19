@@ -103,28 +103,6 @@ export class AddParticipantPage implements ParticipantsManagerDelegate {
     this.navCtrl.pop().then();
   }
 
-  /**
-   * Finish adding participants.
-   */
-  private finish() {
-    this.loadingIndicator.show();
-    this.userSession.getActiveUser().then(activeUser => {
-      this.apiService.addParticipants(activeUser.key, this.meeting.id, this.participants)
-          .subscribe(() => {
-            setTimeout(() => {
-              this.loadingIndicator.hide();
-              this.feedbackAlert.presentWith(
-                  "Teilnehmer hinzugefügt",
-                  "Der Teilnehmer wurde erfolgreich zur Abstimmung hinzugefügt.",
-                  "teaco-user")
-                  .then(() => {
-                    this.goBack();
-                  });
-            }, 400);
-          });
-    });
-  }
-
   onParticipantsInvited(participants: User[]) {
     setTimeout(() => {
       this.loadingIndicator.hide();

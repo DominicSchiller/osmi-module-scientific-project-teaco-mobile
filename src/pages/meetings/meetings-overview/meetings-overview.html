@@ -1,4 +1,4 @@
-<ion-tabs selectedIndex="1" color="gray-light" #tabView>
+<ion-tabs [selectedIndex]="defaultIndex" color="gray-light" #tabView>
     <ion-tab [root]="tab1Root" tabUrlPath="closed" tabTitle="finale Termine" tabIcon="teaco-closed-meetings" tabsHideOnSubPages="true"></ion-tab>
     <ion-tab [root]="tab2Root" tabUrlPath="open" tabTitle="Terminplanungen" tabIcon="teaco-open-meetings" tabIcon="teaco-open-meetings" tabsHideOnSubPages="true"></ion-tab>
 </ion-tabs>
