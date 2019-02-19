@@ -26,14 +26,14 @@
           <div class="horizontal-line"></div>
           <ion-scroll scrollX="true" [ngClass]="meeting.isCancelled ? 'hidden' : ''">
             <ion-row nowrap class="final-dates-list">
-              <div class="date-item" *ngFor="let suggestion of meeting.suggestions" (click)="addSuggestionToCalendar(suggestion)">
+              <button ion-button clear class="date-item" *ngFor="let suggestion of meeting.suggestions" (click)="addSuggestionToCalendar(suggestion)">
                 <div class="month medium">{{getMonth(suggestion)}} '{{getYear(suggestion)}}</div>
                 <div class="day heavy">{{getDay(suggestion)}}</div>
                 <div class="day-name">{{getWeekday(suggestion)}}</div>
                 <div class="time">
                   {{getTime(suggestion)}}
                 </div>
-              </div>
+              </button>
             </ion-row>
           </ion-scroll>
           <div class="horizontal-line" [ngClass]="meeting.isCancelled ? 'hidden' : ''"></div>

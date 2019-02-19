@@ -106,7 +106,7 @@ export class DateTimeHelper {
         return new Date(
             date.getFullYear(),
             date.getMonth(),
-            date.getDay() - 1,
+            date.getUTCDate(),
             time.getHours(),
             time.getMinutes(),
             0, 0

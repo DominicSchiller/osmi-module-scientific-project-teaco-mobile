@@ -28,6 +28,8 @@ export class ClosedMeetingCardComponent extends OpenMeetingCardComponent {
   }
 
   addSuggestionToCalendar(suggestion: Suggestion) {
+    console.warn("Start ", DateTimeHelper.mergeDateAndTime(suggestion.date, suggestion.startTime));
+    console.warn("Ende ", DateTimeHelper.mergeDateAndTime(suggestion.date, suggestion.endTime));
     if(this.platform.is('cordova')) {
       this.calendar.createEventInteractively(
           this.meeting.title,

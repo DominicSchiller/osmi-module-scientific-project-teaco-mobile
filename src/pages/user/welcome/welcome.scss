@@ -13,7 +13,7 @@ page-welcome {
     color: color($colors, primary);
   }
   p {
-    @include box(75%, auto);
+    @include box(90%, auto);
     @include horizontal-center();
     text-align: center;
     color: color($colors, text-dark);
@@ -31,11 +31,11 @@ page-welcome {
     transition-timing-function: ease-in-out;
 
     &#login-button {
-      bottom: 200px;
+      bottom: 235px;
     }
 
     &#register-button {
-      bottom: 120px;
+      bottom: 155px;
       background-color: white;
       color: color($colors, primary);
       border: 1px solid color($colors, primary);

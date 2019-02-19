@@ -66,8 +66,10 @@ closed-meeting-card {
             background-repeat: no-repeat;
             float: left;
             margin: 0 10px;
+            padding: 0 !important;
 
             div {
+              left: 0 !important;
               position: absolute;
               width: calc(100% - 62%/5.12);
               color: color($colors, text-dark);
@@ -75,11 +77,11 @@ closed-meeting-card {
               font-size: 1.2rem;
 
               &.month {
-                top: 10px;
+                top: 13px;
               }
 
               &.day {
-                top: calc(28px);
+                top: 32px;
                 color: color($colors, primary);
                 font-size: 3rem;
               }
