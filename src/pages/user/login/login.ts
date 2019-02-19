@@ -14,13 +14,13 @@ import {FirebaseProvider} from "../../../providers/firebase/firebase";
  */
 @IonicPage({
     segment: 'welcome/register',
-    defaultHistory: ['NoUserFoundPage']
+    defaultHistory: ['WelcomePage']
 })
 @Component({
-    selector: 'page-register-user',
-    templateUrl: 'register-user.html'
+    selector: 'page-login',
+    templateUrl: 'login.html'
 })
-export class RegisterUserPage {
+export class LoginPage {
 
     /**
      * loading indicator UI component
@@ -29,7 +29,7 @@ export class RegisterUserPage {
     /**
      * The user's personal TeaCo key
      */
-    private readonly userKey: string;
+    private userKey: string;
     /**
      * The user's personal TeaCo key
      */
@@ -69,6 +69,8 @@ export class RegisterUserPage {
         if(this.userKey !== undefined) {
             this.isCalledByDeepLink = true;
             this.registerUserViaDeepLink();
+        } else {
+            this.userKey = "";
         }
     }
 
@@ -79,11 +81,15 @@ export class RegisterUserPage {
         this.navCtrl.pop().then();
     }
 
+    private onUserKeyEntered(event) {
+        this.userKey = event[0];
+    }
+
     /**
      * Register the user by validating the entered personal key
      * against the TeaCo backend.
      */
-    private registerUser() {
+    private login() {
         this.loadingIndicator.show();
         this.apiService.getUser(this.userKey).subscribe(user => {
             this.userSession.setActiveUser(user);
@@ -108,7 +114,7 @@ export class RegisterUserPage {
      */
     private registerUserViaDeepLink() {
         setTimeout(() => {
-            this.registerUser();
+            this.login();
         }, 100);
     }
 
@@ -124,14 +130,7 @@ export class RegisterUserPage {
      * Finish the registration process and navigate to the
      * meetings overview page.
      */
-    private finishRegistration(): void {
-        // if(this.isCalledByDeepLink) {
-        //     this.navCtrl.push('MeetingsOverviewPage').then();
-        // } else {
-        //     this.navCtrl.pop().then(() => {
-        //         this.navCtrl.setRoot('MeetingsOverviewPage').then();
-        //     });
-        // }
+    private finish(): void {
         this.navCtrl.push('MeetingsOverviewPage').then();
     }
 

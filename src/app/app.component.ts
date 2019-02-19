@@ -10,7 +10,7 @@ import {UserSessionProvider} from "../providers/user-session/user-session";
 import { ENV } from "@app/env";
 
 import {MeetingsOverviewPage} from "../pages/meetings/meetings-overview/meetings-overview";
-import {RegisterUserPage} from "../pages/user/register-user/register-user";
+import {LoginPage} from "../pages/user/login/login";
 import {FirebaseProvider} from "../providers/firebase/firebase";
 
 @Component({
@@ -65,7 +65,7 @@ export class MyApp {
 
       // Handle deep links
       this.deepLinks.routeWithNavController(this.nav, {
-        '/:userKey': 'RegisterUserPage',
+        '/:userKey': 'LoginPage',
         '/:userKey/meetings/:meetingId': 'MeetingDetailPage'
       }, {
         root: true
@@ -87,7 +87,7 @@ export class MyApp {
         setTimeout( () => {
           this.userSession.ready().then(activeUser => {
             if(!this.isAppLaunchedByDeepLink && !this.isAppLaunchedByPushNotification) {
-              this.rootPage = activeUser ? 'MeetingsOverviewPage' : 'NoUserFoundPage';
+              this.rootPage = activeUser ? 'MeetingsOverviewPage' : 'WelcomePage';
             }
           });
         }, 50);

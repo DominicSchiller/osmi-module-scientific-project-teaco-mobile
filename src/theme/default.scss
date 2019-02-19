@@ -88,6 +88,10 @@ ion-icon {
     mask-image: url("../assets/svg/user/user.svg");
   }
 
+  &[class*="teaco-user-key"] {
+    mask-image: url("../assets/svg/user/user-key.svg");
+  }
+
   &[class*="teaco-email"] {
     mask-image: url("../assets/svg/user/email.svg");
   }

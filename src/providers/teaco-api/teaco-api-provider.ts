@@ -114,6 +114,28 @@ export class TeaCoApiProvider {
           });
   }
 
+    /**
+     * Create a new user on TeaCo.
+     * @param name The user's name
+     * @param email The user's email
+     */
+  createUser(name: string, email: string): Observable<User> {
+      const requestOptions = TeaCoApiProvider.getRequestOptions();
+      const url = this.baseUrl + this.usersAPIEndpoint;
+      let postData = {
+          "email": email,
+          "name": name,
+          "language": "de"
+      };
+      return this.http.post<User>(url, postData, requestOptions)
+          .map(responseData => {
+              if(responseData === null) {
+                  throw new Error("No user found for this key");
+              }
+              return User.of(responseData);
+          });
+  }
+
   /**
    * Update a user's push token on TeaCo.
    * @param userKey The registered user's unique key
