@@ -30,7 +30,7 @@ page-create-new-suggestion {
         #createNewSuggestionButton {
             @include box(100%, 55px);
             position: absolute;
-            bottom: 0;
+            bottom: -4px;
         }
 
         ion-fab[bottom] {

@@ -9,7 +9,7 @@
   <loading-indicator></loading-indicator>
   <feedback-alert></feedback-alert>
 
-  <div class="empty-hint" *ngIf="meetings.length == 0">
+  <div class="empty-hint" *ngIf="meetings.length == 0 && canShowPlaceholder">
     <ion-icon name="teaco-closed-meetings"></ion-icon>
     <div class="message mediumSize bold">
       Keine finalisierten Termine vorhanden

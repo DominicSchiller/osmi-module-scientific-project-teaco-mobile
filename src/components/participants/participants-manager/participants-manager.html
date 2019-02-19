@@ -44,11 +44,12 @@
 </form>
 <section id="participants-queue">
   <ion-scroll scrollY="true">
-    <ion-item class="participant-item" *ngFor="let participant of managedParticipants; let i=index">
+    <ion-item class="participant-item" *ngFor="let participant of managedParticipants; let i=index"
+    [ngClass]="participant.isTemporarely ? 'temporarely-added' : ''">
       <ion-row>
         <ion-col col-auto>
           <div class="user-icon" [ngClass]="participant.id == activeUserId ? 'active-user' : ''">
-            <ion-icon name="teaco-user" color="gray-dark"></ion-icon>
+            <ion-icon name="teaco-user" color="gray-extra-dark"></ion-icon>
           </div>
         </ion-col>
         <ion-col>

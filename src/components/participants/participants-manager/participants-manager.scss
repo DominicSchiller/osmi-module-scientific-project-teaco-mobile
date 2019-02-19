@@ -159,6 +159,10 @@ participants-manager {
         border-top: 1px solid color($colors, gray-dark);
         border-bottom: 1px solid color($colors, gray-dark);
 
+        &.temporarely-added {
+          background-color: color($colors, gray-light);
+        }
+
         &:first-of-type {
           border-top: none !important;
         }
@@ -175,7 +179,7 @@ participants-manager {
         .user-icon {
           @include box(50px, 50px);
           position: relative;
-          border: 1px solid color($colors, gray-dark);
+          border: 1px solid color($colors, gray-extra-dark);
           border-radius: 50%;
 
           &.active-user {
@@ -200,7 +204,7 @@ participants-manager {
           overflow: hidden;
 
           p {
-            //color: color($colors, text-dark) !important;
+            color: color($colors, gray-extra-dark) !important;
             word-break: break-all !important;
             white-space:normal !important;
           }

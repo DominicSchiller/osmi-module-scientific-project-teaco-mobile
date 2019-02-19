@@ -41,7 +41,7 @@ page-create-new-meeting {
         #createNewMeetingButton {
             @include box(100%, 55px);
             position: absolute;
-            bottom: 0;
+            bottom: -4px;
             z-index: 200;
         }
     }

@@ -239,8 +239,11 @@ export class ParticipantsManager {
           }
         });
         if(!isContained) {
+          (<any>checkedResult).isTemporarely = true;
           this.managedParticipants.push(checkedResult);
           this.queuedParticipantsToInvite.push(checkedResult);
+        } else {
+          (<any>checkedResult).isTemporarely = false;
         }
       });
       this.foundUsers = [];

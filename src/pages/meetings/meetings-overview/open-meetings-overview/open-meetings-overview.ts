@@ -57,6 +57,8 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    */
   protected meetings: Meeting[];
 
+  protected canShowPlaceholder: boolean;
+
   /**
    * Constructor
    * @param navCtrl The page's navigation controller
@@ -76,6 +78,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
       private alertCtrl: AlertController,
       private zone: NgZone) {
     this.meetings = [];
+    this.canShowPlaceholder = false;
   }
 
   ngOnInit() {
@@ -94,7 +97,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
       this.apiService.getAllMeetings(activeUser.key, meetingType).subscribe(meetings => {
         this.zone.run(() => {
           this.meetings = meetings;
-          //this.meeting.id = meetings[0].id;
+          this.canShowPlaceholder = true;
           if(meetings.length > 0) {
             this.startMeetingCardsUpdateInterval();
           }
