@@ -62,6 +62,16 @@
   <loading-indicator></loading-indicator>
   <feedback-alert></feedback-alert>
 
+  <ion-refresher (ionRefresh)="onRefreshMeeting($event)">
+    <ion-refresher-content
+            pullingIcon="arrow-round-down"
+            [pullingText]="meetingDetailsSlider.getActiveIndex() === 0 ? 'Terminvorschläge aktualisieren' :
+            meetingDetailsSlider.getActiveIndex() === 1 ? 'Teilnehmerliste aktualisieren' : 'Voting-Status aktualisieren'"
+            refreshingSpinner="crescent"
+            [refreshingText]="meetingDetailsSlider.getActiveIndex() === 0 ? 'Aktualisiere Terminvorschläge ...' :
+            meetingDetailsSlider.getActiveIndex() === 1 ? 'Aktualisiere Teilnehmerliste ...' : 'Aktualisiere Voting-Status ...'">
+    </ion-refresher-content>
+  </ion-refresher>
   <div class="action-overlay" #actionOverlay (click)="closeFinishPlanningActionSheet()"></div>
   <ion-slides pager="false" id="meetingDetailsSlides" #meetingDetailsSlider>
     <ion-slide id="suggestions-slide" class="swiper-no-swiping">
@@ -71,14 +81,6 @@
           Noch keine Terminvorschläge angelegt
         </div>
       </div>
-      <!--<ion-refresher (ionRefresh)="onRefreshMeeting($event)">-->
-      <!--<ion-refresher-content-->
-      <!--pullingIcon="arrow-round-down"-->
-      <!--pullingText="Terminvorschläge aktualisieren"-->
-      <!--refreshingSpinner="crescent"-->
-      <!--refreshingText="Aktualisiere Terminvorschläge ...">-->
-      <!--</ion-refresher-content>-->
-      <!--</ion-refresher>-->
       <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
         <ion-list no-lines>
           <ion-item-sliding *ngFor="let suggestion of (meeting | async)?.suggestions; let i = index" #suggestionSlidingItem>
