@@ -160,7 +160,13 @@ participants-manager {
         border-bottom: 1px solid color($colors, gray-dark);
 
         &.temporarely-added {
-          background-color: color($colors, gray-light);
+          background-color: lighten(color($colors, temporarely), 46%);
+          border-color: color($colors, temporarely);
+        }
+
+        &.marked-to-remove {
+          background-color: lighten(color($colors, removable), 56%);
+          border-color: color($colors, removable);
         }
 
         &:first-of-type {

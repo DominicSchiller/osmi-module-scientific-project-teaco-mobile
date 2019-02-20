@@ -333,6 +333,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
   private openFinishPlanningActionSheet() {
    this.meeting.subscribe(meeting => {
      this.locationInput.value = meeting.location;
+     this.location = meeting.location;
      this.refreshPickedSuggestionsList();
      this.renderer.addClass(this.actionOverlay.nativeElement, 'active');
      this.renderer.addClass(this.finishActionSheet.getElementRef().nativeElement, 'active');

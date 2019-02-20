@@ -189,10 +189,10 @@ export class ParticipantsManager {
     for(let i=0; i<this.queuedParticipantsToRemove.length; i++) {
       if(this.queuedParticipantsToRemove[i].id === participant.id) {
         this.queuedParticipantsToRemove.splice(i, 1);
+        (<any>participant).isMarkedToRemove = false;
         return;
       }
     }
-    // this.participants.splice(index, 1);
     let ignore = false;
     for(let i=0; i<this.queuedParticipantsToInvite.length; i++) {
       if(this.queuedParticipantsToInvite[i].id === participant.id) {
@@ -203,6 +203,7 @@ export class ParticipantsManager {
       }
     }
     if(!ignore) {
+      (<any>participant).isMarkedToRemove = true;
       this.queuedParticipantsToRemove.push(participant);
     }
   }

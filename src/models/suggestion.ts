@@ -98,6 +98,9 @@ export class Suggestion {
         return suggestion;
     }
 
+    /**
+     * Will normalize the suggestion's times with the given time zone offset.
+     */
     public normalizeTimeZoneOffset() {
         let timeZoneOffset = this.date.getTimezoneOffset()/60;
         if(this.startTime.getTimezoneOffset()/60 < 0) {
@@ -108,6 +111,9 @@ export class Suggestion {
         }
     }
 
+    /**
+     * Will remove the the suggestion's times normalization if applied.
+     */
     public denormalizeTimeZoneOffset() {
         if(this.isTimeZoneNormalized) {
             this.startTime.setHours(this.startTime.getHours() - this.timeZoneOffset);

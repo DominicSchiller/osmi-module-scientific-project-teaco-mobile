@@ -72,7 +72,8 @@ page-meeting-detail {
 
           .stats-value {
             text-align: center;
-            margin-bottom: 0px;
+            padding-bottom: 1px;
+            margin-bottom: 0;
             margin-top: 30px;
 
             &.active {
@@ -210,7 +211,7 @@ page-meeting-detail {
           position: relative !important;
 
           .scroll-zoom-wrapper {
-            padding: 0 15px !important;
+            padding: 0 5px !important;
           }
         }
       }
@@ -373,10 +374,6 @@ page-meeting-detail {
               ion-col {
                 padding: 0 !important;
               }
-
-              //&:first-of-type {
-              //  margin-top: 0 !important;
-              //}
 
               &.self-user-row {
                 .user-icon {
@@ -559,6 +556,11 @@ page-meeting-detail {
 
   .card {
     box-shadow: none !important;
+  }
+
+  p {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
   }
 
   .finish-section {

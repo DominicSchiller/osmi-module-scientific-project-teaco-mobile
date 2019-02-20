@@ -45,7 +45,8 @@
 <section id="participants-queue">
   <ion-scroll scrollY="true">
     <ion-item class="participant-item" *ngFor="let participant of managedParticipants; let i=index"
-    [ngClass]="participant.isTemporarely ? 'temporarely-added' : ''">
+    [ngClass]="participant.isTemporarely ? 'temporarely-added' :
+                participant.isMarkedToRemove ? 'marked-to-remove' : ''">
       <ion-row>
         <ion-col col-auto>
           <div class="user-icon" [ngClass]="participant.id == activeUserId ? 'active-user' : ''">
