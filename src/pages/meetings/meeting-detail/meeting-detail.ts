@@ -143,8 +143,11 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
       private zone: NgZone,
       private events: Events) {
     this.userSession.getActiveUser().then(activeUser => {
-      this.activeUserId = activeUser.id;
+      if(activeUser) {
+        this.activeUserId = activeUser.id;
+      }
     });
+
     this.voteDecisions = new Map<number, Object>();
     this.pickedSuggestions = [];
     this.comment = "";
@@ -192,7 +195,29 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
   }
 
   ngOnInit() {
-    this.loadMeetingDetails();
+    if(this.navParams.get('userKey')) {
+      // check if user exists
+      this.userSession.getActiveUser().then(activeUser => {
+        if(activeUser) {
+          // user exists, directly load meeting details
+          this.loadMeetingDetails();
+        } else {
+          // user does not yet exist, so load user first
+          this.loadingIndicator.show();
+          this.apiService.getUser(this.navParams.get('userKey')).subscribe(user => {
+            this.userSession.setActiveUser(user);
+            this.activeUserId = user.id;
+            // user registered, now load meeting details
+            this.loadMeetingDetails();
+          }, error => {
+            alert('Es kam zu einem unerwarteten Fehler bei der Konto-Anmeldung. Bitte überpüfe, ob eine Internetverbindung verfügbar ist.')
+          });
+          this.loadingIndicator.show();
+        }
+      });
+    } else {
+      this.loadMeetingDetails();
+    }
   }
 
   ionViewDidLoad() {
