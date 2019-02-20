@@ -26,14 +26,22 @@ export class ClosedMeetingsOverviewPage extends OpenMeetingsOverviewPage {
    * @param apiService The app's TeaCo API service
    * @param alertCtrl The page's alert controller to create alert and confirmation dialogs
    * @param zone The current template zone this controller refers to
+   * @param events The app's global events system
    */
   constructor(navCtrl: NavController,
               navParams: NavParams,
               userSession: UserSessionProvider,
               apiService: TeaCoApiProvider,
               alertCtrl: AlertController,
-              zone: NgZone) {
-    super(navCtrl, navParams, undefined, userSession, apiService, alertCtrl, zone);
+              zone: NgZone,
+              events: Events) {
+    super(navCtrl, navParams, undefined, userSession, apiService, alertCtrl, zone, events);
+
+    this.events.subscribe('switchToTab', (tabIndex: number) => {
+      if(tabIndex == 0) {
+        this.ngOnInit();
+      }
+    });
   }
 
   ngOnInit() {

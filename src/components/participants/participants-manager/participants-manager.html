@@ -95,7 +95,7 @@
 
 <div id="invite-participants-action-sheet" #inviteParticipantsActionSheet>
   <input-card id="comment-input" type="text-area" icon="chatboxes" placeholder="Gib hier optional noch einen Kommentar ein ..."
-              (onChange)="onCommentEntered($event)"></input-card>
+              (onChange)="onCommentEntered($event)" #commentInput></input-card>
   <button ion-button full id="send-button" class="normalSize medium"
           (click)="inviteParticipants()">
     Jetzt absenden

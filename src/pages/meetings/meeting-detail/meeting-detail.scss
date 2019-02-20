@@ -422,8 +422,8 @@ page-meeting-detail {
       transition-duration: 0.1s;
       -webkit-transition-timing-function: ease-in-out;
       transition-timing-function: ease-in-out;
-      -webkit-backdrop-filter: blur(0px);
-      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(7px);
+      backdrop-filter: blur(7px);
 
       &.active {
         visibility: visible;

@@ -68,6 +68,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
    * @param apiService The app's TeaCo API service
    * @param alertCtrl The page's alert controller to create alert and confirmation dialogs
    * @param zone The current template zone this controller refers to
+   * @param events The app's global events system
    */
   constructor(
       protected navCtrl: NavController,
@@ -76,9 +77,16 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
       protected userSession: UserSessionProvider,
       protected apiService: TeaCoApiProvider,
       private alertCtrl: AlertController,
-      private zone: NgZone) {
+      private zone: NgZone,
+      protected events: Events) {
     this.meetings = [];
     this.canShowPlaceholder = false;
+
+    this.events.subscribe('switchToTab', (tabIndex: number) => {
+      if(tabIndex == 1) {
+        this.ngOnInit();
+      }
+    });
   }
 
   ngOnInit() {

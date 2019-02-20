@@ -75,8 +75,14 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
    */
   protected listRefresher: Refresher;
 
+  /**
+   * The active user's id
+   */
   private activeUserId: number;
 
+  /**
+   * Map of user votes in relation to all given suggestion
+   */
   private voteDecisions: Map<number, Object>;
 
   /**
@@ -415,10 +421,13 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
                   "Planung erfolgreich abgeschlossen. Alle Teilnehmer wurden über die finalen Termine informiert.",
                   "teaco-closed-meetings")
                   .then(() => {
+                    if(this.delegate) {
+                      this.delegate.onMeetingFinalized(this.meetingId);
+                    }
                     this.events.publish('switchToTab', 0);
                     this.goBack();
                   });
-              }, 300);
+              }, 100);
           }, error => {
             this.loadingIndicator.hide();
             alert('Es kam bei der Datenübermittlung zu einem unerwarteten Fehler. Bitte stell sicher, dass du Internetzugang hast.');

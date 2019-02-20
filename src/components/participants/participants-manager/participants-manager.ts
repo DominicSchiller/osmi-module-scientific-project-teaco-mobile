@@ -4,6 +4,7 @@ import {ParticipantsManagerDelegate} from "./participants-manager-delegate";
 import {UserSessionProvider} from "../../../providers/user-session/user-session";
 import {TeaCoApiProvider} from "../../../providers/teaco-api/teaco-api-provider";
 import {Meeting} from "../../../models/meeting";
+import {InputCardComponent} from "../../general/input-card/input-card";
 
 /**
  * Custom component dedicated to manage participants associated to
@@ -22,6 +23,8 @@ export class ParticipantsManager {
   @Input('delegate') delegate: ParticipantsManagerDelegate;
 
   @ViewChild('inviteParticipantsActionSheet') inviteActionSheet: ElementRef;
+
+  @ViewChild('commentInput') commentInput: InputCardComponent;
   /**
    * The pages overlay UI element for i.e. indicating stuff in progress
    */
@@ -275,6 +278,7 @@ export class ParticipantsManager {
           this.invitationComment)
           .subscribe(() => {
             this.invitationComment = "";
+            this.commentInput.value = "";
             if(this.delegate) {
               this.delegate.onParticipantsInvited(this.queuedParticipantsToInvite);
               this.queuedParticipantsToInvite = [];
