@@ -1,0 +1,261 @@
+<ion-header id="meeting-details-page-header">
+  <ion-navbar>
+    <ion-title></ion-title>
+  </ion-navbar>
+
+  <section id="meeting-details-header">
+    <ion-row class="title-row">
+      <ion-col>
+        <ion-icon name="teaco-meeting"></ion-icon>
+      </ion-col>
+      <ion-col class="divider">
+        <div class="vertical-line"></div>
+      </ion-col>
+      <ion-col>
+        <div class="meeting-title medium">{{(meeting | async)?.title}}</div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="divider-row">
+      <div class="horizontal-line"></div>
+    </ion-row>
+    <ion-row class="statistics-row">
+      <ion-col>
+        <button ion-button (click)="showMeetingDetailsSlide(0)">
+          <ion-icon name="teaco-suggestion"></ion-icon>
+          <br />
+          <div class="stats-value light smallSize"
+               [ngClass]="meetingDetailsSlider.getActiveIndex() == 0 ? 'active' : ''">
+            {{(meeting | async)?.numberOfSuggestions}}<br />
+            {{(meeting | async)?.suggestions.length == 1 ? 'Termin' : 'Termine'}}
+          </div>
+        </button>
+      </ion-col>
+      <ion-col >
+        <button ion-button (click)="showMeetingDetailsSlide(1)">
+          <ion-icon name="teaco-participants"></ion-icon>
+          <br />
+          <span class="stats-value light smallSize"
+                [ngClass]="meetingDetailsSlider.getActiveIndex() == 1 ? 'active' : ''">
+            {{(meeting | async)?.numberOfParticipants}}<br />Teilnehmer
+          </span>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button (click)="showMeetingDetailsSlide(2)">
+          <ion-icon name="{{(meeting | async)?.progress.pending === 1 || (meeting | async)?.participants.length <= 1 ? 'teaco-meeting-state-pending' :
+          ((meeting | async)?.progress.completed === 1 ? 'teaco-meeting-state-voting-completed' : 'teaco-meeting-state-voting')}}"></ion-icon>
+          <br />
+          <span class="stats-value light smallSize"
+                [ngClass]="meetingDetailsSlider.getActiveIndex() == 2 ? 'active' : ''">
+            <!--<span class="bold">Status</span><br />-->
+            {{(meeting | async)?.progress.pending === 1 || (meeting | async)?.participants.length <= 1 ? "in Vorbereitung" :
+                  ((meeting | async)?.progress.completed === 1 ? "alle Termine abgestimmt" : "Termine in Abstimmung")}}
+          </span>
+        </button>
+      </ion-col>
+      <div class="tab-slider" #tabSlider>
+      </div>
+    </ion-row>
+  </section>
+</ion-header>
+<ion-content class="no-scroll" id="meeting-details-content">
+  <loading-indicator></loading-indicator>
+  <feedback-alert></feedback-alert>
+
+  <ion-refresher (ionRefresh)="onRefreshMeeting($event)">
+    <ion-refresher-content
+            pullingIcon="arrow-round-down"
+            [pullingText]="meetingDetailsSlider.getActiveIndex() === 0 ? 'Terminvorschläge aktualisieren' :
+            meetingDetailsSlider.getActiveIndex() === 1 ? 'Teilnehmerliste aktualisieren' : 'Voting-Status aktualisieren'"
+            refreshingSpinner="crescent"
+            [refreshingText]="meetingDetailsSlider.getActiveIndex() === 0 ? 'Aktualisiere Terminvorschläge ...' :
+            meetingDetailsSlider.getActiveIndex() === 1 ? 'Aktualisiere Teilnehmerliste ...' : 'Aktualisiere Voting-Status ...'">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="action-overlay" #actionOverlay (click)="closeFinishPlanningActionSheet()"></div>
+  <ion-slides pager="false" id="meetingDetailsSlides" #meetingDetailsSlider>
+    <ion-slide id="suggestions-slide" class="swiper-no-swiping">
+      <div class="empty-hint" *ngIf="(meeting | async)?.suggestions.length == 0">
+        <ion-icon name="teaco-suggestion"></ion-icon>
+        <div class="message mediumSize bold">
+          Noch keine Terminvorschläge angelegt
+        </div>
+      </div>
+      <ion-scroll id="suggestions-list" scrollX="false" scrollY="true">
+        <ion-list no-lines>
+          <ion-item-sliding *ngFor="let suggestion of (meeting | async)?.suggestions; let i = index" #suggestionSlidingItem>
+            <ion-item >
+              <suggestion-card [suggestion]="suggestion" (click)="showSuggestionDetails(suggestion, i)"></suggestion-card>
+            </ion-item>
+            <ion-item-options side="right">
+              <button ion-button color="secondary" (click)="pickSuggestion(suggestion, i, suggestionSlidingItem)" text-wrap>
+                <ion-icon name="{{suggestion.isPicked ? 'teaco-unpicked-suggestion' : 'teaco-picked-suggestion'}}"></ion-icon>
+              </button>
+              <button ion-button color="primary" (click)="deleteSuggestion(suggestion, i, suggestionSlidingItem)">
+                <ion-icon name="md-trash"></ion-icon>
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </ion-scroll>
+      <button ion-button full
+              class="action-button normalSize medium" color="primary"
+              (click)="openFinishPlanningActionSheet()"
+              [hidden]="(meeting | async)?.numberOfParticipants == 1"
+              [disabled]="pickedSuggestions.length == 0">
+        Planung Abschließen
+      </button>
+      <button ion-button full
+              class="action-button normalSize medium" color="primary"
+              (click)="showMeetingDetailsSlide(1)"
+              [disabled]="(meeting | async)?.suggestions.length == 0"
+              [hidden]="(meeting | async)?.numberOfParticipants !== 1">
+        Weiter
+      </button>
+      <ion-fab bottom right id="createNewSuggestionButton">
+        <button ion-fab color="primary" (click)="goToNewSuggestionPage()">
+          <ion-icon name="md-add"></ion-icon>
+        </button>
+      </ion-fab>
+    </ion-slide>
+    <ion-slide id="participants-slide" class="swiper-no-swiping">
+      <div id="participants-manager-section">
+        <participants-manager [meetingId]="(meeting | async)?.id"
+                              [participants]="(meeting | async)?.participants"
+        [delegate]="this">
+        </participants-manager>
+      </div>
+    </ion-slide>
+    <ion-slide id="voting-board-slide" class="swiper-no-swiping">
+      <div class="empty-hint" *ngIf="(meeting | async)?.suggestions.length == 0 ||
+      (meeting | async)?.participants.length == 1">
+        <ion-icon name="teaco-meeting-state-pending"></ion-icon>
+        <div class="message mediumSize bold">
+          Es hat noch keine Abstimmung begonnen.
+        </div>
+        <div class="sub-message normalSize medium">
+          Lege bitte zuerst Terminvorschläge an und lade im Anschluss
+          daran die gewünschten Teilnehmer zur Abstimmung ein.
+        </div>
+      </div>
+      <ion-scroll scrollX="false" scrollY="true" id="planning-status-list"
+                  *ngIf="(meeting | async)?.suggestions.length > 0 &&
+      (meeting | async)?.participants.length > 1">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-5
+                     [ngClass]="(meeting | async)?.suggestions.length == 1 ? 'col-1-suggestion-space' :
+                     (meeting | async)?.suggestions.length == 2 ? 'col-2-suggestion-space' :
+                     (meeting | async)?.suggestions.length == 3 ? 'col-3-suggestion-space' : ''">
+              <ion-row>
+                <ion-col class="header-placeholder-column"></ion-col>
+              </ion-row>
+              <ion-row class="participants-row" nowrap
+                       [ngClass]="participant.id == activeUserId ? 'self-user-row' : ''"
+                       *ngFor="let participant of (meeting | async)?.participants" [ngClass]="participant.id == activeUserId ? 'self-user-row' : ''">
+                <ion-col class="user-icon-column" col-auto>
+                  <div class="user-icon">
+                    <ion-icon name="teaco-user"></ion-icon>
+                  </div>
+                </ion-col>
+                <ion-col class="participant-name-column">
+                  <div class="name-label">
+                    {{participant.id == activeUserId ? 'Du' : (participant.name.length > 0 ? participant.name : participant.email) }}
+                  </div>
+                </ion-col>
+                <ion-col class="vote-status-column"  col-auto>
+                  <ion-icon name="" ></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col col-auto>
+              <div class="vertical-line"></div>
+            </ion-col>
+            <ion-col>
+              <ion-scroll scrollX="true" id="suggestions-scroll">
+                 <ion-row nowrap class="header-row">
+                   <div class="suggestion-info-column"
+                        *ngFor="let suggestion of (meeting | async)?.suggestions; let i=index"
+                   (click)="pickSuggestion(suggestion, i, null)">
+                     <div class="extraSmallSize medium">{{getMonth(suggestion)}} '{{getYear(suggestion)}}</div>
+                    <div class="day normalSize medium">
+                      {{suggestion.date.getDate()}}
+                    </div>
+                     <div class="time extraSmallSize light">
+                       {{getTime(suggestion.startTime)}}
+                     </div>
+                     <div class="binder extraSmallSize light">-</div>
+                     <div class="time extraSmallSize light">
+                       {{getTime(suggestion.endTime)}}
+                     </div>
+                     <div class="pick-status" [ngClass]="suggestion.isPicked ? 'picked' : ''">
+                       <ion-icon name="teaco-picked-suggestion"></ion-icon>
+                     </div>
+                   </div>
+                 </ion-row>
+                <ion-row class="suggestions-row" nowrap
+                         *ngFor="let participant of (meeting | async)?.participants">
+                  <ion-col class="vote-column" [ngClass]="voteDecisions[participant.id][suggestion.id]"
+                           *ngFor="let suggestion of (meeting | async)?.suggestions" col-auto>
+                    <ion-icon name="{{voteDecisions[participant.id][suggestion.id]}}"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-scroll>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-scroll>
+    </ion-slide>
+  </ion-slides>
+
+
+
+
+
+
+
+</ion-content>
+
+<ion-slides pager="false" id="finish-planning-action-sheet" #finishPlanningActionSheet>
+  <ion-slide>
+    <h5>Terminplanung abschließen</h5>
+    <p class="normalSize">
+      Wähle bitte nachfolgend alle finalen Termine aus:
+    </p>
+    <ion-scroll scrollX="false" scrollY="true">
+      <ion-item *ngFor="let suggestion of pickedSuggestions">
+        <ion-label>
+          <ion-row>
+            <ion-col col-auto>
+              <ion-icon class="suggestion-icon" name="teaco-meeting"></ion-icon>
+            </ion-col>
+            <ion-col class="date-info">
+              <div class="normalSize medium">{{getDateString(suggestion.date)}}</div>
+              <div class="normalSize light">{{getTimeSpan(suggestion)}} Uhr</div>
+            </ion-col>
+           </ion-row>
+        </ion-label>
+        <ion-checkbox item-right name="user-result-checkbox" [checked]="suggestion.isPicked" (ionChange)="onPickStatusChange(suggestion)"></ion-checkbox>
+      </ion-item>
+    </ion-scroll>
+    <div class="footer">
+      <button id="swipe-forward-button" class="bold" ion-button clear color="primary" (click)="finishActionSheet.slideNext();">Weiter</button>
+    </div>
+  </ion-slide>
+  <ion-slide>
+    <input-card id="location-input" type="text-area" icon="teaco-location" placeholder="Gib eine Location an ..." (onChange)="onLocationEntered($event)" #locationInput></input-card>
+    <input-card id="comment-input" type="text-area" icon="chatboxes" placeholder="Gib hier optional noch einen Kommentar ein ..." (onChange)="onCommentEntered($event)"></input-card>
+    <div class="finish-section">
+      <p class="normalSize medium">Alles soweit fertig?</p>
+      <p class="normalSize light">Dann schließe deine Meeting-Planung jetzt ab</p>
+      <div class="actions">
+        <button ion-fab color="gray-extra-dark" (click)="closeFinishPlanningActionSheet()">
+          <ion-icon name="teaco-voted-no"></ion-icon>
+        </button>
+        <button ion-fab color="primary" (click)="finishPlanning()" [disabled]="location.length == 0">
+          <ion-icon name="teaco-voted-yes"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </ion-slide>
+</ion-slides>

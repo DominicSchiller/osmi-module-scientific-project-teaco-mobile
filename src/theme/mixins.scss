@@ -1,0 +1,48 @@
+@import '../../node_modules/ionic-angular/themes/ionic.functions';
+
+@mixin box($width: null, $height: null) {
+  @if ($width) {
+    width: $width !important;
+  }
+  @if ($height) {
+    height: $height !important;
+  }
+}
+
+@mixin vertical-align($percentage) {
+  position: relative !important;
+  top: $percentage !important;
+  transform: translateY(-$percentage);
+}
+
+@mixin horizontal-align($percentage) {
+  position: relative !important;
+  left: $percentage !important;
+  transform: translateX(-$percentage);
+}
+
+@mixin align($xPercentage, $yPercentage) {
+  @include vertical-align($yPercentage);
+  @include horizontal-align($xPercentage);
+}
+
+@mixin vertical-center() {
+  @include vertical-align(50%);
+}
+
+@mixin horizontal-center() {
+  @include horizontal-align(50%);
+}
+
+@mixin center() {
+  @include vertical-center();
+  @include horizontal-center();
+  transform: translate(-50%, -50%) !important;
+}
+
+@mixin drop-shadow() {
+  -webkit-box-shadow: 0 2px 10px 3px rgba(34,34,34,0.15);
+  -moz-box-shadow: 0 2px 10px 3px rgba(34,34,34,0.15);
+  box-shadow: 0 2px 10px 3px rgba(34,34,34,0.15);
+}
+

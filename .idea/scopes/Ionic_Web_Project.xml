@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Ionic Web Project" pattern="!file:.gitignore&amp;&amp;!file:ionic.config.json&amp;&amp;!file:tsconfig.json&amp;&amp;!file:tslint.json&amp;&amp;!file[TeaCo-Mobile]:.idea/*&amp;&amp;!file:package-lock.json&amp;&amp;!file:package.json&amp;&amp;!file[TeaCo-Mobile]:.idea//*&amp;&amp;!file:config.xml" />
+</component>

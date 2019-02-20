@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Registrierung
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <loading-indicator></loading-indicator>
+  <div id="form" *ngIf="!isRegistrationSuccess">
+    <p ion-text color="text-dark" class="light normalSize">
+      Um bei TeaCo ein Konto anzulegen, benötigst Du nichts anderes
+      als Deine <br />E-Mail Addresse.
+    </p>
+    <br />
+    <ion-list>
+      <input-card type="text"
+                  placeholder="Dein Name ..."
+                  icon="teaco-user"
+                  (onChange)="onNameEntered($event)">
+      </input-card>
+      <input-card type="text"
+                  placeholder="Deine Email-Addresse"
+                  icon="teaco-email"
+                  (onChange)="onEmailEntered($event)" email>
+      </input-card>
+      <section class="error-section">{{ errorMsg }}</section>
+      <button ion-button round
+              [disabled]="name.length == 0 || email.length == 0 || !isQualifiedEmail"
+              (click)="register()" class="normalSize medium">Konto Registrieren</button>
+    </ion-list>
+  </div>
+  <div id="success-info-container" *ngIf="isRegistrationSuccess">
+    <img alt="no-user icon" src="../../../assets/svg/general/success.svg" />
+    <p class="light normalSize">
+      Herzlichen Glückwunsch
+      <br />
+      Dein Konto wurde erfolgreich eingerichtet.<br />
+      <br />
+      Als Bestätigung haben wir Dir eine kurze Mail an Deine
+      zuvor angegebene Mail-Addresse geschickt.
+    </p>
+    <button ion-button round (click)="finish()" class="normalSize medium">Fertig</button>
+  </div>
+</ion-content>

@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar hideBackButton>
+      <ion-buttons left>
+          <button (click)="closeModal()" ion-button>
+              <ion-icon name="md-close"></ion-icon>
+          </button>
+      </ion-buttons>
+    <ion-title>Neues Meeting Anlegen</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <loading-indicator></loading-indicator>
+
+    <ion-scroll scrollY="true">
+        <ion-list>
+            <input-card [type]="'text'" [placeholder]="'Titel'" [icon]="'teaco-title'" (onChange)="onTitleEntered($event)">
+            </input-card>
+            <div class="medium optional-header">
+                Optional:
+            </div>
+            <input-card [type]="'text'" [placeholder]="'Ort'" [icon]="'teaco-location'" (onChange)="onLocationEntered($event)">
+            </input-card>
+        </ion-list>
+    </ion-scroll>
+    <button ion-button full block id="createNewMeetingButton" class="normalSize medium" color="primary"
+            (click)="createMeeting()">Meeting Anlegen</button>
+</ion-content>

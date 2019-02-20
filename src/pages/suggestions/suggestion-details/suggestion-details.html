@@ -1,0 +1,64 @@
+<ion-header id="suggestion-details-page-header">
+  <ion-navbar>
+    <ion-title>Abstimmungsdetails</ion-title>
+  </ion-navbar>
+  <section id="suggestion-details-header">
+    <ion-row class="title-row">
+      <ion-col>
+        <ion-icon name="teaco-suggestion"></ion-icon>
+      </ion-col>
+      <ion-col class="divider">
+        <div class="vertical-line"></div>
+      </ion-col>
+      <ion-col>
+        <div class="suggestion-date medium">{{getDate()}}</div>
+        <div class="suggestion-time light">{{getTimeSpan()}} Uhr</div>
+      </ion-col>
+      <ion-col col-auto>
+        <ion-icon name="teaco-picked-suggestion" [hidden]="!suggestion.isPicked"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </section>
+</ion-header>
+
+
+<ion-content padding>
+  <loading-indicator></loading-indicator>
+  <feedback-alert></feedback-alert>
+
+  <ion-scroll scrollX="false" scrollY="true">
+    <ion-item *ngFor="let participant of meeting.participants">
+      <ion-row [ngClass]="participant.id == activeUserId ? 'self-user-row' : ''">
+        <ion-col class="user-icon-column" col-auto>
+          <div class="user-icon">
+            <ion-icon name="teaco-user"></ion-icon>
+          </div>
+        </ion-col>
+        <ion-col class="participant-column">
+          <div class="name-label">
+            {{participant.id == activeUserId ? 'Du' : (participant.name.length > 0 ? participant.name : participant.email) }}
+          </div>
+        </ion-col>
+        <ion-col class="vote-status-column" [ngClass]="voteDecisions[participant.id]" col-auto>
+          <ion-icon name="{{voteDecisions[participant.id]}}" ></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-scroll>
+  <ion-fab bottom right id="pick-suggestion-button">
+    <button ion-fab color="secondary" (click)="pickSuggestion()">
+      <ion-icon name="{{suggestion.isPicked ? 'teaco-unpicked-suggestion' : 'teaco-picked-suggestion'}}"></ion-icon>
+    </button>
+  </ion-fab>
+  <!--<ion-fab bottom right>-->
+    <!--<button ion-fab id="pick-suggestion-button" (click)="pickSuggestion()">-->
+      <!--<ion-icon name=""></ion-icon>-->
+
+    <!--</button>-->
+  <!--</ion-fab>-->
+
+  <button ion-button full id="delete-suggestion-button" (click)="deleteSuggestion()">
+    <ion-icon name="md-trash"></ion-icon>
+    Terminvorschlag löschen
+  </button>
+</ion-content>

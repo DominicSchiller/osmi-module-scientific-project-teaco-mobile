@@ -1,0 +1,51 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            Anmeldung
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <loading-indicator></loading-indicator>
+    <div id="form" *ngIf="!isCalledByDeepLink && !isRegistrationSuccess">
+        <p ion-text color="text-dark" class="light normalSize">
+            Bitte gib nachfolgend Deinen persönlichen TeaCo-Key ein, den Du in Deiner
+            Bestätigungs-Mail erhalten hast.
+            <br /><br />
+            Alterntiv kannst Du auch ganz einfach den App-Button in Deiner Bestätigungs- oder
+            jedglicher Einladungs-Mail zu einer Abstimmung anklicken,
+            um Dich mit Deinem Account völlig automatisch in dieser App anzumelden.
+        </p>
+        <br />
+        <ion-list>
+            <input-card type="text-area"
+                        placeholder="Dein persönlicher TeaCo-Key ..."
+                        icon="teaco-user-key"
+                        (onChange)="onUserKeyEntered($event)">
+            </input-card>
+            <section class="error-section">{{ errorMsg }}</section>
+            <button ion-button round
+                    [disabled]="userKey.length == 0"
+                    (click)="login()" class="normalSize medium">Anmelden</button>
+        </ion-list>
+    </div>
+    <div id="direct-registration-info-container" *ngIf="isCalledByDeepLink && !isRegistrationSuccess">
+        <p  ion-text color="text-dark">
+            Ihr Konto wird registriert ...
+        </p>
+    </div>
+    <div id="success-info-container" *ngIf="isRegistrationSuccess">
+        <img alt="no-user icon" src="../../../assets/svg/general/success.svg" />
+        <p class="light normalSize">
+            Herzlichen Glückwunsch
+            <br />
+            <span>{{ registeredUser.name }}</span>
+            <br />
+            Du hast Dich mit deinem Account erfolgreich angemeldet,
+            <br />
+            und kannst die App nun im vollem Umfang verwenden.
+        </p>
+        <button ion-button round (click)="finish()" class="normalSize medium">Fertig</button>
+    </div>
+</ion-content>

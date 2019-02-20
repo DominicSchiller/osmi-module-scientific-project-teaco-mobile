@@ -1,0 +1,76 @@
+@import "../../../theme/default";
+
+suggestion-card {
+  ion-card {
+    padding: 0 !important;
+    margin: 0 0 15px 0 !important;
+    width: 100% !important;
+    //border-top: 1px solid color($colors, gray-medium);
+    -webkit-box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+
+    .horizontal-line {
+      margin: 10px 0 2px 0;
+    }
+
+    .vertical-line {
+      left: 0;
+      top: 0;
+      margin: 0 10px 0 5px;
+      height: 90% !important;
+      @include vertical-center();
+      position: absolute !important;
+    }
+
+    .date-label {
+      width: 100%;
+      //text-align: center;
+    }
+
+    .time-label {
+      margin-top: 3px;
+    }
+
+    .quick-vote-col {
+      padding: 0;
+    }
+
+    .picked-star {
+      font-size: 2.4rem;
+      padding: 0 5px;
+    }
+
+    .progress-label {
+      @include vertical-center();
+    }
+
+    .progress-bar {
+      @include box(100%, 8px);
+      @include vertical-center();
+      border-radius: 15px;
+      overflow: hidden;
+
+      * {
+        float: left;
+        @include vertical-center();
+      }
+
+      .dont-know-voted {
+        height: 70% !important;
+        background-color: color($colors, dont-know);
+      }
+      .maybe-voted {
+        height: 100% !important;
+        background-color: color($colors, maybe);
+      }
+      .no-voted {
+        height: 100% !important;
+        background-color: color($colors, no);
+      }
+      .yes-voted {
+        height: 100% !important;
+        background-color: color($colors, yes);
+      }
+    }
+  }
+}

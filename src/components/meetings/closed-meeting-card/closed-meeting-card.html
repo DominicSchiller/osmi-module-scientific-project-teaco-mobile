@@ -1,0 +1,60 @@
+<ion-card>
+  <ion-grid>
+    <ion-row>
+      <!-- Status Icon-->
+      <ion-col col-1>
+        <ion-icon
+                name="{{meeting.isCancelled ? 'teaco-meeting-state-cancelled' : 'teaco-meeting-state-completed'}}"
+                class="status-icon"
+                color="{{meeting.isCancelled ? 'gray-dark' : 'ok'}}">
+        </ion-icon>
+      </ion-col>
+      <!-- Meeting  Title and basic statistics -->
+      <ion-col col-11>
+        <div class="vertical-line"></div>
+        <!-- date information -->
+        <div class="date-section">
+          <span>{{passedTimeDescription}}</span>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </div>
+        <!-- meeting title -->
+        <ion-card-header class="medium">
+          {{meeting.title}}
+        </ion-card-header>
+        <!-- basic statistics -->
+        <ion-card-content>
+          <div class="horizontal-line"></div>
+          <ion-scroll scrollX="true" [ngClass]="meeting.isCancelled ? 'hidden' : ''">
+            <ion-row nowrap class="final-dates-list">
+              <button ion-button clear class="date-item" *ngFor="let suggestion of meeting.suggestions" (click)="addSuggestionToCalendar(suggestion)">
+                <div class="month medium">{{getMonth(suggestion)}} '{{getYear(suggestion)}}</div>
+                <div class="day heavy">{{getDay(suggestion)}}</div>
+                <div class="day-name">{{getWeekday(suggestion)}}</div>
+                <div class="time">
+                  {{getTime(suggestion)}}
+                </div>
+              </button>
+            </ion-row>
+          </ion-scroll>
+          <div class="horizontal-line" [ngClass]="meeting.isCancelled ? 'hidden' : ''"></div>
+          <ion-row>
+            <ion-col class="participants-column" col-auto>
+              <ion-icon name="teaco-participants"></ion-icon>
+              <div class="counter">{{meeting.numberOfParticipants}}</div>
+            </ion-col>
+            <ion-col col-auto>
+              <div class="vertical-line"></div>
+            </ion-col>
+            <ion-col class="location-column" [ngClass]="meeting.isCancelled ? 'hidden' : ''">
+              <span class="medium">Location: </span>
+              <br />{{meeting.location}}
+            </ion-col>
+            <ion-col class="cancel-status-column" [ngClass]="meeting.isCancelled ? '' : 'hidden'">
+              <span class="medium">Planung abgebrochen </span>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>

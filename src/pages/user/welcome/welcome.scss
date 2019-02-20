@@ -1,0 +1,44 @@
+@import '../../../theme/default';
+
+page-welcome {
+  #teaco-logo {
+    @include box(150px, 150px);
+    @include horizontal-center();
+    margin-top: 75px;
+  }
+
+  h1 {
+    @include box(100%, auto);
+    text-align: center;
+    color: color($colors, primary);
+  }
+  p {
+    @include box(90%, auto);
+    @include horizontal-center();
+    text-align: center;
+    color: color($colors, text-dark);
+  }
+
+  button {
+    @include box(80%, 55px);
+    @include horizontal-center();
+    position: absolute !important;
+    -webkit-transition-property: all;
+    transition-property: all;
+    -webkit-transition-duration: 0.1s;
+    transition-duration: 0.1s;
+    -webkit-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+
+    &#login-button {
+      bottom: 235px;
+    }
+
+    &#register-button {
+      bottom: 155px;
+      background-color: white;
+      color: color($colors, primary);
+      border: 1px solid color($colors, primary);
+    }
+  }
+}

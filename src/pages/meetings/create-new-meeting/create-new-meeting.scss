@@ -1,0 +1,48 @@
+@import "../../../theme/default";
+
+page-create-new-meeting {
+    
+    ion-navbar {
+        ion-buttons {
+            button {
+                font-size: 2.4rem !important;
+            }
+        }
+        ion-icon {
+            color: #fff !important;
+        }
+    }
+    
+    ion-content{
+        background-color: color($colors, gray-light) !important;
+
+        ion-scroll {
+            @include box(100%, 100%);
+
+            ion-list {
+                margin-bottom: 75px !important;
+
+                .optional-header {
+                    margin: 20px 5px 10px 5px;
+                    color: color($colors, text-dark);
+                }
+
+                .datetime-ios {
+                    padding: 0 !important;
+                }
+
+                ion-icon{
+                    color: color($colors, primary) !important;
+                    font-size: 2.4rem;
+                }
+            }
+        }
+
+        #createNewMeetingButton {
+            @include box(100%, 55px);
+            position: absolute;
+            bottom: -4px;
+            z-index: 200;
+        }
+    }
+}

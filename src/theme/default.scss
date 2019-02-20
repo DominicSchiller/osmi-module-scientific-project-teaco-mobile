@@ -1,0 +1,233 @@
+@import 'variables';
+@import 'mixins';
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+}
+
+* {
+  &.hidden {
+    display: none;
+  }
+
+  &.no-bg-image {
+    &:after {
+      background-image: none;
+    }
+  }
+
+  /**
+  Font weight declarations
+   */
+  &.thin {
+    font-weight: 300;
+  }
+  &.light {
+    font-weight: 400;
+  }
+  &.medium {
+    font-weight: 500;
+  }
+  &.bold {
+    font-weight: 600;
+  }
+  &.heavy {
+    font-weight: 900;
+  }
+  &.extraSmallSize {
+    font-size: 1.2rem;
+  }
+  &.smallSize {
+    font-size: 1.4rem;
+  }
+  &.normalSize {
+    font-size: 1.6rem;
+  }
+  &.mediumSize {
+    font-size: 1.8rem;
+  }
+  &.largeSize {
+    font-size: 2.0rem;
+  }
+  &.extraLargeSize {
+    font-size: 2.4rem;
+  }
+}
+
+/**
+Line declarations
+ */
+.horizontal-line {
+  @include box(100%, 1px);
+  margin: 10px 0;
+  background: color($colors, gray-medium);
+}
+
+.vertical-line {
+  @include box(1px, 100%);
+  margin: 0 10px;
+  background: color($colors, gray-medium);
+}
+
+/**
+Icon declarations
+ */
+
+ion-icon {
+  &[class*="teaco-"] {
+    mask-size: contain;
+    mask-position: 50% 50%;
+    mask-repeat: no-repeat;
+    background: currentColor;
+    width: 1em;
+    height: 1em;
+  }
+
+  &[class*="teaco-user"] {
+    mask-image: url("../assets/svg/user/user.svg");
+  }
+
+  &[class*="teaco-user-key"] {
+    mask-image: url("../assets/svg/user/user-key.svg");
+  }
+
+  &[class*="teaco-email"] {
+    mask-image: url("../assets/svg/user/email.svg");
+  }
+
+  &[class*="teaco-meeting"] {
+    mask-image: url("../assets/svg/meetings/meeting.svg");
+  }
+
+  &[class*="teaco-open-meetings"] {
+    mask-image: url("../assets/svg/meetings/open-meetings.svg");
+  }
+
+  &[class*="teaco-closed-meetings"] {
+    mask-image: url("../assets/svg/meetings/closed-meetings.svg");
+  }
+
+  &[class*="teaco-meeting-state-pending"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-pending.svg");
+  }
+
+  &[class*="teaco-meeting-state-voting"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-voting.svg");
+  }
+
+  &[class*="teaco-meeting-state-voting-completed"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-voting-completed.svg");
+  }
+
+  &[class*="teaco-meeting-state-cancelled"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-cancelled.svg");
+  }
+
+  &[class*="teaco-meeting-state-completed"] {
+    mask-image: url("../assets/svg/meetings/meeting-state-completed.svg");
+  }
+
+  &[class*="teaco-suggestion"] {
+    mask-image: url("../assets/svg/meetings/suggestions.svg");
+  }
+
+  &[class*="teaco-participants"] {
+     mask-image: url("../assets/svg/meetings/participants.svg");
+  }
+
+  &[class*="teaco-add-participant"] {
+    mask-image: url("../assets/svg/meetings/add-participant.svg");
+  }
+
+  &[class*="teaco-add-suggestion"] {
+    mask-image: url("../assets/svg/meetings/add-suggestion.svg");
+  }
+
+  &[class*="teaco-suggestion"] {
+    mask-image: url("../assets/svg/suggestions/suggestion.svg");
+  }
+
+  &[class*="teaco-picked-suggestion"] {
+    mask-image: url("../assets/svg/suggestions/picked_suggestion.svg");
+  }
+
+  &[class*="teaco-unpicked-suggestion"] {
+    mask-image: url("../assets/svg/suggestions/unpicked_suggestion.svg");
+  }
+
+  &[class*="teaco-voted-yes"] {
+    mask-image: url("../assets/svg/suggestions/quick-vote/voted-yes.svg");
+  }
+
+  &[class*="teaco-voted-no"] {
+    mask-image: url("../assets/svg/suggestions/quick-vote/voted-no.svg");
+  }
+
+  &[class*="teaco-voted-maybe"] {
+    mask-image: url("../assets/svg/suggestions/quick-vote/voted-maybe.svg");
+  }
+  
+  &[class*="teaco-location"] {
+    mask-image: url("../assets/svg/meetings/location.svg");
+  }
+
+  &[class*="teaco-comments"] {
+    mask-image: url("../assets/svg/meetings/comments.svg");
+  }
+
+  &[class*="teaco-startTime"] {
+    mask-image: url("../assets/svg/meetings/startTime.svg");
+  }
+
+  &[class*="teaco-endTime"] {
+    mask-image: url("../assets/svg/meetings/endTime.svg");
+  }
+
+  &[class*="teaco-calendar"] {
+    mask-image: url("../assets/svg/meetings/calendar.svg");
+  }
+
+  &[class*="teaco-title"] {
+    mask-image: url("../assets/svg/meetings/title.svg");
+  }
+
+  &[class*="teaco-duration"] {
+    mask-image: url("../assets/svg/suggestions/duration.svg");
+  }
+  /**
+  background images
+   */
+  div {
+    &.final-date-image {
+
+    }
+  }
+}
+
+ion-fab {
+  z-index: 800 !important;
+}
+
+button {
+  text-transform: none !important;
+}
+
+/**
+  Default iOS Styles
+   */
+.list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block {
+  border-bottom: none !important;
+}
+
+.list-ios > .item-block:first-child {
+  border-top: none !important;
+}
+
+.alert-message {
+  font-size: 1.4rem !important;
+}
+
+.refresher-refreshing .spinner-crescent circle, .refresher-refreshing .spinner-ios line, .refresher-refreshing .spinner-ios-small line{
+  stroke : color($colors, secondary);
+}

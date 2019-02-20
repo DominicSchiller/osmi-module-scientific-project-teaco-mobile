@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Finalisierte Meetings</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <loading-indicator></loading-indicator>
+  <feedback-alert></feedback-alert>
+
+  <div class="empty-hint" *ngIf="meetings.length == 0 && canShowPlaceholder">
+    <ion-icon name="teaco-closed-meetings"></ion-icon>
+    <div class="message mediumSize bold">
+      Keine finalisierten Termine vorhanden
+    </div>
+  </div>
+
+  <ion-refresher (ionRefresh)="onRefreshMeetings($event)">
+    <ion-refresher-content
+            pullingIcon="arrow-round-down"
+            pullingText="Meetings aktualisieren"
+            refreshingSpinner="crescent"
+            refreshingText="Aktualisiere Meetings ...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list no-lines>
+    <ion-item-sliding *ngFor="let meeting of meetings; let i=index" #meetingSlidingItem>
+      <ion-item>
+        <closed-meeting-card [meeting]="meeting">
+        </closed-meeting-card>
+      </ion-item>
+      <ion-item-options side="right">
+        <!--<button ion-button color="secondary">-->
+          <!--<ion-icon name="md-folder"></ion-icon>-->
+        <!--</button>-->
+        <button ion-button color="primary" (click)="deleteMeeting(meeting, i, meetingSlidingItem)">
+          <ion-icon name="md-trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

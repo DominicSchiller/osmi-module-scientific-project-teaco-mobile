@@ -1,0 +1,103 @@
+<div class="action-overlay" #actionOverlay (click)="closeInviteParticipantsActionSheet()"></div>
+
+<form id="search-bar" #f="ngForm" (ngSubmit)="onAddParticipantsToQueue()">
+  <div id="search-input">
+    <ion-icon id="search-icon" name="teaco-email" color="primary"></ion-icon>
+    <ion-input type="email"
+               placeholder="E-Mail des Teilnehmers ..."
+               [(ngModel)]="searchTerm"
+               (keyup)="onSearchWordTyped()" email name="search-term-input">
+    </ion-input>
+    <ion-spinner id="search-loading-indicator" name="crescent" color="secondary" [hidden]="!isSearching"></ion-spinner>
+  </div>
+  <div id="search-results-list" [ngClass]="foundUsers.length > 0 ? 'results-available' : ''">
+    <ion-scroll scrollY="true">
+      <p class="results-title mediumSize medium">Meinst Du ...</p>
+      <ion-item class="search-result" *ngFor="let result of foundUsers; let i=index">
+        <ion-label>
+          <ion-icon class="user-icon" name="teaco-user"
+                    [ngClass]="result.id === activeUserId ? 'active-user' : ''"></ion-icon>
+          <div class="user-information">
+            <div [hidden]="result.id === activeUserId">
+              <p class="normalSize medium">{{result.name}}</p>
+              <p class="smallSize light">{{result.email}}</p>
+            </div>
+            <div class="active-user"
+                 [hidden]="result.id !== activeUserId">
+              <p class="normalSize medium">Du</p>
+              <p class="smallSize light">{{result.email}}</p>
+            </div>
+          </div>
+        </ion-label>
+        <ion-checkbox item-right
+                      (ionChange)="verifySelectedUsers(i)"
+                      name="user-result-checkbox"
+                      [disabled]="isContainedIn(participants, result)"
+                      [checked]="result.selected"></ion-checkbox>
+      </ion-item>
+    </ion-scroll>
+  </div>
+  <button id="queue-user-button"
+          class="normalSize medium" ion-button full
+          [hidden]="!isSearchTermQualifiedEmail && !isUserSelected" type="submit">
+    Hinzufügen</button>
+</form>
+<section id="participants-queue">
+  <ion-scroll scrollY="true">
+    <ion-item class="participant-item" *ngFor="let participant of managedParticipants; let i=index"
+    [ngClass]="participant.isTemporarely ? 'temporarely-added' :
+                participant.isMarkedToRemove ? 'marked-to-remove' : ''">
+      <ion-row>
+        <ion-col col-auto>
+          <div class="user-icon" [ngClass]="participant.id == activeUserId ? 'active-user' : ''">
+            <ion-icon name="teaco-user" color="gray-extra-dark"></ion-icon>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="user-information">
+            <div [hidden]="participant.id == activeUserId">
+              <p class="normalSize medium">
+                {{participant.name}}
+              </p>
+              <p class="normalSize light">
+                {{participant.email}}
+              </p>
+            </div>
+            <div class="active-user medium"
+                    [hidden]="participant.id !== activeUserId" >
+              Du
+            </div>
+          </div>
+        </ion-col>
+        <ion-col col-auto class="actions-column" [hidden]="participant.id === activeUserId">
+          <button ion-button class="remove-from-queue-button"
+                  [ngClass]="isContainedIn(queuedParticipantsToRemove, participant) ? 'active': ''"
+                  (click)="onRemoveSelected(i)">
+            <ion-icon name="close" class="bold"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-scroll>
+</section>
+<button id="add-participants-button" ion-button full
+        class="mediumSize medium"
+        [hidden]="queuedParticipantsToInvite.length == 0"
+        (click)="openInviteParticipantsActionSheet()">
+  Teilnehmer einladen
+</button>
+<button id="remove-participants-button" ion-button full
+        class="mediumSize medium"
+        [hidden]="queuedParticipantsToRemove.length == 0"
+        (click)="unInviteParticipants()">
+  Teilnehmer ausladen
+</button>
+
+<div id="invite-participants-action-sheet" #inviteParticipantsActionSheet>
+  <input-card id="comment-input" type="text-area" icon="chatboxes" placeholder="Gib hier optional noch einen Kommentar ein ..."
+              (onChange)="onCommentEntered($event)" #commentInput></input-card>
+  <button ion-button full id="send-button" class="normalSize medium"
+          (click)="inviteParticipants()">
+    Jetzt absenden
+  </button>
+</div>

@@ -1,0 +1,54 @@
+<ion-card>
+  <ion-grid>
+    <ion-row>
+      <!-- Status Icon-->
+      <ion-col col-1>
+        <ion-icon
+                name="{{meeting.progress.pending === 1 || meeting.numberOfParticipants === 1 ? 'teaco-meeting-state-pending' : (meeting.progress.completed === 1 ? 'teaco-meeting-state-voting-completed' : 'teaco-meeting-state-voting')}}"
+                class="status-icon"
+                color="{{meeting.progress.pending === 1 || meeting.numberOfParticipants === 1 ? 'gray-dark' : (meeting.progress.completed === 1 ? 'voted' : 'voting')}}">
+        </ion-icon>
+      </ion-col>
+      <!-- Meeting  Title and basic statistics -->
+      <ion-col col-11>
+        <div class="vertical-line"></div>
+        <!-- date information -->
+        <div class="date-section">
+          <span>{{passedTimeDescription}}</span>
+          <ion-icon name="ios-arrow-forward"></ion-icon>
+        </div>
+        <!-- meeting title -->
+        <ion-card-header class="medium">
+          {{meeting.title}}
+        </ion-card-header>
+        <!-- basic statistics -->
+        <ion-card-content>
+          <div class="horizontal-line"></div>
+          <ion-row>
+            <ion-col col-auto>
+              <ion-icon name="teaco-participants"></ion-icon>
+              <div class="counter">{{meeting.numberOfParticipants}}</div>
+            </ion-col>
+            <ion-col col-auto>
+              <ion-icon name="teaco-meeting"></ion-icon>
+              <div class="counter">{{meeting.numberOfSuggestions}}</div>
+            </ion-col>
+            <ion-col col-auto>
+              <div class="vertical-line"></div>
+            </ion-col>
+            <ion-col class="progress-column">
+              <div class="progress-bar">
+                <div class="voted" [ngStyle]="{'width': 'calc(' + (meeting.numberOfParticipants === 1 ? 0 : meeting.progress.completed) + '*100%)'}">
+                </div>
+                <div class="in-progress" [ngStyle]="{'width': 'calc(' + (meeting.numberOfParticipants === 1 ? 0 : meeting.progress.started) + '*100%)'}">
+                </div>
+                <div class="pending" [ngStyle]="{'width': 'calc(' + (meeting.numberOfParticipants === 1 ? 1 : meeting.progress.pending) + '*100%)'}">
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>

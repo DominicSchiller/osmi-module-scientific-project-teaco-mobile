@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Terminplanungen</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <loading-indicator></loading-indicator>
+  <feedback-alert></feedback-alert>
+
+  <div class="empty-hint" *ngIf="meetings.length == 0 && canShowPlaceholder">
+    <ion-icon name="teaco-open-meetings"></ion-icon>
+    <div class="message mediumSize bold">
+      Keine Terminplanungen vorhanden
+    </div>
+  </div>
+
+  <ion-refresher (ionRefresh)="onRefreshMeetings($event)">
+    <ion-refresher-content
+            pullingIcon="arrow-round-down"
+            pullingText="Meetings aktualisieren"
+            refreshingSpinner="crescent"
+            refreshingText="Aktualisiere Meetings ...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list no-lines>
+    <ion-item-sliding *ngFor="let meeting of meetings; let i=index" #meetingSlidingItem>
+      <ion-item>
+        <open-meeting-card [meeting]="meeting" (click)="onShowMeetingDetail(meeting)">
+        </open-meeting-card>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="tertiary" (click)="goToAddParticipantsPage(meeting, meetingSlidingItem)" text-wrap>
+          <ion-icon name="teaco-add-participant"></ion-icon>
+        </button>
+        <button ion-button color="secondary" (click)="goToNewSuggestionPage(meeting, meetingSlidingItem)" text-wrap>
+          <ion-icon name="teaco-add-suggestion"></ion-icon>
+        </button>
+        <button ion-button color="primary" (click)="deleteMeeting(meeting, i, meetingSlidingItem)">
+          <ion-icon name="md-trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-fab bottom right id="createNewMeetingButton">
+      <button ion-fab color="primary" (click)="goToNewMeetingPage()">
+        <ion-icon name="md-add"></ion-icon>
+      </button>
+  </ion-fab>
+    
+</ion-content>

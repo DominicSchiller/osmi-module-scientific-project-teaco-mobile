@@ -1,0 +1,28 @@
+@import '../../../theme/mixins';
+@import '../../../theme/variables';
+
+page-meetings-overview {
+  .tabbar {
+    padding: 2px 5px;
+
+    .tab-button {
+      .tab-button-text {
+        margin-top: 2px !important;
+      }
+
+      ion-icon {
+        @include box(30px, 30px);
+      }
+
+      &[aria-selected=true] {
+        .tab-button-text {
+          color: color($colors, primary);
+          font-size: 1.05rem;
+        }
+        ion-icon {
+          color: color($colors, primary) !important;
+        }
+      }
+    }
+  }
+}

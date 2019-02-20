@@ -1,0 +1,19 @@
+@import "../../../theme/default";
+
+page-add-participant {
+  ion-header {
+    ion-navbar {
+      ion-buttons {
+        button {
+          font-size: 2.4rem !important;
+        }
+      }
+      ion-icon {
+        color: color($colors, light) !important;
+      }
+    }
+  }
+
+  ion-content {
+  }
+}

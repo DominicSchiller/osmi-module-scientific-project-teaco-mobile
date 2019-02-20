@@ -1,0 +1,87 @@
+@import "../../../theme/default";
+
+page-login {
+  ion-navbar {
+    ion-buttons {
+      button {
+        font-size: 2.4rem !important;
+        &.bar-button-ios {
+          font-size: 4.0rem !important;
+        }
+      }
+    }
+  }
+  
+  ion-content {
+    height: 100%;
+    width: 100%;
+
+    p {
+      padding: 0 25px !important;
+    }
+
+    button {
+      @include box(100%, 50px);
+      @include horizontal-center();
+      text-transform: none !important;
+    }
+
+    #form {
+      padding: 0 10px;
+      margin-top: 35px !important;
+
+      ion-list {
+        padding: 0 25px !important;
+        @include horizontal-center();
+
+        input-card {
+          .card {
+            box-shadow: none !important;
+            border-bottom: 1px solid color($colors, gray-medium);
+          }
+        }
+
+        .error-section {
+          margin-top: 5px;
+          color: color($colors, primary)
+        }
+      }
+
+      button {
+        margin-top: 30px !important;
+      }
+    }
+
+    #direct-registration-info-container {
+      margin-top: 65px;
+      p {
+        text-align: center;
+      }
+    }
+
+    #success-info-container {
+      width: 100%;
+      padding: 0 25px;
+
+      img {
+        @include box(50%, auto);
+        @include horizontal-center();
+        margin: 30px 0 15px 0;
+      }
+
+      p {
+        text-align: center;
+
+        span {
+          line-height: 30px;
+          font-weight: 600;
+        }
+      }
+
+      button {
+        margin-top: 50px !important;
+      }
+    }
+  }
+
+}

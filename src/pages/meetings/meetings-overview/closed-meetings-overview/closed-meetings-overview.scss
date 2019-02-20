@@ -1,0 +1,65 @@
+@import '../../../../theme/default';
+
+page-closed-meetings-overview {
+  ion-content {
+    background-color: color($colors, gray-light) !important;
+
+    .empty-hint {
+      @include box(200px, 200px);
+      @include center();
+      top: calc(50% - 30px) !important;
+      position: absolute !important;
+      text-align: center;
+
+      .message {
+        margin-top: 15px;
+        color: color($colors, gray-dark);
+      }
+      ion-icon {
+        color: color($colors, gray-dark);
+        font-size: 12rem;
+      }
+    }
+
+    ion-item-sliding {
+      background-color: color($colors, gray-light) !important;
+      border-top: 1px solid color($colors, gray-medium) !important;
+      margin: 0 !important;
+      padding: 0 !important;
+
+      ion-item {
+        background-color: color($colors, gray-light);
+
+        &, ion-label, .item-inner {
+          padding: 0 !important;
+          margin: 0 !important;
+          background-color: color($colors, gray-light);
+        }
+      }
+
+      ion-item-options {
+        height: calc(100% - 15px) !important;
+        -webkit-box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.15) !important;
+        background-color: #ffffff;
+
+        button {
+          width: 75px !important;
+          text-transform: none !important;
+
+          ion-icon {
+            font-size: 3.5rem !important;
+
+            &[class*="teaco"] {
+              margin-bottom: 5px;
+            }
+          }
+        }
+      }
+    }
+
+    .scroll-content {
+      padding: 0 !important;
+    }
+  }
+}
