@@ -138,8 +138,8 @@ export class SuggestionDetailsPage {
    */
   private deleteSuggestion() {
     const alert = this.alertCtrl.create({
-      "title": "Teriminvorschlag wirklich löschen?",
-      "message": "<br />Du bist dabei diesen Terminvorschlag entgültig zu löschen? Willst du ihn wirklich löschen?",
+      "title": "Terminvorschlag wirklich löschen?",
+      "message": "<br />Du bist dabei diesen Terminvorschlag endgültig zu löschen? Willst du ihn wirklich löschen?",
       buttons: [
         {
           "text": "Ja, Terminvorschlag löschen",
@@ -194,7 +194,7 @@ export class SuggestionDetailsPage {
       this.apiService.updateSuggestion(activeUser.key, this.suggestion).subscribe(() => {
         this.feedbackAlert.presentWith(
             !this.suggestion.isPicked ? "Als final markiert" : "Markierung aufgehoben",
-            !this.suggestion.isPicked ? "Der Termin wurde erfolgreich als final markiert." : "Die Markierung als entgültiger Terminvorschlag wurde aufgehoben",
+            !this.suggestion.isPicked ? "Der Termin wurde erfolgreich als final markiert." : "Die Markierung als endgültiger Terminvorschlag wurde aufgehoben",
             !this.suggestion.isPicked ? "teaco-picked-suggestion" : "teaco-unpicked-suggestion"
             ).then();
         setTimeout(() => {

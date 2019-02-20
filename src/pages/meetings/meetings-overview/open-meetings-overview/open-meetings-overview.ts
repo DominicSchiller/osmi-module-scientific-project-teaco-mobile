@@ -199,7 +199,7 @@ export class OpenMeetingsOverviewPage implements EditMeetingEventDelegate {
     slidingItem.close();
     const alert = this.alertCtrl.create({
       "title": "Meeting wirklich löschen?",
-      "message": "<br />Du bist dabei das Meeting<br /><br /><b>» " + meeting.title + " «</b><br /><br />entgültig zu löschen? Willst du dieses Meeting wirklich löschen?",
+      "message": "<br />Du bist dabei das Meeting<br /><br /><b>» " + meeting.title + " «</b><br /><br />endgültig zu löschen? Willst du dieses Meeting wirklich löschen?",
       buttons: [
         {
           "text": "Ja, Meeting löschen",

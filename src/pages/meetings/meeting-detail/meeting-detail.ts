@@ -478,7 +478,7 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
         this.apiService.updateSuggestion(activeUser.key, suggestion).subscribe(() => {
           this.feedbackAlert.presentWith(
               suggestion.isPicked ? "Als final markiert" : "Markierung aufgehoben",
-              suggestion.isPicked ? "Der Termin wurde erfolgreich als final markiert." : "Die Markierung als entgültiger Terminvorschlag wurde aufgehoben",
+              suggestion.isPicked ? "Der Termin wurde erfolgreich als final markiert." : "Die Markierung als endgültiger Terminvorschlag wurde aufgehoben",
               suggestion.isPicked ? "teaco-picked-suggestion" : "teaco-unpicked-suggestion"
           ).then();
         });
@@ -496,8 +496,8 @@ export class MeetingDetailPage implements CreateSuggestionEventDelegate, Partici
   private deleteSuggestion(suggestion: Suggestion, index: number, slidingItem: ItemSliding) {
     slidingItem.close();
     const alert = this.alertCtrl.create({
-      "title": "Teriminvorschlag wirklich löschen?",
-      "message": "<br />Du bist dabei diesen Terminvorschlag entgültig zu löschen? Willst du ihn wirklich löschen?",
+      "title": "Terminvorschlag wirklich löschen?",
+      "message": "<br />Du bist dabei diesen Terminvorschlag endgültig zu löschen? Willst du ihn wirklich löschen?",
       buttons: [
         {
           "text": "Ja, Terminvorschlag löschen",
