@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-packageName="de.thb.TeaCo" id="de.th-brandenburg.TeaCo" ios-CFBundleIdentifier="de.th-brandenburg.TeaCo" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-packageName="de.thb.TeaCo" id="de.th-brandenburg.TeaCo" ios-CFBundleIdentifier="de.th-brandenburg.TeaCo" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>TeaCo</name>
     <description>An awesome meeting planning app</description>
     <author email="schiller.dominic@outlook.com" href="mailto:schiller.dominic@outlook.com">Dominic Schiller</author>
